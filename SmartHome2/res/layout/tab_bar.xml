@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:id="@id/tab_bar" android:background="@drawable/tab_bar_bk" android:layout_width="fill_parent" android:layout_height="55dip" android:layout_alignParentBottom="true"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <FrameLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_weight="1.0"
+      android:id="@+id/tabHome" android:background="@drawable/tab_selected_bg">
+        <LinearLayout android:gravity="center" android:layout_gravity="center" android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent">
+            <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/tab_home" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="家居设备" android:textColor="#ffffff"/>
+        </LinearLayout>
+    </FrameLayout>
+    <FrameLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_weight="1.0"
+      android:id="@+id/tabSwitch" android:background="@drawable/tab_selected_bg">
+        <LinearLayout android:gravity="center" android:layout_gravity="center" android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent">
+            <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/tab_switch" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="继电器" android:textColor="#ffffff"/>
+        </LinearLayout>
+    </FrameLayout>
+    <FrameLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_weight="1.0"
+      android:id="@+id/tabScene" android:background="@drawable/tab_selected_bg">
+        <LinearLayout android:gravity="center" android:layout_gravity="center" android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent">
+            <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/tab_scene" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="情景模式" android:textColor="#ffffff"/>
+        </LinearLayout>
+    </FrameLayout>
+    <FrameLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_weight="1.0"
+      android:id="@+id/tabAlarmLog" android:background="@drawable/tab_selected_bg">
+        <LinearLayout android:gravity="center" android:layout_gravity="center" android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent">
+            <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/tab_alarm" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="报警日志" android:textColor="#ffffff"/>
+        </LinearLayout>
+    </FrameLayout>
+    <FrameLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_weight="1.0"
+      android:id="@+id/tabMore" android:background="@drawable/tab_selected_bg">
+        <LinearLayout android:gravity="center" android:layout_gravity="center" android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent">
+            <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/tab_more" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="更多" android:textColor="#ffffff"/>
+        </LinearLayout>
+    </FrameLayout>
+</LinearLayout>

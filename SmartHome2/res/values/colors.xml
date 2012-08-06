@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <color name="SMARTHOME_FONTCOLOR">#ffffffff</color>
+    <color name="SMARTHOME_TITLE_BACKGROUND_UP">#00555555</color>
+    <color name="button_menu_txtcolor">#ff0cbce1</color>
+    <color name="list_text_alarm_color">#fff3ff34</color>
+    <color name="list_text_equipement_color">#fff2f4ff</color>
+</resources>

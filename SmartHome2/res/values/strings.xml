@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string name="hello">Hello World, Main!</string>
+    <string name="app_name">AT-008智能家居</string>
+    <string name="version">2.0</string>
+    <string name="spinner_panel_prompt">请选择控制面板</string>
+    <string name="spinner_type_prompt">请选择设备分类</string>
+    <string name="dialog_wifi_error_message">您的移动设备没有连上Wi-Fi，请先连上Wi-Fi网络！</string>
+    <string name="ask_wifi_set">当前设备没有可用网络（wifi或者3G），建议打开wifi，是否进入配置程序打开WIFI？</string>
+    <string name="link_mcu_err_title">连接智能终端错误提示</string>
+    <string name="app_exit_tip_str">您确定要退出智能家居控制终端吗？</string>
+</resources>
