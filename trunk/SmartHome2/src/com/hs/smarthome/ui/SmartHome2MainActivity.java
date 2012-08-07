@@ -15,6 +15,8 @@ import com.hs.smarthome.db.SmartHomeAccessor;
 
 public class SmartHome2MainActivity extends ActivityGroup implements View.OnClickListener{
     
+	
+	
 	private FrameLayout tabContainer;
 	
 	private FrameLayout tabHomeButton;
