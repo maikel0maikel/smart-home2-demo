@@ -1,4 +1,4 @@
-package com.hs.smarthome;
+package com.hs.smarthome.ui;
 
 import android.app.ActivityGroup;
 import android.app.LocalActivityManager;
@@ -9,6 +9,9 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+
+import com.hs.smarthome.R;
+import com.hs.smarthome.db.SmartHomeAccessor;
 
 public class SmartHome2MainActivity extends ActivityGroup implements View.OnClickListener{
     
