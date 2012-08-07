@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<LinearLayout android:layout_width="fill_parent" android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android"
-    android:gravity="center">
-    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="继电器" android:textSize="50sp"/>
+<LinearLayout android:orientation="vertical" android:id="@id/switch_control_main" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <ListView android:id="@+id/func_switch_lv" android:fadingEdge="none" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginLeft="10.0dip" android:layout_marginTop="10.0dip" android:layout_marginRight="10.0dip" android:layout_marginBottom="5.0dip" android:scrollingCache="false" android:cacheColorHint="#00000000" android:divider="@drawable/list_driver" />
 </LinearLayout>

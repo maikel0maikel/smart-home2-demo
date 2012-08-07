@@ -1,4 +1,7 @@
-package com.hs.smarthome;
+package com.hs.smarthome.ui;
+
+import com.hs.smarthome.R;
+import com.hs.smarthome.R.layout;
 
 import android.app.Activity;
 import android.os.Bundle;
