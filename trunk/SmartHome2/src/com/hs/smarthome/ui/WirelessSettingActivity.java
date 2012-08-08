@@ -18,7 +18,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hs.smarthome.R;
+import com.hs.smarthome.db.SmartHomeAccessor;
 import com.hs.smarthome.db.WirelessItem;
+import com.hs.smarthome.db.WirelessSettingAccessor;
 
 
 public class WirelessSettingActivity extends Activity{
@@ -39,6 +41,13 @@ public class WirelessSettingActivity extends Activity{
 		
 		func_wireless_lv = (ListView)findViewById(R.id.result_list);
 		
+		try {
+			WirelessSettingAccessor.getInstance(this).initWirelessTable();
+			wirelessItemList = WirelessSettingAccessor.getInstance(this).getWirelessItemList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		//构建无线对象
 		initWirelessList();
 		
@@ -51,27 +60,16 @@ public class WirelessSettingActivity extends Activity{
 	
 	private void initWirelessList() {
 		
-		WirelessItem wirelessItem1 = new WirelessItem();
-		wirelessItem1.itemImgResID = R.drawable.setting_yes;
-		wirelessItem1.itemTitleName = "无线1";
+		for(int i = 1; i <= 100; i++)
+		{
+		WirelessItem wirelessItem = new WirelessItem();
+		wirelessItem.itemImgResID = R.drawable.setting_yes;
+		wirelessItem.itemTitleName = "无线" + i;
 		
-		WirelessItem wirelessItem2 = new WirelessItem();
-		wirelessItem2.itemImgResID = R.drawable.setting_yes;
-		wirelessItem2.itemTitleName = "无线2";
+		wirelessItemList.add(wirelessItem);	
 		
-		WirelessItem wirelessItem3 = new WirelessItem();
-		wirelessItem3.itemImgResID = R.drawable.setting_yes;
-		wirelessItem3.itemTitleName = "无线3";
-		
-		WirelessItem wirelessItem4 = new WirelessItem();
-		wirelessItem4.itemImgResID = R.drawable.setting_yes;
-		wirelessItem4.itemTitleName = "无线4";
+		}
 
-		
-		wirelessItemList.add(wirelessItem1);		
-		wirelessItemList.add(wirelessItem2);	
-		wirelessItemList.add(wirelessItem3);	
-		wirelessItemList.add(wirelessItem4);	
 		
 	}
 
