@@ -116,7 +116,7 @@ public class FuncMoreActivity extends Activity{
 			if(moreItem.itemImgResID==R.drawable.menu_list_more_wxsz)
 			{
 				Intent intent = new Intent();
-				intent.setClass(FuncMoreActivity.this, wireless_setting.class);
+				intent.setClass(FuncMoreActivity.this, WirelessSettingActivity.class);
 				FuncMoreActivity.this.startActivity(intent);
 				
 				

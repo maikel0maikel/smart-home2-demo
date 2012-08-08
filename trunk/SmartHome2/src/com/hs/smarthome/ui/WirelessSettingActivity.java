@@ -21,7 +21,7 @@ import com.hs.smarthome.R;
 import com.hs.smarthome.db.WirelessItem;
 
 
-public class wireless_setting extends Activity{
+public class WirelessSettingActivity extends Activity{
 
 	private LayoutInflater mInflater = null;
 	
