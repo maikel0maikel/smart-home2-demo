@@ -3,6 +3,7 @@ package com.hs.smarthome.ui;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -85,8 +86,7 @@ public class FuncMoreActivity extends Activity{
 		moreItem7.explain = "设备中央控制器IP地址、端口号";
 
 		
-		
-		
+			
 		
 	
 		
@@ -111,7 +111,16 @@ public class FuncMoreActivity extends Activity{
 			MoreItem moreItem = moreItemList.get(position);
 			moreAdapter.notifyDataSetChanged();	//刷新数据集
 			
+			
 			//做相关的处理
+			if(moreItem.itemImgResID==R.drawable.menu_list_more_wxsz)
+			{
+				Intent intent = new Intent();
+				intent.setClass(FuncMoreActivity.this, wireless_setting.class);
+				FuncMoreActivity.this.startActivity(intent);
+				
+				
+			}
 			//Toast.makeText(FuncMoreActivity.this, moreItem.itemTitleName, Toast.LENGTH_SHORT).show();
 		}
     }
