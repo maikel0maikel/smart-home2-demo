@@ -23,6 +23,7 @@
         <activity android:name=".ui.FuncMoreActivity" />
         <activity android:name=".ui.FuncSceneActivity" />
         <activity android:name=".ui.FuncSwitchActivity" />
+        <activity android:name=".ui.WirelessSettingActivity"/>
     </application>
 
 </manifest>
