@@ -57,32 +57,32 @@ public class FuncMoreActivity extends Activity{
 		MoreItem moreItem2 = new MoreItem();
 		moreItem2.itemImgResID = R.drawable.menu_list_more_hwsz;
 		moreItem2.itemTitleName = "红外遥控名称设置";
-		moreItem1.explain = "更改红外遥控名称及发射端口";
+		moreItem2.explain = "更改红外遥控名称及发射端口";
 		
 		MoreItem moreItem3 = new MoreItem();
 		moreItem3.itemImgResID = R.drawable.menu_list_more_xtsz;
 		moreItem3.itemTitleName = "家居设备绑定";
-		moreItem1.explain = "维护家居设备、绑定功能信号";
+		moreItem3.explain = "维护家居设备、绑定功能信号";
 		
 		MoreItem moreItem4 = new MoreItem();
 		moreItem4.itemImgResID = R.drawable.menu_list_more_kgsz;
 		moreItem4.itemTitleName = "继电器名称设置";
-		moreItem1.explain = "更改继电器名称";
+		moreItem4.explain = "更改继电器名称";
 		
 		MoreItem moreItem5 = new MoreItem();
 		moreItem5.itemImgResID = R.drawable.menu_list_more_room;
 		moreItem5.itemTitleName = "房间名称设置";
-		moreItem1.explain = "更改房间名称";
+		moreItem5.explain = "更改房间名称";
 		
 		MoreItem moreItem6 = new MoreItem();
 		moreItem6.itemImgResID = R.drawable.menu_list_more_alarm_ico;
 		moreItem6.itemTitleName = "报警铃音设置";
-		moreItem1.explain = "报警铃声、震动设置、名称";
+		moreItem6.explain = "报警铃声、震动设置、名称";
 		
 		MoreItem moreItem7 = new MoreItem();
 		moreItem7.itemImgResID = R.drawable.menu_list_more_xtsz;
 		moreItem7.itemTitleName = "中央控制器设置";
-		moreItem1.explain = "设备中央控制器IP地址、端口号";
+		moreItem7.explain = "设备中央控制器IP地址、端口号";
 
 		
 		
