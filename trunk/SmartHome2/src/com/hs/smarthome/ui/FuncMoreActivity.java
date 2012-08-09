@@ -120,6 +120,12 @@ public class FuncMoreActivity extends Activity{
 				intent.setClass(FuncMoreActivity.this, WirelessSettingActivity.class);
 				FuncMoreActivity.this.startActivity(intent);
 				break;
+			case R.drawable.menu_list_more_hwsz:
+				Intent intenti = new Intent();
+				intenti.setClass(FuncMoreActivity.this, InfraredSettingActivity.class);
+				FuncMoreActivity.this.startActivity(intenti);
+				break;
+				
 			
 			}
 	
