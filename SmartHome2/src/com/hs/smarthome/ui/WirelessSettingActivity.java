@@ -51,7 +51,7 @@ public class WirelessSettingActivity extends Activity{
 		}
 		
 		//构建无线对象
-		initWirelessList();
+		//initWirelessList();
 		
 		wirelessAdapter = new WirelessAdapter();
 		func_wireless_lv.setAdapter(wirelessAdapter);
@@ -128,7 +128,7 @@ public class WirelessSettingActivity extends Activity{
 			}
 			
 			
-			cache.icon.setImageResource(wirelessItem.itemImgResID);
+			cache.icon.setImageResource(R.drawable.setting_yes);
 			
 			cache.label.setText(wirelessItem.itemTitleName);
 			
