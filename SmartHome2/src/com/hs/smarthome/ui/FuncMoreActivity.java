@@ -113,14 +113,16 @@ public class FuncMoreActivity extends Activity{
 			
 			
 			//做相关的处理
-			if(moreItem.itemImgResID==R.drawable.menu_list_more_wxsz)
+			switch(moreItem.itemImgResID)
 			{
+			case R.drawable.menu_list_more_wxsz:
 				Intent intent = new Intent();
 				intent.setClass(FuncMoreActivity.this, WirelessSettingActivity.class);
 				FuncMoreActivity.this.startActivity(intent);
-				
-				
+				break;
+			
 			}
+	
 			//Toast.makeText(FuncMoreActivity.this, moreItem.itemTitleName, Toast.LENGTH_SHORT).show();
 		}
     }

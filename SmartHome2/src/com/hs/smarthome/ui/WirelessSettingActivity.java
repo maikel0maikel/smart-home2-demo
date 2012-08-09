@@ -5,6 +5,7 @@ package com.hs.smarthome.ui;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -83,6 +84,10 @@ public class WirelessSettingActivity extends Activity{
 				long id) {
 			WirelessItem wirelessItem = wirelessItemList.get(position);
 			wirelessAdapter.notifyDataSetChanged();	//刷新数据集
+			
+			Intent intent = new Intent();
+			intent.setClass(WirelessSettingActivity.this, WirelessSettingDialog.class);
+			WirelessSettingActivity.this.startActivity(intent);
 			
 
 		}
