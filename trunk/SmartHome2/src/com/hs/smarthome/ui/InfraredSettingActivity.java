@@ -52,7 +52,7 @@ public class InfraredSettingActivity extends Activity{
 		}
 		
 		//构建无线对象
-		initWirelessList();
+		initInfraredList();
 		
 		infraredAdapter = new InfraredAdapter();
 		func_infrared_lv.setAdapter(infraredAdapter);
@@ -61,7 +61,7 @@ public class InfraredSettingActivity extends Activity{
 		infraredAdapter.notifyDataSetChanged();	//刷新数据集
 	}
 	
-	private void initWirelessList() {
+	private void initInfraredList() {
 		
 		for(int i = 1; i <= 50; i++)
 		{
