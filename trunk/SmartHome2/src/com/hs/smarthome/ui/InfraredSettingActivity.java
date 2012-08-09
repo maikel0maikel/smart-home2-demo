@@ -52,7 +52,7 @@ public class InfraredSettingActivity extends Activity{
 		}
 		
 		//构建无线对象
-		initInfraredList();
+		//initInfraredList();
 		
 		infraredAdapter = new InfraredAdapter();
 		func_infrared_lv.setAdapter(infraredAdapter);
@@ -129,7 +129,7 @@ public class InfraredSettingActivity extends Activity{
 			}
 			
 			
-			cache.icon.setImageResource(infraredItem.itemImgResID);
+			cache.icon.setImageResource(R.drawable.setting_yes);
 			
 			cache.label.setText(infraredItem.itemTitleName);
 			
