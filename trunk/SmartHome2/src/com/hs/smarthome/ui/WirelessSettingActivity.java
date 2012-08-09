@@ -16,10 +16,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.hs.smarthome.R;
-import com.hs.smarthome.db.SmartHomeAccessor;
 import com.hs.smarthome.db.WirelessItem;
 import com.hs.smarthome.db.WirelessSettingAccessor;
 
@@ -31,6 +29,9 @@ public class WirelessSettingActivity extends Activity{
 	private ListView func_wireless_lv;
 	private ArrayList<WirelessItem> wirelessItemList = new ArrayList<WirelessItem>(); 
 	private WirelessAdapter wirelessAdapter;
+	
+	/**重命名*/
+	private final static int DIALOG_RENAME = 1;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -87,9 +88,9 @@ public class WirelessSettingActivity extends Activity{
 			
 			Intent intent = new Intent();
 			intent.setClass(WirelessSettingActivity.this, WirelessSettingDialog.class);
-			WirelessSettingActivity.this.startActivity(intent);
-			
-
+			intent.putExtra("position", position);
+			intent.putExtra("itemTitleName", wirelessItem.itemTitleName);
+			WirelessSettingActivity.this.startActivityForResult(intent, DIALOG_RENAME);
 		}
     }
 	
@@ -144,4 +145,33 @@ public class WirelessSettingActivity extends Activity{
 			label = (TextView) view.findViewById(R.id.label);
 		}
 	}
+	
+	protected void onActivityResult(int reqCode, int resultCode, Intent data) {
+		super.onActivityResult(reqCode, resultCode, data);
+		if (resultCode != Activity.RESULT_OK) {	
+			return;
+		}
+		
+		switch (reqCode) {
+			case (DIALOG_RENAME):
+				int position = data.getIntExtra("position",0);
+				String itemTitleName = data.getStringExtra("itemTitleName");
+				//修改列表
+				WirelessItem wirelessItem = null;
+				if (position<wirelessItemList.size() && position>=0) {
+					wirelessItem = wirelessItemList.get(position);
+					wirelessItem.itemTitleName = itemTitleName;
+					wirelessAdapter.notifyDataSetChanged();	//刷新数据集
+					
+					//保存数据库
+					try {
+						WirelessSettingAccessor.getInstance(this).updateWirelessItem(wirelessItem);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+				
+			break;
+		}
+	};
 }

@@ -13,14 +13,14 @@ public class WirelessSettingAccessor {
 	
 	private static final String DATABASE_NAME = "wirelesssetting.db";	
 	
-	public static final String TBL_SWITCH = "tbl_switch";	//无线表名
-	private static final int INIT_SWITCH_ITEM = 100;			//默认初始化100个无线
+	public static final String TBL_WIRELESS = "tbl_wireless";	//无线表名
+	private static final int INIT_WIRELESS_ITEM = 100;			//默认初始化100个无线
 	
 	//SQL格式化网站  http://www.dpriver.com/pp/sqlformat.htm
 	
 	//创建 无线 数据表
-	public static final String SQL_CREATE_TABLE_SWITCH = ""
-			+ "CREATE TABLE IF NOT EXISTS tbl_switch "
+	public static final String SQL_CREATE_TABLE_WIRELESS = ""
+			+ "CREATE TABLE IF NOT EXISTS tbl_wireless "
 			+ "  ( "
 			+ "     itemId INTEGER PRIMARY KEY AUTOINCREMENT, " //主键,自增ID
 			+ "     itemTitleName TEXT "						//无线名称		
@@ -33,7 +33,7 @@ public class WirelessSettingAccessor {
 		this.ctx = ctx;
 		
 		SQLiteDatabase db = openDB();
-		db.execSQL(SQL_CREATE_TABLE_SWITCH);
+		db.execSQL(SQL_CREATE_TABLE_WIRELESS);
 		db.close();
 	}	
 
@@ -60,7 +60,7 @@ public class WirelessSettingAccessor {
 		
 		WirelessItem ret = new WirelessItem();  
 		ret.itemId = c.getInt(0);
-	    ret.itemTitleName = c.getString(2);
+	    ret.itemTitleName = c.getString(1);
 		return ret; 
 	}
 	
@@ -75,7 +75,7 @@ public class WirelessSettingAccessor {
 		ArrayList<WirelessItem> ret = new ArrayList<WirelessItem>();
 
 		SQLiteDatabase db = openDB();
-		String sql = "select * from "+TBL_SWITCH+" order by itemId ";
+		String sql = "select * from "+TBL_WIRELESS+" order by itemId ";
 		Cursor c = db.rawQuery(sql, null);
 		c.moveToFirst();
 
@@ -99,7 +99,7 @@ public class WirelessSettingAccessor {
 	public WirelessItem getWirelessItem(int itemId) throws Exception{
 		WirelessItem ret = null;
 		SQLiteDatabase db = openDB();
-		Cursor c = db.rawQuery("select * from "+TBL_SWITCH+" where itemId=? ", new String[] {itemId+""});           
+		Cursor c = db.rawQuery("select * from "+TBL_WIRELESS+" where itemId=? ", new String[] {itemId+""});           
         if (c.moveToFirst()) {            
             ret = buildWirelessItem(c);
         }
@@ -122,9 +122,9 @@ public class WirelessSettingAccessor {
 						
 		SQLiteDatabase db = openDB();
 		if(this.getWirelessItem(item.itemId)== null){			
-			db.insertOrThrow(TBL_SWITCH, null, values);			
+			db.insertOrThrow(TBL_WIRELESS, null, values);			
 		}else{
-		    db.update(TBL_SWITCH, values, "itemId=?", new String[] {item.itemId+""});		
+		    db.update(TBL_WIRELESS, values, "itemId=?", new String[] {item.itemId+""});		
 		}		
 		db.close();
 		return true;
@@ -144,11 +144,11 @@ public class WirelessSettingAccessor {
 		ContentValues values = new ContentValues();		
 		SQLiteDatabase db = openDB();
 		//初始化8个继电器信息
-		for (int i = 0; i < INIT_SWITCH_ITEM; i++) {
+		for (int i = 0; i < INIT_WIRELESS_ITEM; i++) {
 			//values.put("itemId", item.itemId); //系统自增
 			values.put("itemTitleName", "无线"+(i+1));
 			
-			db.insertOrThrow(TBL_SWITCH, null, values);				
+			db.insertOrThrow(TBL_WIRELESS, null, values);				
 		}
 	
 		db.close();
@@ -156,19 +156,19 @@ public class WirelessSettingAccessor {
 	
 	public void clearWirelessTable() {
 		SQLiteDatabase db = openDB();
-		db.execSQL("DELETE FROM "+TBL_SWITCH);
+		db.execSQL("DELETE FROM "+TBL_WIRELESS);
 		db.close();
 	}
 
 	public void dropWirelessTable() {
 		SQLiteDatabase db = openDB();
-		db.execSQL("DROP TABLE IF EXISTS " + TBL_SWITCH);
+		db.execSQL("DROP TABLE IF EXISTS " + TBL_WIRELESS);
 		db.close();
 	}
 
 	public boolean isWirelessTableEmpty() {
 		SQLiteDatabase db = openDB();
-		Cursor c = db.query(TBL_SWITCH, null, null, null, null, null, null);
+		Cursor c = db.query(TBL_WIRELESS, null, null, null, null, null, null);
 		boolean ret = c.getCount() == 0 ? true : false;
 		c.close();
 		db.close();
