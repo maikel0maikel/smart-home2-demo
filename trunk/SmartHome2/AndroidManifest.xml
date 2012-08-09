@@ -24,6 +24,7 @@
         <activity android:name=".ui.FuncSceneActivity" />
         <activity android:name=".ui.FuncSwitchActivity" />
         <activity android:name=".ui.WirelessSettingActivity"/>
+        <activity android:name=".ui.WirelessSettingDialog" android:theme="@android:style/Theme.Dialog"/>
     </application>
 
 </manifest>
