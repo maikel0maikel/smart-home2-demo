@@ -135,6 +135,11 @@ public class FuncMoreActivity extends Activity{
 				intentRoom.setClass(FuncMoreActivity.this, RoomSettingActivity.class);
 				FuncMoreActivity.this.startActivity(intentRoom);
 				break;
+			case R.drawable.menu_list_more_alarm_ico:
+				Intent intentAlarm = new Intent();
+				intentAlarm.setClass(FuncMoreActivity.this, AlarmSettingActivity.class);
+				FuncMoreActivity.this.startActivity(intentAlarm);
+				break;
 				
 			
 			}
