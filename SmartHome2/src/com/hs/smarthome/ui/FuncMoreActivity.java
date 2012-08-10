@@ -121,9 +121,14 @@ public class FuncMoreActivity extends Activity{
 				FuncMoreActivity.this.startActivity(intent);
 				break;
 			case R.drawable.menu_list_more_hwsz:
-				Intent intenti = new Intent();
-				intenti.setClass(FuncMoreActivity.this, InfraredSettingActivity.class);
-				FuncMoreActivity.this.startActivity(intenti);
+				Intent intentInfrared = new Intent();
+				intentInfrared.setClass(FuncMoreActivity.this, InfraredSettingActivity.class);
+				FuncMoreActivity.this.startActivity(intentInfrared);
+				break;
+			case R.drawable.menu_list_more_kgsz:
+				Intent intentRelay = new Intent();
+				intentRelay.setClass(FuncMoreActivity.this, RelaySettingActivity.class);
+				FuncMoreActivity.this.startActivity(intentRelay);
 				break;
 				
 			
