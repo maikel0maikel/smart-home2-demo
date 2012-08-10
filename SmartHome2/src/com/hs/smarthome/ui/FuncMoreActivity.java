@@ -63,7 +63,7 @@ public class FuncMoreActivity extends Activity{
 		moreItem2.explain = "更改红外遥控名称及发射端口";
 		
 		MoreItem moreItem3 = new MoreItem();
-		moreItem3.itemImgResID = R.drawable.menu_list_more_xtsz;
+		moreItem3.itemImgResID = R.drawable.menu_list_more_sbsz;
 		moreItem3.itemTitleName = "家居设备绑定";
 		moreItem3.explain = "维护家居设备、绑定功能信号";
 		
