@@ -17,7 +17,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hs.smarthome.R;
+import com.hs.smarthome.db.CentralControllerItem;
 import com.hs.smarthome.db.MoreItem;
+import com.hs.smarthome.db.WirelessItem;
 
 
 public class FuncMoreActivity extends Activity{
@@ -116,9 +118,9 @@ public class FuncMoreActivity extends Activity{
 			switch(moreItem.itemImgResID)
 			{
 			case R.drawable.menu_list_more_wxsz:
-				Intent intent = new Intent();
-				intent.setClass(FuncMoreActivity.this, WirelessSettingActivity.class);
-				FuncMoreActivity.this.startActivity(intent);
+				Intent intentWireless = new Intent();
+				intentWireless.setClass(FuncMoreActivity.this, WirelessSettingActivity.class);
+				FuncMoreActivity.this.startActivity(intentWireless);
 				break;
 			case R.drawable.menu_list_more_hwsz:
 				Intent intentInfrared = new Intent();
@@ -139,6 +141,16 @@ public class FuncMoreActivity extends Activity{
 				Intent intentAlarm = new Intent();
 				intentAlarm.setClass(FuncMoreActivity.this, AlarmSettingActivity.class);
 				FuncMoreActivity.this.startActivity(intentAlarm);
+				break;
+			case R.drawable.menu_list_more_xtsz:
+				Intent intent = new Intent();
+				CentralControllerItem centralcontrollerItem = new CentralControllerItem();
+				intent.setClass(FuncMoreActivity.this, CentralControllerSettingDialog.class);
+				intent.putExtra("position", position);
+				intent.putExtra("IP", centralcontrollerItem.IP);
+				intent.putExtra("Port", centralcontrollerItem.Port);
+				
+				FuncMoreActivity.this.startActivityForResult(intent, 2);
 				break;
 				
 			
