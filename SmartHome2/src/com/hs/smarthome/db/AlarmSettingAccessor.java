@@ -23,7 +23,11 @@ public class AlarmSettingAccessor {
 			+ "CREATE TABLE IF NOT EXISTS tbl_alarm"
 			+ "  ( "
 			+ "     itemId INTEGER PRIMARY KEY AUTOINCREMENT, " //主键,自增ID
-			+ "     itemTitleName TEXT "						//报警名称		
+			+ "     itemTitleName TEXT, "						//报警名称	
+			+ " 	itemShock INTEGER, "
+			+ " 	itemSound INTEGER, "
+			+ " 	itemDefaultSound INTEGER, "
+			+ " 	itemOtherSoundPath TEXT "
 			+ "  )";
 	
 	
@@ -61,6 +65,10 @@ public class AlarmSettingAccessor {
 		AlarmItem ret = new AlarmItem();  
 		ret.itemId = c.getInt(0);
 	    ret.itemTitleName = c.getString(1);
+	    ret.itemShock = c.getInt(2);
+	    ret.itemSound = c.getInt(3);
+	    ret.itemDefaultSound = c.getInt(4);
+	    ret.itemOtherSoundPath = c.getString(5);
 		return ret; 
 	}
 	
@@ -119,6 +127,10 @@ public class AlarmSettingAccessor {
 		ContentValues values = new ContentValues();		
 		//values.put("itemId", item.itemId); //系统自增
 		values.put("itemTitleName", item.itemTitleName);
+		values.put("itemShock", item.itemShock);
+		values.put("itemSound", item.itemSound);
+		values.put("itemDefaultSound", item.itemDefaultSound);
+		values.put("itemOtherSoundPath", item.itemOtherSoundPath);
 						
 		SQLiteDatabase db = openDB();
 		if(this.getAlarmItem(item.itemId)== null){			
@@ -145,6 +157,10 @@ public class AlarmSettingAccessor {
 		SQLiteDatabase db = openDB();
 		//初始化9个报警信息
 		values.put("itemTitleName", "温度报警");
+		values.put("itemShock", AlarmItem.ITEM_FLAG_ON);
+		values.put("itemSound", AlarmItem.ITEM_FLAG_ON);
+		values.put("itemDefaultSound", AlarmItem.ITEM_FLAG_ON);
+		values.put("itemOtherSoundPath", "");
 		db.insertOrThrow(TBL_ALARM, null, values);
 		
 		for (int i = 0; i < INIT_ALARM_ITEM-1; i++) {
