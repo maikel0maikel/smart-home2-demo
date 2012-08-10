@@ -11,6 +11,9 @@ public class SwitchItem {
 	/**继电器名称*/
 	public String itemTitleName;
 	
+	/**资源图片*/
+	public int itemImgResID; 	
+	
 	public static final int ITEM_FLAG_OFF = 0; 
 	public static final int ITEM_FLAG_ON = 1;
 }
