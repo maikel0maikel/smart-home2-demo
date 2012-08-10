@@ -84,17 +84,19 @@ public class AlarmSettingActivity extends Activity{
 	/**
      * 列表项点击
      */
-    private class ListItemClickListener implements OnItemClickListener{
+	private class ListItemClickListener implements OnItemClickListener {
 
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
 			AlarmItem alarmItem = alarmItemList.get(position);
-			alarmAdapter.notifyDataSetChanged();	//刷新数据集
-			
-
-    }
-}
+			Intent intent = new Intent();
+			intent.setClass(AlarmSettingActivity.this, AlarmSettingDetailActivity.class);
+			intent.putExtra("alarmItem", alarmItem);
+			startActivity(intent);
+		}
+	}
+	
 	private class AlarmAdapter extends BaseAdapter {
 
 		@Override
