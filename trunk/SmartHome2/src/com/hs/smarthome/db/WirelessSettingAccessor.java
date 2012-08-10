@@ -143,7 +143,7 @@ public class WirelessSettingAccessor {
 		WirelessItem item = new WirelessItem();
 		ContentValues values = new ContentValues();		
 		SQLiteDatabase db = openDB();
-		//初始化8个继电器信息
+		//初始化100个无线信息
 		for (int i = 0; i < INIT_WIRELESS_ITEM; i++) {
 			//values.put("itemId", item.itemId); //系统自增
 			values.put("itemTitleName", "无线"+(i+1));
