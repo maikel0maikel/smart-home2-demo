@@ -117,16 +117,19 @@ public class AlarmSettingDetailActivity extends Activity{
 			if (position==0){
 				cache.label.setText("报警震动提示开关");
 				boolean selected = mAlarmItem.itemShock==AlarmItem.ITEM_FLAG_ON?true:false;
+				cache.check_ico.setImageResource(R.drawable.checkbox);
 				cache.check_ico.setSelected(selected);
 			}
 			if (position==1){
 				cache.label.setText("报警声音提示开关");
 				boolean selected = mAlarmItem.itemSound==AlarmItem.ITEM_FLAG_ON?true:false;
+				cache.check_ico.setImageResource(R.drawable.checkbox);
 				cache.check_ico.setSelected(selected);
 			}
 			if (position==2){
 				cache.label.setText("为内部报警默认音");
 				boolean selected = mAlarmItem.itemDefaultSound==AlarmItem.ITEM_FLAG_ON?true:false;
+				cache.check_ico.setImageResource(R.drawable.checkbox);
 				cache.check_ico.setSelected(selected);
 			}
 			if (position==3){
