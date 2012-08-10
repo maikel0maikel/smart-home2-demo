@@ -2,6 +2,8 @@ package com.hs.smarthome.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +24,11 @@ public class CentralControllerSettingDialog extends Activity implements View.OnC
 	public Button Cancel;
 	
 	private int position;
+	
+	private final String PREFS_NAME = "SmartHomeV2";
+	private final String KEY_IP = "ip";
+	private final String KEY_PORT = "port";
+	
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,6 +53,9 @@ public class CentralControllerSettingDialog extends Activity implements View.OnC
         Ok.setText("确定");
         Cancel.setText("取消");
         
+        EditIP.setText( getPrefsKey(KEY_IP) );
+        EditPort.setText( getPrefsKey(KEY_PORT) );
+        
         Ok.setOnClickListener(this);
         Cancel.setOnClickListener(this);
         		
@@ -56,13 +66,17 @@ public class CentralControllerSettingDialog extends Activity implements View.OnC
 		switch (paramView.getId()) {
 			case R.id.Ok:
 				//TODO 判断Edit是否为空
-				
+				/*
 				Intent mIntent = new Intent(CentralControllerSettingDialog.this, FuncMoreActivity.class);
 				mIntent.putExtra("IP", IP.getText().toString());
 				mIntent.putExtra("Port", Port.getText().toString());
 				mIntent.putExtra("position", position);
 				
 				setResult(Activity.RESULT_OK, mIntent);
+				*/
+				setPrefsKey(KEY_IP, EditIP.getText().toString());
+				setPrefsKey(KEY_PORT, EditPort.getText().toString());
+				
 				finish();
 				break;
 			case R.id.Cancel:
@@ -71,4 +85,17 @@ public class CentralControllerSettingDialog extends Activity implements View.OnC
 		}
 	}
     
+    public String getPrefsKey(String keyName){
+    	
+    	final SharedPreferences prefs = getSharedPreferences(PREFS_NAME, 0);
+    	return prefs.getString(keyName,"");
+    }
+    
+    public void setPrefsKey(String keyName, String keyValue){
+    	
+    	final SharedPreferences prefs = getSharedPreferences(PREFS_NAME, 0);
+    	Editor editor = prefs.edit();
+    	editor.putString(keyName, keyValue);
+    	editor.commit();
+    }
 }
