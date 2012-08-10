@@ -92,7 +92,8 @@ public class AlarmSettingActivity extends Activity{
 			AlarmItem alarmItem = alarmItemList.get(position);
 			Intent intent = new Intent();
 			intent.setClass(AlarmSettingActivity.this, AlarmSettingDetailActivity.class);
-			intent.putExtra("alarmItem", alarmItem);
+			//intent.putExtra("alarmItem", alarmItem);
+			intent.putExtra("alarmItemID", alarmItem.itemId);
 			startActivity(intent);
 		}
 	}

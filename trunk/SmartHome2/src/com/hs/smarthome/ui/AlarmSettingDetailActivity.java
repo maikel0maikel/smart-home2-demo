@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.hs.smarthome.R;
 import com.hs.smarthome.db.AlarmItem;
+import com.hs.smarthome.db.AlarmSettingAccessor;
 import com.hs.smarthome.db.SwitchItem;
 
 public class AlarmSettingDetailActivity extends Activity{
@@ -32,7 +33,15 @@ public class AlarmSettingDetailActivity extends Activity{
 
 		setContentView(R.layout.func_alarm_detail);
 		
-		mAlarmItem = (AlarmItem)getIntent().getSerializableExtra("alarmItem");
+		//mAlarmItem = (AlarmItem)getIntent().getSerializableExtra("alarmItem");
+		
+		int alarmItemID = getIntent().getIntExtra("alarmItemID", 0);
+		
+		try {
+			mAlarmItem = AlarmSettingAccessor.getInstance(this).getAlarmItem(alarmItemID);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		mInflater = LayoutInflater.from( this );
 		
@@ -43,6 +52,18 @@ public class AlarmSettingDetailActivity extends Activity{
 		func_alarm_detail_lv.setOnItemClickListener(new ListItemClickListener());
 		
 		alarmSettingDetailAdapter.notifyDataSetChanged();	//刷新数据集
+	}
+	
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		
+		try {
+			AlarmSettingAccessor.getInstance(this).updateAlarmItem(mAlarmItem);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
     /**
