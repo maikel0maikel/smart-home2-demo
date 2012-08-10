@@ -130,6 +130,11 @@ public class FuncMoreActivity extends Activity{
 				intentRelay.setClass(FuncMoreActivity.this, RelaySettingActivity.class);
 				FuncMoreActivity.this.startActivity(intentRelay);
 				break;
+			case R.drawable.menu_list_more_room:
+				Intent intentRoom = new Intent();
+				intentRoom.setClass(FuncMoreActivity.this, RoomSettingActivity.class);
+				FuncMoreActivity.this.startActivity(intentRoom);
+				break;
 				
 			
 			}
