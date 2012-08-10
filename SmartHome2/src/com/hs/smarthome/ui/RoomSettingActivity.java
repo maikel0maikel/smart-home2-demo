@@ -115,13 +115,13 @@ public class RoomSettingActivity extends Activity{
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
-			RoomItem wirelessItem = roomItemList.get(position);
+			RoomItem roomItem = roomItemList.get(position);
 			roomAdapter.notifyDataSetChanged();	//刷新数据集
 			
 			Intent intent = new Intent();
 			intent.setClass(RoomSettingActivity.this, RoomSettingDialog.class);
 			intent.putExtra("position", position);
-			intent.putExtra("itemTitleName", wirelessItem.itemTitleName);
+			intent.putExtra("itemTitleName", roomItem.itemTitleName);
 			RoomSettingActivity.this.startActivityForResult(intent, DIALOG_RENAME);
 		}
     }

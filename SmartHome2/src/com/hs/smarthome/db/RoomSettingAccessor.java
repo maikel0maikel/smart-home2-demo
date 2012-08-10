@@ -143,14 +143,25 @@ public class RoomSettingAccessor {
 		RoomItem item = new RoomItem();
 		ContentValues values = new ContentValues();		
 		SQLiteDatabase db = openDB();
-		//初始化8个继电器信息
-		for (int i = 0; i < INIT_ROOM_ITEM; i++) {
-			//values.put("itemId", item.itemId); //系统自增
-			values.put("itemTitleName", "房间"+(i+1));
-			
-			db.insertOrThrow(TBL_ROOM, null, values);				
-		}
-	
+		//初始化6个房间信息
+		values.put("itemTitleName", "客厅");
+		db.insertOrThrow(TBL_ROOM, null, values);
+		
+		values.put("itemTitleName", "卧室");
+		db.insertOrThrow(TBL_ROOM, null, values);	
+		
+		values.put("itemTitleName", "书房");
+		db.insertOrThrow(TBL_ROOM, null, values);	
+
+		values.put("itemTitleName", "厨房");
+		db.insertOrThrow(TBL_ROOM, null, values);	
+		
+		values.put("itemTitleName", "其他");
+		db.insertOrThrow(TBL_ROOM, null, values);
+		
+		values.put("itemTitleName", "其他2");
+		db.insertOrThrow(TBL_ROOM, null, values);	
+		
 		db.close();
 	}
 	
