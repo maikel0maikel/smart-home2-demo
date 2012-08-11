@@ -27,6 +27,7 @@ public class AlarmSettingDialog extends Activity implements View.OnClickListener
         setContentView(R.layout.wireless_setting_dialog);
         
         String itemOtherSoundPath = getIntent().getStringExtra("itemOtherSoundPath");
+        String itemTitleName = getIntent().getStringExtra("itemTitleName");
         position = getIntent().getIntExtra("position", 0);
 		
         Title = (TextView)findViewById(R.id.Title);
@@ -36,7 +37,7 @@ public class AlarmSettingDialog extends Activity implements View.OnClickListener
         Cancel = (Button)findViewById(R.id.Cancel);
         
         Edit.setText(itemOtherSoundPath);
-        Title.setText("报警铃音编辑");
+        Title.setText(itemTitleName+"报警铃音编辑");
         Name.setText("请输入报警铃音路径：");
         Ok.setText("确定");
         Cancel.setText("取消");
