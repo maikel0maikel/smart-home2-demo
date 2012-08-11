@@ -10,7 +10,7 @@ public class AlarmItem implements Serializable{
 	/**资源图片*/
 	public int itemImgResID; 		 
 	
-	/**无线名称*/
+	/**报警名称*/
 	public String itemTitleName;
 	
 	/**报警震动提示开关      0:为Off 1:表示On*/

@@ -28,11 +28,13 @@
         <activity android:name=".ui.RelaySettingActivity"/>
         <activity android:name=".ui.RoomSettingActivity"/>
         <activity android:name=".ui.AlarmSettingActivity"/>
+        <activity android:name=".ui.AlarmSettingDetailActivity"/>
         <activity android:name=".ui.WirelessSettingDialog" android:theme="@android:style/Theme.Dialog"/>
         <activity android:name=".ui.InfraredSettingDialog" android:theme="@android:style/Theme.Dialog"/>
         <activity android:name=".ui.RelaySettingDialog" android:theme="@android:style/Theme.Dialog"/>
         <activity android:name=".ui.RoomSettingDialog" android:theme="@android:style/Theme.Dialog"/>
         <activity android:name=".ui.CentralControllerSettingDialog" android:theme="@android:style/Theme.Dialog"/>
+        <activity android:name=".ui.AlarmSettingDialog" android:theme="@android:style/Theme.Dialog"/>
     </application>
 
 </manifest>

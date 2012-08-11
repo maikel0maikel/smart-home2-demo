@@ -1,6 +1,7 @@
 package com.hs.smarthome.ui;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -98,6 +99,13 @@ public class AlarmSettingDetailActivity extends Activity{
 			
 			if (position==3){
 				//弹出路径设置对话框
+				
+				
+				Intent intent = new Intent();
+				intent.setClass(AlarmSettingDetailActivity.this, AlarmSettingDialog.class);
+				intent.putExtra("position", position);
+				intent.putExtra("itemOtherSoundPath", mAlarmItem.itemOtherSoundPath);
+				AlarmSettingDetailActivity.this.startActivityForResult(intent, 1);
 			}
 			
 			alarmSettingDetailAdapter.notifyDataSetChanged();	//刷新数据集
