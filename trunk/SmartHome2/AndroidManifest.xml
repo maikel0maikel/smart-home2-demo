@@ -34,6 +34,7 @@
         <activity android:name=".ui.RelaySettingDialog" android:theme="@android:style/Theme.Dialog"/>
         <activity android:name=".ui.RoomSettingDialog" android:theme="@android:style/Theme.Dialog"/>
         <activity android:name=".ui.CentralControllerSettingDialog" android:theme="@android:style/Theme.Dialog"/>
+        <activity android:name=".ui.AlarmSettingDialog" android:theme="@android:style/Theme.Dialog"/>
     </application>
 
 </manifest>
