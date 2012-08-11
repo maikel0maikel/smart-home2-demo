@@ -105,6 +105,7 @@ public class AlarmSettingDetailActivity extends Activity{
 				intent.setClass(AlarmSettingDetailActivity.this, AlarmSettingDialog.class);
 				intent.putExtra("position", position);
 				intent.putExtra("itemOtherSoundPath", mAlarmItem.itemOtherSoundPath);
+				intent.putExtra("itemTitleName", mAlarmItem.itemTitleName);
 				AlarmSettingDetailActivity.this.startActivityForResult(intent, 1);
 			}
 			
