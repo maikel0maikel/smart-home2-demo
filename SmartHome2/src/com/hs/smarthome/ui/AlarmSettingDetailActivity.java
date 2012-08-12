@@ -17,6 +17,8 @@ import android.widget.Toast;
 import com.hs.smarthome.R;
 import com.hs.smarthome.db.AlarmItem;
 import com.hs.smarthome.db.AlarmSettingAccessor;
+import com.hs.smarthome.db.InfraredItem;
+import com.hs.smarthome.db.InfraredSettingAccessor;
 import com.hs.smarthome.db.SwitchItem;
 
 public class AlarmSettingDetailActivity extends Activity{
@@ -27,6 +29,9 @@ public class AlarmSettingDetailActivity extends Activity{
 	private AlarmSettingDetailAdapter alarmSettingDetailAdapter;
 	
 	private AlarmItem mAlarmItem;
+	
+	/**路径设置*/
+	private final static int DIALOG_PATH_SETTING = 1;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -100,13 +105,12 @@ public class AlarmSettingDetailActivity extends Activity{
 			if (position==3){
 				//弹出路径设置对话框
 				
-				
 				Intent intent = new Intent();
 				intent.setClass(AlarmSettingDetailActivity.this, AlarmSettingDialog.class);
 				intent.putExtra("position", position);
 				intent.putExtra("itemOtherSoundPath", mAlarmItem.itemOtherSoundPath);
 				intent.putExtra("itemTitleName", mAlarmItem.itemTitleName);
-				AlarmSettingDetailActivity.this.startActivityForResult(intent, 1);
+				AlarmSettingDetailActivity.this.startActivityForResult(intent, DIALOG_PATH_SETTING);
 			}
 			
 			alarmSettingDetailAdapter.notifyDataSetChanged();	//刷新数据集
@@ -182,4 +186,19 @@ public class AlarmSettingDetailActivity extends Activity{
 			check_ico = (ImageView) view.findViewById(R.id.check_ico);
 		}
 	}
+	
+	protected void onActivityResult(int reqCode, int resultCode, Intent data) {
+		super.onActivityResult(reqCode, resultCode, data);
+		if (resultCode != Activity.RESULT_OK) {	
+			return;
+		}
+		
+		switch (reqCode) {
+			case (DIALOG_PATH_SETTING):
+				String itemOtherSoundPath = data.getStringExtra("itemOtherSoundPath");
+				mAlarmItem.itemOtherSoundPath = itemOtherSoundPath;
+				
+			break;
+		}
+	};
 }
