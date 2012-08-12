@@ -16,4 +16,10 @@ public class HomeItem {
 	
 	/**设备分类*/
 	public int itemRoomID;
+	
+	/**无线信号*/
+	public String itemWireless;
+	
+	/**红外信号*/
+	public String itemInfrared;
 }

@@ -4,11 +4,14 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -93,8 +96,11 @@ public class FuncHomeActivity extends Activity implements View.OnClickListener {
 				try {
 					HomeSettingAccessor.getInstance(this).initHomeTable();
 					tab1ListView = new ListView(this);
+					tab1ListView.setCacheColorHint(Color.parseColor("#00000000"));
+					tab1ListView.setDivider( this.getResources().getDrawable(R.drawable.list_driver) );
 					HomeAdapter ext = new HomeAdapter( HomeSettingAccessor.getInstance(this).getHomeItemList(1) );
 					tab1ListView.setAdapter(ext);
+					tab1ListView.setOnItemClickListener(new ListItemClickListener());
 					ext.notifyDataSetChanged(); // 刷新数据集
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -198,6 +204,28 @@ public class FuncHomeActivity extends Activity implements View.OnClickListener {
 		tabContainer.addView(mainView);
 	}
 
+	/**
+     * 列表项点击
+     */
+    private class ListItemClickListener implements OnItemClickListener{
+
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position,
+				long id) {
+			
+			ItemCache cache = (ItemCache) view.getTag();
+
+			switch ( cache.homeItem.itemControlPanelID ){
+			
+				case ControlPanel.PANEL3:
+					Intent intent = new Intent();
+					intent.setClass(FuncHomeActivity.this, EquipementControlTV.class);
+					FuncHomeActivity.this.startActivity(intent);
+				break;
+			}
+		}
+    }
+    
 	@Override
 	public void onClick(View v) {
 
@@ -244,6 +272,8 @@ public class FuncHomeActivity extends Activity implements View.OnClickListener {
 				cache = (ItemCache) view.getTag();
 			}
 
+			cache.homeItem = homeItem;
+			
 			cache.icon.setImageResource( ControlPanel.getImgResByPanelID(homeItem.itemControlPanelID) );
 			cache.label.setText(homeItem.itemTitleName);
 
@@ -254,6 +284,7 @@ public class FuncHomeActivity extends Activity implements View.OnClickListener {
 	private class ItemCache {
 		public ImageView icon;
 		public TextView label;
+		public HomeItem homeItem;
 
 		public ItemCache(View view) {
 			icon = (ImageView) view.findViewById(R.id.icon);
