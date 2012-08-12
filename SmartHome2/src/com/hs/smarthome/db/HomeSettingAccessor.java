@@ -149,36 +149,118 @@ public class HomeSettingAccessor {
 		//初始化100个设备信息
 		for (int i = 0; i < INIT_HOME_ITEM; i++) {
 			
-			if (i>0&&i<2){
+			if (i>=0&&i<5){
 				values.put("itemRoomID", 1);
-			}else{
-				values.put("itemRoomID", 2);
 			}
 			
 			if (i==0){
-				values.put("itemTitleName", "开关");
-				values.put("itemControlPanelID", ControlPanel.PANEL1);
-			}
-			if (i==1){
-				values.put("itemTitleName", "空调");
-				values.put("itemControlPanelID", ControlPanel.PANEL2);
-			}
-			if (i==2){
 				values.put("itemTitleName", "电视机");
 				values.put("itemControlPanelID", ControlPanel.PANEL3);
 			}
+			if (i==1){
+				values.put("itemTitleName", "饮水机");
+				values.put("itemControlPanelID", ControlPanel.PANEL1);
+			}
+			if (i==2){
+				values.put("itemTitleName", "顶灯");
+				values.put("itemControlPanelID", ControlPanel.PANEL1);
+			}
 			if (i==3){
-				values.put("itemTitleName", "播放器");
-				values.put("itemControlPanelID", ControlPanel.PANEL4);
+				values.put("itemTitleName", "空调");
+				values.put("itemControlPanelID", ControlPanel.PANEL2);
 			}
 			if (i==4){
-				values.put("itemTitleName", "多媒体");
-				values.put("itemControlPanelID", ControlPanel.PANEL5);
+				values.put("itemTitleName", "窗帘");
+				values.put("itemControlPanelID", ControlPanel.PANEL1);
 			}
 			
 			db.insertOrThrow(TBL_HOME, null, values);	
 		}
+	for (int i = 0; i < INIT_HOME_ITEM-2; i++) {
+			
+			if (i>=0&&i<3){
+				values.put("itemRoomID", 2);
+			}
+			
+			if (i==0){
+				values.put("itemTitleName", "顶灯");
+				values.put("itemControlPanelID", ControlPanel.PANEL1);
+			}
+			if (i==1){
+				values.put("itemTitleName", "台灯");
+				values.put("itemControlPanelID", ControlPanel.PANEL1);
+			}
+			if (i==2){
+				values.put("itemTitleName", "窗帘");
+				values.put("itemControlPanelID", ControlPanel.PANEL1);
+			}
+				
+			db.insertOrThrow(TBL_HOME, null, values);	
+		}
+	for (int i = 0; i < INIT_HOME_ITEM-2; i++) {
+		
+		if (i>=0&&i<5){
+			values.put("itemRoomID", 3);
+		}
+		
+		if (i==0){
+			values.put("itemTitleName", "顶灯");
+			values.put("itemControlPanelID", ControlPanel.PANEL1);
+		}
+		if (i==1){
+			values.put("itemTitleName", "台灯");
+			values.put("itemControlPanelID", ControlPanel.PANEL1);
+		}
+		if (i==2){
+			values.put("itemTitleName", "窗帘");
+			values.put("itemControlPanelID", ControlPanel.PANEL1);
+		}
+		
+		db.insertOrThrow(TBL_HOME, null, values);	
+	}
+for (int i = 0; i < INIT_HOME_ITEM-4; i++) {
+		
+		if (i>=0&&i<5){
+			values.put("itemRoomID", 4);
+		}
+		
+		if (i==0){
+			values.put("itemTitleName", "顶灯");
+			values.put("itemControlPanelID", ControlPanel.PANEL1);
+		}
+		db.insertOrThrow(TBL_HOME, null, values);	
+	}
+for (int i = 0; i < INIT_HOME_ITEM-3; i++) {
 	
+	if (i>=0&&i<5){
+		values.put("itemRoomID", 5);
+	}
+	
+	if (i==0){
+		values.put("itemTitleName", "卫生间顶灯");
+		values.put("itemControlPanelID", ControlPanel.PANEL1);
+	}
+	if (i==1){
+		values.put("itemTitleName", "卫生间热水器");
+		values.put("itemControlPanelID", ControlPanel.PANEL1);
+	}
+
+	
+	db.insertOrThrow(TBL_HOME, null, values);	
+}
+for (int i = 0; i < INIT_HOME_ITEM-4; i++) {
+	
+	if (i>=0&&i<5){
+		values.put("itemRoomID", 6);
+	}
+	
+	if (i==0){
+		values.put("itemTitleName", "卫生间洗衣机");
+		values.put("itemControlPanelID", ControlPanel.PANEL1);
+	}
+	db.insertOrThrow(TBL_HOME, null, values);	
+}
+		
 		db.close();
 	}
 	

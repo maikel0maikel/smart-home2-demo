@@ -121,6 +121,15 @@ public class FuncHomeActivity extends Activity implements View.OnClickListener {
 			lastActionButton = paramView;
 			if (tab3ListView == null) {
 				// tabListView = null; 初始化
+				try {
+					HomeSettingAccessor.getInstance(this).initHomeTable();
+					tab3ListView = new ListView(this);
+					HomeAdapter ext = new HomeAdapter( HomeSettingAccessor.getInstance(this).getHomeItemList(3) );
+					tab3ListView.setAdapter(ext);
+					ext.notifyDataSetChanged(); // 刷新数据集
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 			tmpTabListView = tab3ListView;
 			break;
@@ -128,6 +137,15 @@ public class FuncHomeActivity extends Activity implements View.OnClickListener {
 			lastActionButton = paramView;
 			if (tab4ListView == null) {
 				// tabListView = null; 初始化
+				try {
+					HomeSettingAccessor.getInstance(this).initHomeTable();
+					tab4ListView = new ListView(this);
+					HomeAdapter ext = new HomeAdapter( HomeSettingAccessor.getInstance(this).getHomeItemList(4) );
+					tab4ListView.setAdapter(ext);
+					ext.notifyDataSetChanged(); // 刷新数据集
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 			tmpTabListView = tab4ListView;
 			break;
@@ -135,6 +153,15 @@ public class FuncHomeActivity extends Activity implements View.OnClickListener {
 			lastActionButton = paramView;
 			if (tab5ListView == null) {
 				// tabListView = null; 初始化
+				try {
+					HomeSettingAccessor.getInstance(this).initHomeTable();
+					tab5ListView = new ListView(this);
+					HomeAdapter ext = new HomeAdapter( HomeSettingAccessor.getInstance(this).getHomeItemList(5) );
+					tab5ListView.setAdapter(ext);
+					ext.notifyDataSetChanged(); // 刷新数据集
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 			tmpTabListView = tab5ListView;
 			break;
@@ -142,6 +169,15 @@ public class FuncHomeActivity extends Activity implements View.OnClickListener {
 			lastActionButton = paramView;
 			if (tab6ListView == null) {
 				// tabListView = null; 初始化
+				try {
+					HomeSettingAccessor.getInstance(this).initHomeTable();
+					tab6ListView = new ListView(this);
+					HomeAdapter ext = new HomeAdapter( HomeSettingAccessor.getInstance(this).getHomeItemList(6) );
+					tab6ListView.setAdapter(ext);
+					ext.notifyDataSetChanged(); // 刷新数据集
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 			tmpTabListView = tab6ListView;
 			break;
