@@ -236,7 +236,7 @@ public class FuncHomeActivity extends Activity implements View.OnClickListener {
 
 			ItemCache cache = null;
 			if (null == view) {
-				view = mInflater.inflate(R.layout.wireless_setting_list_item,
+				view = mInflater.inflate(R.layout.home_list_item,
 						null);
 				cache = new ItemCache(view);
 				view.setTag(cache);
