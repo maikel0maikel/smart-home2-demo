@@ -10,4 +10,10 @@ public class HomeItem {
 	
 	/**设备名称*/
 	public String itemTitleName;
+	
+	/**控制面板*/
+	public int itemControlPanelID;
+	
+	/**设备分类*/
+	public int itemRoomID;
 }

@@ -16,8 +16,7 @@ public class HomeSettingAccessor {
 	private static final String DATABASE_NAME = "homesetting.db";	
 	
 	public static final String TBL_HOME = "tbl_home";	//设备表名
-	private static final int INIT_HOME_ITEM = 100;			//默认初始化100个设备
-	
+	private static final int INIT_HOME_ITEM = 5;			//默认初始化100个报警
 	//SQL格式化网站  http://www.dpriver.com/pp/sqlformat.htm
 	
 	//创建 设备 数据表
@@ -25,7 +24,9 @@ public class HomeSettingAccessor {
 			+ "CREATE TABLE IF NOT EXISTS tbl_home "
 			+ "  ( "
 			+ "     itemId INTEGER PRIMARY KEY AUTOINCREMENT, " //主键,自增ID
-			+ "     itemTitleName TEXT "						//设备名称		
+			+ "     itemTitleName TEXT, "						//设备名称	
+			+ "     itemControlPanelID INTEGER , " 				//控制面板
+			+ "     itemRoomID INTEGER "						//设备分类				
 			+ "  )";
 	
 	
@@ -63,7 +64,8 @@ public class HomeSettingAccessor {
 		HomeItem ret = new HomeItem();  
 		ret.itemId = c.getInt(0);
 	    ret.itemTitleName = c.getString(1);
-	    chooseImgRes(ret);
+	    ret.itemControlPanelID = c.getInt(2);
+	    ret.itemRoomID = c.getInt(3);
 		return ret; 
 	}
 	
@@ -72,13 +74,13 @@ public class HomeSettingAccessor {
 	 * @return
 	 * @throws Exception
 	 */
-	public ArrayList<HomeItem> getHomeItemList()
+	public ArrayList<HomeItem> getHomeItemList(int roomID)
 			throws Exception {
 
 		ArrayList<HomeItem> ret = new ArrayList<HomeItem>();
 
 		SQLiteDatabase db = openDB();
-		String sql = "select * from "+TBL_HOME+" order by itemId ";
+		String sql = "select * from "+TBL_HOME+" where itemRoomID="+roomID+" order by itemId ";
 		Cursor c = db.rawQuery(sql, null);
 		c.moveToFirst();
 
@@ -122,6 +124,8 @@ public class HomeSettingAccessor {
 		ContentValues values = new ContentValues();		
 		//values.put("itemId", item.itemId); //系统自增
 		values.put("itemTitleName", item.itemTitleName);
+		values.put("itemControlPanelID", item.itemControlPanelID);
+		values.put("itemRoomID", item.itemRoomID);
 						
 		SQLiteDatabase db = openDB();
 		if(this.getHomeItem(item.itemId)== null){			
@@ -129,7 +133,6 @@ public class HomeSettingAccessor {
 		}else{
 		    db.update(TBL_HOME, values, "itemId=?", new String[] {item.itemId+""});		
 		}	
-		chooseImgRes(item);
 		db.close();
 		return true;
 	}
@@ -137,23 +140,43 @@ public class HomeSettingAccessor {
 	/**
 	 * 创建设备初始化数据
 	 */
-	public void initHomeTable(){
-		//DEBUG 使用 清空表
-		//clearShortCutSlotPanelTable();
-		//dropShortCutSlotPanelTable();
+	public void initHomeTable(){		
 		if ( !isHomeTableEmpty() )
 			return;
 		
-		HomeItem item = new HomeItem();
 		ContentValues values = new ContentValues();		
 		SQLiteDatabase db = openDB();
 		//初始化100个设备信息
 		for (int i = 0; i < INIT_HOME_ITEM; i++) {
-			//values.put("itemId", item.itemId); //系统自增
-			values.put("itemTitleName", "设备"+(i+1));
+			
+			if (i>0&&i<2){
+				values.put("itemRoomID", 1);
+			}else{
+				values.put("itemRoomID", 2);
+			}
+			
+			if (i==0){
+				values.put("itemTitleName", "开关");
+				values.put("itemControlPanelID", ControlPanel.PANEL1);
+			}
+			if (i==1){
+				values.put("itemTitleName", "空调");
+				values.put("itemControlPanelID", ControlPanel.PANEL2);
+			}
+			if (i==2){
+				values.put("itemTitleName", "电视机");
+				values.put("itemControlPanelID", ControlPanel.PANEL3);
+			}
+			if (i==3){
+				values.put("itemTitleName", "播放器");
+				values.put("itemControlPanelID", ControlPanel.PANEL4);
+			}
+			if (i==4){
+				values.put("itemTitleName", "多媒体");
+				values.put("itemControlPanelID", ControlPanel.PANEL5);
+			}
 			
 			db.insertOrThrow(TBL_HOME, null, values);	
-			chooseImgRes(item);
 		}
 	
 		db.close();
@@ -180,24 +203,5 @@ public class HomeSettingAccessor {
 		return ret;
 	}
 	
-	public void chooseImgRes(HomeItem item){
-		
-		String str=item.itemTitleName;
-		switch(str){
-		case "电视机":item.itemImgResID=R.drawable.menu_list_equipement_tv;break;
-		case "饮水机":item.itemImgResID=R.drawable.menu_list_equipement_kg;break;
-		case "顶灯":item.itemImgResID=R.drawable.menu_list_equipement_kg;break;
-		case "窗帘":item.itemImgResID=R.drawable.menu_list_equipement_kg;break;
-		case "台灯":item.itemImgResID=R.drawable.menu_list_equipement_kg;break;
-		case "卫生间顶灯":item.itemImgResID=R.drawable.menu_list_equipement_kg;break;
-		case "卫生间热水器":item.itemImgResID=R.drawable.menu_list_equipement_kg;break;
-		case "卫生间洗衣机":item.itemImgResID=R.drawable.menu_list_equipement_kg;break;
-		case "空调":item.itemImgResID=R.drawable.menu_list_equipement_kt;break;
-		case "DVD":item.itemImgResID=R.drawable.menu_list_equipement_dvd;break;
-		case "多媒体":item.itemImgResID=R.drawable.menu_list_equipement_media;break;
-		default:item.itemImgResID=R.drawable.menu_list_equipement_kg;break;
-		
-		}
-	}
 
 }
