@@ -3,6 +3,8 @@ package com.hs.smarthome.db;
 
 import java.util.ArrayList;
 
+import com.hs.smarthome.R;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;

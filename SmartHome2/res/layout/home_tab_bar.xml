@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:id="@id/tab_bar" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_alignParentTop="true"
+  android:layout_margin="15dip"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+	<FrameLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_weight="1.0"
+      android:id="@+id/drawingRoom" android:background="@drawable/room_tab_selected_left_bg" >
+        <LinearLayout android:gravity="center" android:layout_gravity="center" android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="客厅" android:textColor="#000000"/>
+        </LinearLayout>
+    </FrameLayout>
+    <FrameLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_weight="1.0"
+      android:id="@+id/bedRoom" android:background="@drawable/room_tab_selected_bg" >
+        <LinearLayout android:gravity="center" android:layout_gravity="center" android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="卧室" android:textColor="#000000"/>
+        </LinearLayout>
+    </FrameLayout>
+    <FrameLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_weight="1.0"
+      android:id="@+id/studyRoom" android:background="@drawable/room_tab_selected_bg" >
+        <LinearLayout android:gravity="center" android:layout_gravity="center" android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="书房" android:textColor="#000000"/>
+        </LinearLayout>
+    </FrameLayout>
+    <FrameLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_weight="1.0"
+      android:id="@+id/kitchenRoom" android:background="@drawable/room_tab_selected_bg" >
+        <LinearLayout android:gravity="center" android:layout_gravity="center" android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="厨房" android:textColor="#000000"/>
+        </LinearLayout>
+    </FrameLayout>
+    <FrameLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_weight="1.0"
+      android:id="@+id/Other" android:background="@drawable/room_tab_selected_bg" >
+        <LinearLayout android:gravity="center" android:layout_gravity="center" android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="其他" android:textColor="#000000"/>
+        </LinearLayout>
+    </FrameLayout>
+      <FrameLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_weight="1.0"
+      android:id="@+id/Other2" android:background="@drawable/room_tab_selected_right_bg" >
+        <LinearLayout android:gravity="center" android:layout_gravity="center" android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="其他2" android:textColor="#000000"/>
+        </LinearLayout>
+    </FrameLayout>
+</LinearLayout>
