@@ -9,17 +9,26 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.hs.smarthome.R;
+import com.hs.smarthome.db.HomeItem;
+import com.hs.smarthome.db.HomeSettingAccessor;
+import com.hs.smarthome.db.WirelessItem;
+import com.hs.smarthome.db.WirelessSettingAccessor;
+import com.hs.smarthome.ui.WirelessSettingActivity.ListItemClickListener;
+import com.hs.smarthome.ui.WirelessSettingActivity.WirelessAdapter;
+
 
 public class FuncHomeActivity extends Activity implements View.OnClickListener{
 
@@ -40,6 +49,14 @@ public class FuncHomeActivity extends Activity implements View.OnClickListener{
 	private ListView tab6ListView;
 	
 	private View lastActionButton;
+	
+	private ArrayList<HomeItem> homeItemList = new ArrayList<HomeItem>(); 
+	private LayoutInflater mInflater = null;
+	private HomeAdapter homeAdapter;
+	private ListView func_home_lv;
+	
+	/**重命名*/
+	private final static int DIALOG_RENAME = 1;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -62,6 +79,23 @@ public class FuncHomeActivity extends Activity implements View.OnClickListener{
 		
 		tabContainer = (FrameLayout) findViewById(R.id.tabs);
 		
+		try {
+			HomeSettingAccessor.getInstance(this).initHomeTable();
+			homeItemList = HomeSettingAccessor.getInstance(this).getHomeItemList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		//构建设备对象
+		//initWirelessList();
+		func_home_lv = (ListView)findViewById(R.id.result_list);
+		
+		homeAdapter = new HomeAdapter();
+		func_home_lv.setAdapter(homeAdapter);
+	//	func_home_lv.setOnItemClickListener(new ListItemClickListener());
+		
+		homeAdapter.notifyDataSetChanged();	//刷新数据集
+		
 		showView(tabButton1);
 	}
 	
@@ -81,10 +115,11 @@ public class FuncHomeActivity extends Activity implements View.OnClickListener{
 			case R.id.drawingRoom:
 				lastActionButton = paramView;
 				if (tab1ListView==null) {
+					
+					
 					tab1ListView = new ListView(this);
-			        final List<HashMap<String,String>> list = initlist();
-			        Log.v("ss",list.size()+"");
-			        ExtAdapter ext = new ExtAdapter(this,list);
+					initHomeList1();			       
+			        HomeAdapter ext = new HomeAdapter();
 			        tab1ListView.setAdapter(ext);
 				}
 				tmpTabListView = tab1ListView;
@@ -146,7 +181,7 @@ public class FuncHomeActivity extends Activity implements View.OnClickListener{
 		showView(v);
 	}
 	
-	public List<HashMap<String, String>> initlist() {
+/*	public List<HashMap<String, String>> initlist() {
 		List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 		HashMap<String, String> map = null;
 		for (int i = 0; i < 10; i++) {
@@ -163,45 +198,144 @@ public class FuncHomeActivity extends Activity implements View.OnClickListener{
 		list.add(0, map);
 		return list;
 	}
-}
+}*/
 
-class ExtAdapter extends BaseAdapter {
+	private void initHomeList1() {
+		
+	    HomeItem homeItem1 = new HomeItem();
+		homeItem1.itemTitleName = "电视机";
+		chooseImgRes(homeItem1);
+		homeItemList.add(homeItem1);	
+		
+		HomeItem homeItem2 = new HomeItem();
+			homeItem2.itemTitleName = "饮水机";
+			chooseImgRes(homeItem2);
+			homeItemList.add(homeItem2);	
+			 
+		HomeItem homeItem3 = new HomeItem();
+    		homeItem3.itemTitleName = "顶灯";
+			chooseImgRes(homeItem3);
+			homeItemList.add(homeItem3);
+			
+		HomeItem homeItem4 = new HomeItem();
+    		homeItem4.itemTitleName = "空调";
+			chooseImgRes(homeItem4);
+			homeItemList.add(homeItem4);
+			
+			
+		HomeItem homeItem5 = new HomeItem();
+	   		homeItem5.itemTitleName = "窗帘";
+			chooseImgRes(homeItem5);
+			homeItemList.add(homeItem5);
+		
+			
+				
+					
+			
+		
 
-	// 数据源
-	private List<HashMap<String, String>> list;
-	private Context context;
 
-	public ExtAdapter(Context context, List<HashMap<String, String>> list) {
-		this.context = context;
-		this.list = list;
+		
 	}
-
-	public View getView(int position, View convertView, ViewGroup parent) {
-		TableLayout tab = new TableLayout(context);
-		tab.setStretchAllColumns(true);
-		TableRow row = new TableRow(context);
-		TextView tv = null;
-		HashMap<String, String> map = list.get(position);
-		for (String key : map.keySet()) {
-			tv = new TextView(context);
-			tv.setText(map.get(key));
-			tv.setHeight(30);
-			row.addView(tv);
+	
+	
+	public void chooseImgRes(HomeItem item){
+		
+		String str=item.itemTitleName;
+		switch(str){
+		case "电视机":item.itemImgResID=R.drawable.menu_list_equipement_tv;break;
+		case "饮水机":item.itemImgResID=R.drawable.menu_list_equipement_kg;break;
+		case "顶灯":item.itemImgResID=R.drawable.menu_list_equipement_kg;break;
+		case "窗帘":item.itemImgResID=R.drawable.menu_list_equipement_kg;break;
+		case "台灯":item.itemImgResID=R.drawable.menu_list_equipement_kg;break;
+		case "卫生间顶灯":item.itemImgResID=R.drawable.menu_list_equipement_kg;break;
+		case "卫生间热水器":item.itemImgResID=R.drawable.menu_list_equipement_kg;break;
+		case "卫生间洗衣机":item.itemImgResID=R.drawable.menu_list_equipement_kg;break;
+		case "空调":item.itemImgResID=R.drawable.menu_list_equipement_kt;break;
+		case "DVD":item.itemImgResID=R.drawable.menu_list_equipement_dvd;break;
+		case "多媒体":item.itemImgResID=R.drawable.menu_list_equipement_media;break;
+		default:item.itemImgResID=R.drawable.menu_list_equipement_kg;break;
+		
 		}
-		tab.addView(row);
-		return tab;
 	}
+private class HomeAdapter extends BaseAdapter {
 
+	@Override
 	public int getCount() {
-		return list.size();
+		return homeItemList.size();
 	}
 
+	@Override
 	public Object getItem(int position) {
-		return list.get(position);
+		return homeItemList.get(position);
 	}
 
+	@Override
 	public long getItemId(int position) {
 		return position;
 	}
 
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		
+		HomeItem homeItem = homeItemList.get(position);
+		
+		View view = convertView;
+		
+		ItemCache cache = null;
+		if (null == view) {
+			view = mInflater.inflate(R.layout.wireless_setting_list_item, null);
+			cache = new ItemCache(view);
+			view.setTag(cache);
+		} else {
+			cache = (ItemCache) view.getTag();
+		}
+		
+		
+		cache.icon.setImageResource(homeItem.itemImgResID);
+		
+		cache.label.setText(homeItem.itemTitleName);
+		
+		return view;
+	}
+}
+
+private class ItemCache {
+	public ImageView icon;
+	public TextView label;
+	
+	public ItemCache(View view) {
+		icon = (ImageView) view.findViewById(R.id.icon);
+		label = (TextView) view.findViewById(R.id.label);
+	}
+}
+
+protected void onActivityResult(int reqCode, int resultCode, Intent data) {
+	super.onActivityResult(reqCode, resultCode, data);
+	if (resultCode != Activity.RESULT_OK) {	
+		return;
+	}
+	
+	switch (reqCode) {
+		case (DIALOG_RENAME):
+			int position = data.getIntExtra("position",0);
+			String itemTitleName = data.getStringExtra("itemTitleName");
+			//修改列表
+			HomeItem homeItem = null;
+			if (position<homeItemList.size() && position>=0) {
+				homeItem = homeItemList.get(position);
+				homeItem.itemTitleName = itemTitleName;
+				homeAdapter.notifyDataSetChanged();	//刷新数据集
+				
+				//保存数据库
+				try {
+					HomeSettingAccessor.getInstance(this).updateHomeItem(homeItem);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			
+		break;
+	}
+};
 }
