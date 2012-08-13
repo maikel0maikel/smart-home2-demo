@@ -12,4 +12,9 @@
         <item>3</item>
         <item>4</item>
     </string-array>
+    <string-array name="homesetting_menu">
+        <item>新增设备</item>
+        <item>编辑设备</item>
+        <item>删除设备</item>
+    </string-array>
 </resources>
