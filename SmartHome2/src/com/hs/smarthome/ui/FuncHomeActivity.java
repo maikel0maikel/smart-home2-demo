@@ -114,8 +114,11 @@ public class FuncHomeActivity extends Activity implements View.OnClickListener {
 				try {
 					HomeSettingAccessor.getInstance(this).initHomeTable();
 					tab2ListView = new ListView(this);
+					tab2ListView.setCacheColorHint(Color.parseColor("#00000000"));
+					tab2ListView.setDivider( this.getResources().getDrawable(R.drawable.list_driver) );
 					HomeAdapter ext = new HomeAdapter( HomeSettingAccessor.getInstance(this).getHomeItemList(2) );
 					tab2ListView.setAdapter(ext);
+					tab2ListView.setOnItemClickListener(new ListItemClickListener());
 					ext.notifyDataSetChanged(); // 刷新数据集
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -129,9 +132,12 @@ public class FuncHomeActivity extends Activity implements View.OnClickListener {
 				// tabListView = null; 初始化
 				try {
 					HomeSettingAccessor.getInstance(this).initHomeTable();
-					tab3ListView = new ListView(this);
+					tab3ListView = new ListView(this);	
+					tab3ListView.setCacheColorHint(Color.parseColor("#00000000"));
+					tab3ListView.setDivider( this.getResources().getDrawable(R.drawable.list_driver) );
 					HomeAdapter ext = new HomeAdapter( HomeSettingAccessor.getInstance(this).getHomeItemList(3) );
 					tab3ListView.setAdapter(ext);
+					tab3ListView.setOnItemClickListener(new ListItemClickListener());
 					ext.notifyDataSetChanged(); // 刷新数据集
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -146,8 +152,11 @@ public class FuncHomeActivity extends Activity implements View.OnClickListener {
 				try {
 					HomeSettingAccessor.getInstance(this).initHomeTable();
 					tab4ListView = new ListView(this);
+					tab4ListView.setCacheColorHint(Color.parseColor("#00000000"));
+					tab4ListView.setDivider( this.getResources().getDrawable(R.drawable.list_driver) );
 					HomeAdapter ext = new HomeAdapter( HomeSettingAccessor.getInstance(this).getHomeItemList(4) );
 					tab4ListView.setAdapter(ext);
+					tab4ListView.setOnItemClickListener(new ListItemClickListener());
 					ext.notifyDataSetChanged(); // 刷新数据集
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -162,8 +171,11 @@ public class FuncHomeActivity extends Activity implements View.OnClickListener {
 				try {
 					HomeSettingAccessor.getInstance(this).initHomeTable();
 					tab5ListView = new ListView(this);
+					tab5ListView.setCacheColorHint(Color.parseColor("#00000000"));
+					tab5ListView.setDivider( this.getResources().getDrawable(R.drawable.list_driver) );
 					HomeAdapter ext = new HomeAdapter( HomeSettingAccessor.getInstance(this).getHomeItemList(5) );
 					tab5ListView.setAdapter(ext);
+					tab5ListView.setOnItemClickListener(new ListItemClickListener());
 					ext.notifyDataSetChanged(); // 刷新数据集
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -178,8 +190,11 @@ public class FuncHomeActivity extends Activity implements View.OnClickListener {
 				try {
 					HomeSettingAccessor.getInstance(this).initHomeTable();
 					tab6ListView = new ListView(this);
+					tab5ListView.setCacheColorHint(Color.parseColor("#00000000"));
+					tab5ListView.setDivider( this.getResources().getDrawable(R.drawable.list_driver) );
 					HomeAdapter ext = new HomeAdapter( HomeSettingAccessor.getInstance(this).getHomeItemList(6) );
 					tab6ListView.setAdapter(ext);
+					tab6ListView.setOnItemClickListener(new ListItemClickListener());
 					ext.notifyDataSetChanged(); // 刷新数据集
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -217,11 +232,55 @@ public class FuncHomeActivity extends Activity implements View.OnClickListener {
 
 			switch ( cache.homeItem.itemControlPanelID ){
 			
-				case ControlPanel.PANEL3:
-					Intent intent = new Intent();
-					intent.setClass(FuncHomeActivity.this, EquipementControlTV.class);
-					FuncHomeActivity.this.startActivity(intent);
+			case ControlPanel.PANEL1:
+				Intent intent1 = new Intent();
+				intent1.setClass(FuncHomeActivity.this, EquipementControlOpenOff.class);
+				FuncHomeActivity.this.startActivity(intent1);
+			break;
+			
+			case ControlPanel.PANEL2:
+				Intent intent2 = new Intent();
+				intent2.setClass(FuncHomeActivity.this, EquipementControlKongTiao.class);
+				FuncHomeActivity.this.startActivity(intent2);
+			break;
+			
+			case ControlPanel.PANEL3:
+					Intent intent3 = new Intent();
+					intent3.setClass(FuncHomeActivity.this, EquipementControlTV.class);
+					FuncHomeActivity.this.startActivity(intent3);
 				break;
+		
+			case ControlPanel.PANEL4:
+				Intent intent4 = new Intent();
+				intent4.setClass(FuncHomeActivity.this, EquipementControlPlay.class);
+				FuncHomeActivity.this.startActivity(intent4);
+			break;
+			
+			case ControlPanel.PANEL5:
+				Intent intent5 = new Intent();
+				intent5.setClass(FuncHomeActivity.this, EquipementControlPlay.class);
+				FuncHomeActivity.this.startActivity(intent5);
+			break;
+			
+			case ControlPanel.PANEL6:
+				Intent intent6 = new Intent();
+				intent6.setClass(FuncHomeActivity.this, EquipementControlKongTiao.class);
+				FuncHomeActivity.this.startActivity(intent6);
+			break;
+			
+			
+			case ControlPanel.PANEL7:
+				Intent intent7 = new Intent();
+				intent7.setClass(FuncHomeActivity.this, EquipementControlOpenOff_1.class);
+				FuncHomeActivity.this.startActivity(intent7);
+			break;
+			
+			case ControlPanel.PANEL8:
+				Intent intent8 = new Intent();
+				intent8.setClass(FuncHomeActivity.this, EquipementControlOpenOff_2.class);
+				FuncHomeActivity.this.startActivity(intent8);
+			break;
+				
 			}
 		}
     }

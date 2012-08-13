@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout android:gravity="center_horizontal" android:id="@id/equipement_control_panel" android:background="@drawable/main_bk" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout android:orientation="vertical" android:background="@drawable/panel_background" android:layout_width="300.0dip" android:layout_height="fill_parent" android:layout_marginTop="10.0dip" android:layout_marginBottom="10.0dip">
+        <RelativeLayout android:layout_width="fill_parent" android:layout_height="wrap_content">
+            <Button android:id="@id/btClose" android:background="@drawable/panel_close_button_style" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+        </RelativeLayout>
+        <LinearLayout android:gravity="center" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="20.0px">
+            <Button android:id="@id/panel_tv_bttop" android:background="@drawable/panel_media_up_style" android:layout_width="wrap_content" android:layout_height="fill_parent" />
+        </LinearLayout>
+        <LinearLayout android:gravity="center" android:layout_width="fill_parent" android:layout_height="wrap_content">
+            <Button android:id="@id/panel_tv_btleft" android:background="@drawable/panel_media_left_style" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+            <Button android:id="@id/panel_tv_ok" android:background="@drawable/panel_media_ok_style" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+            <Button android:id="@id/panel_tv_btright" android:background="@drawable/panel_media_right_style" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout android:gravity="center" android:layout_width="fill_parent" android:layout_height="wrap_content">
+            <Button android:id="@id/panel_tv_btbottom" android:background="@drawable/panel_media_down_style" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout android:gravity="center" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="20.0dip">
+            <RelativeLayout android:layout_width="200.0px" android:layout_height="fill_parent">
+                <Button android:id="@id/panel_tv_yinlin_up" android:background="@drawable/panel_tv_top_button_style" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentLeft="true" />
+                <Button android:id="@id/panel_tv_video_up" android:background="@drawable/panel_tv_top_button_style" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentRight="true" />
+            </RelativeLayout>
+        </LinearLayout>
+        <LinearLayout android:gravity="center" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="20.0px">
+            <RelativeLayout android:layout_width="200.0px" android:layout_height="fill_parent">
+                <Button android:id="@id/panel_tv_yinlin_down" android:background="@drawable/panel_tv_bottom_button_style" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentLeft="true" />
+                <Button android:id="@id/panel_tv_video_down" android:background="@drawable/panel_tv_bottom_button_style" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentRight="true" />
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
