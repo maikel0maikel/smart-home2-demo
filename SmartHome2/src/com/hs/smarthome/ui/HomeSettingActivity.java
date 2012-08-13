@@ -5,6 +5,9 @@ package com.hs.smarthome.ui;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -14,11 +17,13 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hs.smarthome.R;
 import com.hs.smarthome.db.ControlPanel;
@@ -112,6 +117,20 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 					HomeAdapter ext = new HomeAdapter( HomeSettingAccessor.getInstance(this).getHomeItemList(1) );
 					tab1ListView.setAdapter(ext);
 					tab1ListView.setOnItemClickListener(new ListItemClickListener());
+					tab1ListView.setOnItemLongClickListener(new OnItemLongClickListener() {  
+						  
+				        @Override  
+				        public boolean onItemLongClick(AdapterView<?> arg0, View arg1,  
+				                int arg2, long arg3) {  
+				        	
+				        	Dialog alertDialog = createOperateDialog();
+							if (alertDialog != null) {				
+								alertDialog.show();
+							}
+							
+				            return true;  
+				        }  
+				      });
 					ext.notifyDataSetChanged(); // 刷新数据集
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -335,4 +354,30 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 			break;
 		}
 	};
+	
+	/**
+	 * 点击主题列表后的选项
+	 * 
+	 * @param clickView
+	 * @param simpleTheme
+	 * @return
+	 */
+	public Dialog createOperateDialog() {
+		return new AlertDialog.Builder(this).setItems(R.array.homesetting_menu,
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						switch (whichButton) {
+						case 0://新增设备
+							Toast.makeText(HomeSettingActivity.this, "新增设备", Toast.LENGTH_LONG).show();
+							break;
+						case 1://修改设备
+							Toast.makeText(HomeSettingActivity.this, "修改设备", Toast.LENGTH_LONG).show();
+							break;
+						case 2://删除设备
+							Toast.makeText(HomeSettingActivity.this, "删除设备", Toast.LENGTH_LONG).show();
+							break;
+						}
+					}
+				}).create();
+	}
 }
