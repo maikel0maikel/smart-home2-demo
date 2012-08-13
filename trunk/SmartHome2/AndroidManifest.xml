@@ -35,6 +35,7 @@
         <activity android:name=".ui.EquipementControlOpenOff"/>
         <activity android:name=".ui.EquipementControlPlay"/>
         <activity android:name=".ui.EquipementControlOpenOff_2"/>
+         <activity android:name=".ui.HomeSettingActivity"/>
         <activity android:name=".ui.WirelessSettingDialog" android:theme="@android:style/Theme.Dialog"/>
         <activity android:name=".ui.InfraredSettingDialog" android:theme="@android:style/Theme.Dialog"/>
         <activity android:name=".ui.RelaySettingDialog" android:theme="@android:style/Theme.Dialog"/>
