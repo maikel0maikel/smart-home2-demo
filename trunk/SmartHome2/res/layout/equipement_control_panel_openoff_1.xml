@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout android:gravity="center_horizontal" android:orientation="horizontal" android:id="@id/equipement_control_panel" android:background="@drawable/main_bk" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout android:orientation="vertical" android:background="@drawable/panel_background" android:layout_width="300.0dip" android:layout_height="fill_parent" android:layout_marginTop="10.0dip" android:layout_marginBottom="10.0dip">
+        <LinearLayout android:gravity="center" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="60.0px">
+            <Button android:id="@id/panel_kg_bt1" android:background="@drawable/panel_kg_1_button_style" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="10.0dip" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

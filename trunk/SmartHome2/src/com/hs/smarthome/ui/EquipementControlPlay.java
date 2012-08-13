@@ -5,12 +5,12 @@ import com.hs.smarthome.R;
 import android.app.Activity;
 import android.os.Bundle;
 
-public class EquipementControlTV extends Activity{
+public class EquipementControlPlay extends Activity{
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.equipement_control_panel_tv_2);
+		setContentView(R.layout.equipement_control_panel_play);
 	}
 }

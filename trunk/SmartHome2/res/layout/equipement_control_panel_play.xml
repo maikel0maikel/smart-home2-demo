@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout android:gravity="center_horizontal" android:id="@id/equipement_control_panel" android:background="@drawable/main_bk" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout android:orientation="vertical" android:background="@drawable/panel_background" android:layout_width="300.0dip" android:layout_height="fill_parent" android:layout_marginTop="10.0dip" android:layout_marginBottom="10.0dip">
+        <RelativeLayout android:layout_width="fill_parent" android:layout_height="wrap_content">
+            <Button android:id="@id/btClose" android:background="@drawable/panel_close_button_style" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+        </RelativeLayout>
+        <LinearLayout android:gravity="center" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="20.0px">
+            <Button android:id="@id/panel_play_btbf" android:background="@drawable/panel_play_bf_button_style" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+            <Button android:id="@id/panel_play_btstop" android:background="@drawable/panel_play_stop_button_style" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="15.0dip" />
+        </LinearLayout>
+        <LinearLayout android:gravity="center" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="20.0px">
+            <Button android:id="@id/panel_play_btkt" android:background="@drawable/panel_play_kt_button_style" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="15.0dip" />
+            <Button android:id="@id/panel_play_btmt" android:background="@drawable/panel_play_mt_button_style" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="15.0dip" />
+            <Button android:id="@id/panel_play_btmj" android:background="@drawable/panel_play_mj_button_style" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="15.0dip" />
+            <Button android:id="@id/panel_play_btkj" android:background="@drawable/panel_play_kj_button_style" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="15.0dip" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
