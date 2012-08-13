@@ -50,7 +50,6 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 
 	private LayoutInflater mInflater = null;
 	
-	private ListView func_home_lv;
 	private ArrayList<HomeItem> homeItemList = new ArrayList<HomeItem>(); 
 	private HomeAdapter homeAdapter;
 	
@@ -61,12 +60,8 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.wireless_setting);
+		setContentView(R.layout.func_home_setting);
 		
-		mInflater = LayoutInflater.from( this );
-		
-		func_home_lv = (ListView)findViewById(R.id.result_list);
-
 		mInflater = LayoutInflater.from( this );
 		
 		this.tabButton1 = (FrameLayout) findViewById(R.id.drawingRoom);
@@ -86,15 +81,6 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 		tabContainer = (FrameLayout) findViewById(R.id.tabs);
 
 		showView(tabButton1);
-		
-		//构建无线对象
-		//initWirelessList();
-		
-		homeAdapter = new HomeAdapter();
-		func_home_lv.setAdapter(homeAdapter);
-		func_home_lv.setOnItemClickListener(new ListItemClickListener());
-		
-		homeAdapter.notifyDataSetChanged();	//刷新数据集
 	}
 	
 	public void onClick(View v) {
@@ -254,14 +240,7 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
-			HomeItem homeItem = homeItemList.get(position);
-			homeAdapter.notifyDataSetChanged();	//刷新数据集
-		/*	
-			Intent intent = new Intent();
-			intent.setClass(HomeSettingActivity.this, HomeSettingDialog.class);
-			intent.putExtra("position", position);
-			intent.putExtra("itemTitleName", homeItem.itemTitleName);
-			HomeSettingActivity.this.startActivityForResult(intent, DIALOG_RENAME);*/
+	
 		}
     }
 	
