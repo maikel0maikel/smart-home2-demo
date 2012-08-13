@@ -190,8 +190,8 @@ public class FuncHomeActivity extends Activity implements View.OnClickListener {
 				try {
 					HomeSettingAccessor.getInstance(this).initHomeTable();
 					tab6ListView = new ListView(this);
-					tab5ListView.setCacheColorHint(Color.parseColor("#00000000"));
-					tab5ListView.setDivider( this.getResources().getDrawable(R.drawable.list_driver) );
+					tab6ListView.setCacheColorHint(Color.parseColor("#00000000"));
+					tab6ListView.setDivider( this.getResources().getDrawable(R.drawable.list_driver) );
 					HomeAdapter ext = new HomeAdapter( HomeSettingAccessor.getInstance(this).getHomeItemList(6) );
 					tab6ListView.setAdapter(ext);
 					tab6ListView.setOnItemClickListener(new ListItemClickListener());
