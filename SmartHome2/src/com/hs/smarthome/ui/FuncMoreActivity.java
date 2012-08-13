@@ -153,6 +153,12 @@ public class FuncMoreActivity extends Activity{
 				FuncMoreActivity.this.startActivityForResult(intent, 2);
 				break;
 				
+			case R.drawable.menu_list_more_sbsz:
+				Intent intentHome = new Intent();
+				intentHome.setClass(FuncMoreActivity.this, HomeSettingActivity.class);
+				FuncMoreActivity.this.startActivity(intentHome);
+				break;
+				
 			
 			}
 	
