@@ -99,24 +99,20 @@ public class HomeAddDialog extends Activity implements View.OnClickListener{
 
 		});
         
-       /* Ok.setOnClickListener(this);
-        Cancel.setOnClickListener(this);*/
+        Ok.setOnClickListener(this);
+        Cancel.setOnClickListener(this);
         		
     }
 
-	@Override
-	public void onClick(View v) {
-		// TODO Auto-generated method stub
-		
-	}
+
 
 	
-/*	public void onClick(View paramView) {
-		switch (paramView.getId()) {
+	public void onClick(View paramView) {
+			switch (paramView.getId()) {
 			case R.id.Ok:
 				//TODO 判断Edit是否为空
 				
-				Intent mIntent = new Intent(HomeSettingDialog.this, WirelessSettingActivity.class);
+				Intent mIntent = new Intent(HomeAddDialog.this, HomeSettingActivity.class);
 				mIntent.putExtra("itemTitleName", Edit.getText().toString());
 				mIntent.putExtra("position", position);
 				
@@ -127,6 +123,6 @@ public class HomeAddDialog extends Activity implements View.OnClickListener{
 				finish();
 				break;				
 		}
-	}*/
+	}
     
 }
