@@ -365,26 +365,21 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 	 * @return
 	 */
 	public Dialog createOperateDialog() {
-		return new AlertDialog.Builder(this).setItems(R.array.homesetting_menu,
-				new DialogInterface.OnClickListener() {
-						new AlertDialog.Builder(HomeSettingActivity.this).setTitle("操作").
-						//设置数组
-						setItems(R.array.homesetting_menu, new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int whichcountry) {/*
-								
-								CharSequence strDialogBody = getResources().getString("你选择的是：");
+		return new AlertDialog.Builder(HomeSettingActivity.this).setTitle("操作").
+				setItems(R.array.homesetting_menu, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichcountry) {
+						
+						CharSequence strDialogBody = "你选择的是：";
 
-								String[] phones = getResources().getStringArray(R.array.homesetting_menu);
-								
-								new AlertDialog.Builder(HomeSettingActivity.this)
-									.setMessage(strDialogBody + phones[whichcountry])
-									.setNeutralButton("确认", new DialogInterface.OnClickListener() {
-									public void onClick(DialogInterface dialog, int whichButton) { /* 在这里处理要作的事 
-									}
-								}).show();
-							*/}
-						}
-					
-		}).create();
+						String[] phones = getResources().getStringArray(R.array.homesetting_menu);
+						
+						new AlertDialog.Builder(HomeSettingActivity.this)
+							.setMessage(strDialogBody + phones[whichcountry])
+							.setNeutralButton("确认", new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int whichButton) {
+							}
+						}).show();
+					}
+				}).create();
 	}
 }
