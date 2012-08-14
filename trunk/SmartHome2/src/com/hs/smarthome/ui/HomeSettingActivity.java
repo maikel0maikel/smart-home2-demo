@@ -368,17 +368,22 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 		return new AlertDialog.Builder(HomeSettingActivity.this).setTitle("操作").
 				setItems(R.array.homesetting_menu, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int whichcountry) {
+						switch (whichcountry) {
+						case 0://新增设备
+							Intent intent0 = new Intent();
+							intent0.setClass(HomeSettingActivity.this, HomeAddDialog.class);
+							HomeSettingActivity.this.startActivityForResult(intent0, DIALOG_RENAME);
+							break;
+						case 1://修改设备
+							Intent intent1 = new Intent();
+							intent1.setClass(HomeSettingActivity.this, HomeSettingDialog.class);
+							HomeSettingActivity.this.startActivityForResult(intent1, DIALOG_RENAME);
+							break;
+						case 2://删除设备
+							Toast.makeText(HomeSettingActivity.this, "删除设备", Toast.LENGTH_LONG).show();
+							break;
+						}
 						
-						CharSequence strDialogBody = "你选择的是：";
-
-						String[] phones = getResources().getStringArray(R.array.homesetting_menu);
-						
-						new AlertDialog.Builder(HomeSettingActivity.this)
-							.setMessage(strDialogBody + phones[whichcountry])
-							.setNeutralButton("确认", new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int whichButton) {
-							}
-						}).show();
 					}
 				}).create();
 	}
