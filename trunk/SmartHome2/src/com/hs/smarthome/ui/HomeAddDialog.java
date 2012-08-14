@@ -43,6 +43,8 @@ public class HomeAddDialog extends Activity implements View.OnClickListener{
 		
         Title = (TextView)findViewById(R.id.Title);
         Name = (TextView)findViewById(R.id.Name);
+        Panel = (TextView)findViewById(R.id.Panel);
+        Room = (TextView)findViewById(R.id.Room);
         Edit = (EditText)findViewById(R.id.Edit);
         Ok = (Button)findViewById(R.id.Ok);
         Cancel = (Button)findViewById(R.id.Cancel);
@@ -51,6 +53,8 @@ public class HomeAddDialog extends Activity implements View.OnClickListener{
         
         Edit.setText(itemTitleName);
         Title.setText("添加设备");
+        Room.setText("设备分类:");
+        Panel.setText("控制面板：");
         Name.setText("设备名称：");
         Ok.setText("确定");
         Cancel.setText("取消");
