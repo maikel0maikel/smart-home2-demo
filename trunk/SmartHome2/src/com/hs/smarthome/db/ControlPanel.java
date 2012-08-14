@@ -31,7 +31,7 @@ public class ControlPanel {
 	public static final int PANEL8 = 8;
 	
 	public static int getImgResByPanelID(int panelID){
-		int returnRes = 0;
+		int returnRes = R.drawable.menu_list_equipement_kg;
 		switch(panelID){
 		case	PANEL1:
 			returnRes = R.drawable.menu_list_equipement_kg;

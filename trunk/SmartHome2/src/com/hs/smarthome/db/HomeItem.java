@@ -1,6 +1,8 @@
 package com.hs.smarthome.db;
 
-public class HomeItem {
+import java.io.Serializable;
+
+public class HomeItem  implements Serializable{
 		
 	/** 记录ID 有唯一性约束*/
 	public int itemId; 	
