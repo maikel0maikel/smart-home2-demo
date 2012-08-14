@@ -55,14 +55,17 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 	private ListView tab6ListView;
 
 	private View lastActionButton;
+	
+	private ListView lastListView;
+	
+	private int roomID;
 
 	private LayoutInflater mInflater = null;
 	
-	private ArrayList<HomeItem> homeItemList = new ArrayList<HomeItem>(); 
-	private HomeAdapter homeAdapter;
-	
-	/**重命名*/
-	private final static int DIALOG_RENAME = 1;
+	/**新增设备*/
+	private final static int DIALOG_ADD = 1;
+	/**修改设备*/
+	private final static int DIALOG_EDIT = 2;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -110,6 +113,7 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 
 		switch (paramView.getId()) {
 		case R.id.drawingRoom:
+			roomID = 1;
 			lastActionButton = paramView;
 			if (tab1ListView == null) {
 				try {
@@ -126,7 +130,7 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 				        public boolean onItemLongClick(AdapterView<?> arg0, View arg1,  
 				                int arg2, long arg3) {  
 				        	
-				        	Dialog alertDialog = createOperateDialog();
+				        	Dialog alertDialog = createOperateDialog(arg1);
 							if (alertDialog != null) {				
 								alertDialog.show();
 							}
@@ -140,8 +144,10 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 				}
 			}
 			tmpTabListView = tab1ListView;
+			lastListView = tab1ListView;
 			break;
 		case R.id.bedRoom:
+			roomID = 2;
 			lastActionButton = paramView;
 			if (tab2ListView == null) {
 				try {
@@ -158,8 +164,10 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 				}
 			}
 			tmpTabListView = tab2ListView;
+			lastListView = tab2ListView;
 			break;
 		case R.id.studyRoom:
+			roomID = 3;
 			lastActionButton = paramView;
 			if (tab3ListView == null) {
 				// tabListView = null; 初始化
@@ -177,8 +185,10 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 				}
 			}
 			tmpTabListView = tab3ListView;
+			lastListView = tab3ListView;
 			break;
 		case R.id.kitchenRoom:
+			roomID = 4;
 			lastActionButton = paramView;
 			if (tab4ListView == null) {
 				// tabListView = null; 初始化
@@ -196,8 +206,10 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 				}
 			}
 			tmpTabListView = tab4ListView;
+			lastListView = tab4ListView;
 			break;
 		case R.id.Other:
+			roomID = 5;
 			lastActionButton = paramView;
 			if (tab5ListView == null) {
 				// tabListView = null; 初始化
@@ -215,8 +227,10 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 				}
 			}
 			tmpTabListView = tab5ListView;
+			lastListView = tab5ListView;
 			break;
 		case R.id.Other2:
+			roomID = 6;
 			lastActionButton = paramView;
 			if (tab6ListView == null) {
 				// tabListView = null; 初始化
@@ -234,6 +248,7 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 				}
 			}
 			tmpTabListView = tab6ListView;
+			lastListView = tab6ListView;
 			break;
 		}
 
@@ -275,7 +290,15 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 		public HomeAdapter(ArrayList<HomeItem> homeItemList){
 			this.homeItemList = homeItemList;
 		}
-
+		
+		public void addHomeItem(HomeItem homeItem){
+			this.homeItemList.add(homeItem);
+		}
+		
+		public void deleteHomeItem(HomeItem homeItem){
+			this.homeItemList.remove(homeItem);
+		}
+		
 		@Override
 		public int getCount() {
 			return homeItemList.size();
@@ -336,23 +359,26 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 		}
 		
 		switch (reqCode) {
-			case (DIALOG_RENAME):
-				int position = data.getIntExtra("position",0);
-				String itemTitleName = data.getStringExtra("itemTitleName");
+			case (DIALOG_ADD):
+				HomeItem homeItem = (HomeItem)data.getSerializableExtra("homeItem");
 				//修改列表
-				HomeItem homeItem = null;
-				if (position<homeItemList.size() && position>=0) {
-					homeItem = homeItemList.get(position);
-					homeItem.itemTitleName = itemTitleName;
-					homeAdapter.notifyDataSetChanged();	//刷新数据集
-					
-					//保存数据库
-					try {
-						HomeSettingAccessor.getInstance(this).updateHomeItem(homeItem);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
+				lastListView = getSelectListView(roomID);
+				
+				if (lastListView!=null){
+					HomeAdapter selectHomeAdapter = (HomeAdapter)lastListView.getAdapter();
+					selectHomeAdapter.addHomeItem(homeItem);
+					selectHomeAdapter.notifyDataSetChanged();	//刷新数据集
 				}
+				//保存数据库
+				try {
+					HomeSettingAccessor.getInstance(this).updateHomeItem(homeItem);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+			break;
+			
+			case (DIALOG_EDIT):
 				
 			break;
 		}
@@ -365,7 +391,12 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 	 * @param simpleTheme
 	 * @return
 	 */
-	public Dialog createOperateDialog() {
+	public Dialog createOperateDialog(View opObj) {
+		
+		ItemCache itemCache = (ItemCache)opObj.getTag();
+		final HomeItem deleteHomeItem = itemCache.homeItem;
+		final int itemID = itemCache.homeItem.itemId;
+		
 		return new AlertDialog.Builder(HomeSettingActivity.this).setTitle("操作").
 				setItems(R.array.homesetting_menu, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int whichcountry) {
@@ -373,14 +404,32 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 						case 0://新增设备
 							Intent intent0 = new Intent();
 							intent0.setClass(HomeSettingActivity.this, HomeAddDialog.class);
-							HomeSettingActivity.this.startActivityForResult(intent0, DIALOG_RENAME);
+							intent0.putExtra("roomID", roomID);
+							
+							HomeSettingActivity.this.startActivityForResult(intent0, DIALOG_ADD);
 							break;
 						case 1://修改设备
 							Intent intent1 = new Intent();
 							intent1.setClass(HomeSettingActivity.this, HomeSettingDialog.class);
-							HomeSettingActivity.this.startActivityForResult(intent1, DIALOG_RENAME);
+							HomeSettingActivity.this.startActivityForResult(intent1, DIALOG_EDIT);
 							break;
 						case 2://删除设备
+							
+							//保存数据库
+							try {
+								HomeSettingAccessor.getInstance(HomeSettingActivity.this).deleteHomeSetting(itemID);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}							
+							
+							lastListView = getSelectListView(roomID);
+							
+							if (lastListView!=null){
+								HomeAdapter selectHomeAdapter = (HomeAdapter)lastListView.getAdapter();
+								selectHomeAdapter.deleteHomeItem(deleteHomeItem);
+								selectHomeAdapter.notifyDataSetChanged();	//刷新数据集
+							}
+							
 							Toast.makeText(HomeSettingActivity.this, "删除设备", Toast.LENGTH_LONG).show();
 							break;
 						}
@@ -388,4 +437,33 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 					}
 				}).create();
 	}
+	
+	
+	public ListView getSelectListView(int roomNumID){
+		ListView resultList = null;
+		
+		switch (roomNumID) {
+		case 1:
+			resultList = tab1ListView;
+			break;
+		case 2:
+			resultList = tab2ListView;
+			break;
+		case 3:
+			resultList = tab3ListView;
+			break;
+		case 4:
+			resultList = tab4ListView;
+			break;
+		case 5:
+			resultList = tab5ListView;
+			break;
+		case 6:
+			resultList = tab6ListView;
+			break;
+		}
+		
+		return resultList;
+	}
+	
 }

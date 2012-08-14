@@ -12,6 +12,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.hs.smarthome.R;
+import com.hs.smarthome.db.ControlPanel;
+import com.hs.smarthome.db.HomeItem;
 
 
 public class HomeAddDialog extends Activity implements View.OnClickListener{
@@ -31,7 +33,7 @@ public class HomeAddDialog extends Activity implements View.OnClickListener{
 	private ArrayAdapter<String> paneldapter;
 	private ArrayAdapter<String> roomdapter;
 	
-	private int position;
+	private int roomID;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,7 +41,7 @@ public class HomeAddDialog extends Activity implements View.OnClickListener{
         setContentView(R.layout.home_setting_dialog);
         
         String itemTitleName = getIntent().getStringExtra("itemTitleName");
-        position = getIntent().getIntExtra("position", 0);
+        roomID = getIntent().getIntExtra("roomID", 1);
 		
         Title = (TextView)findViewById(R.id.Title);
         Name = (TextView)findViewById(R.id.Name);
@@ -71,6 +73,9 @@ public class HomeAddDialog extends Activity implements View.OnClickListener{
         panel_Spinner.setAdapter(paneldapter);
         room_Spinner.setAdapter(roomdapter);
 
+        //panel_Spinner.setSelection(2,true);
+        room_Spinner.setSelection(roomID-1,true);
+        
 		// 添加Spinner事件监听
         panel_Spinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
 
@@ -115,10 +120,14 @@ public class HomeAddDialog extends Activity implements View.OnClickListener{
 			switch (paramView.getId()) {
 			case R.id.Ok:
 				//TODO 判断Edit是否为空
+				HomeItem homeItem = new HomeItem();
+				
+				homeItem.itemTitleName = Edit.getText().toString();
+				homeItem.itemRoomID = room_Spinner.getSelectedItemPosition()+1;
+				homeItem.itemControlPanelID = panel_Spinner.getSelectedItemPosition()+1;
 				
 				Intent mIntent = new Intent(HomeAddDialog.this, HomeSettingActivity.class);
-				mIntent.putExtra("itemTitleName", Edit.getText().toString());
-				mIntent.putExtra("position", position);
+				mIntent.putExtra("homeItem", homeItem);
 				
 				setResult(Activity.RESULT_OK, mIntent);
 				finish();

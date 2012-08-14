@@ -264,6 +264,12 @@ for (int i = 0; i < INIT_HOME_ITEM-4; i++) {
 		db.close();
 	}
 	
+	public void deleteHomeSetting(int itemID) {
+		SQLiteDatabase db = openDB();
+		db.execSQL("DELETE FROM "+TBL_HOME+" WHERE itemId="+itemID);
+		db.close();
+	}
+	
 	public void clearHomeTable() {
 		SQLiteDatabase db = openDB();
 		db.execSQL("DELETE FROM "+TBL_HOME);
