@@ -33,12 +33,14 @@ public class HomeSettingDialog extends Activity implements View.OnClickListener{
 	private ArrayAdapter<String> roomdapter;
 	
 	private int position;
+	
+	private HomeItem homeItem;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_setting_dialog);
-        
+        homeItem = (HomeItem)getIntent().getSerializableExtra("homeItem");
         String itemTitleName = getIntent().getStringExtra("itemTitleName");
         position = getIntent().getIntExtra("position", 0);
 		
@@ -116,15 +118,13 @@ public void onClick(View paramView) {
 		switch (paramView.getId()) {
 			case R.id.Ok:
 				//TODO 判断Edit是否为空
-				
-	HomeItem homeItem = new HomeItem();
-				
 				homeItem.itemTitleName = Edit.getText().toString();
 				homeItem.itemRoomID = room_Spinner.getSelectedItemPosition()+1;
 				homeItem.itemControlPanelID = panel_Spinner.getSelectedItemPosition()+1;
 				
 				Intent mIntent = new Intent(HomeSettingDialog.this, HomeSettingActivity.class);
 				mIntent.putExtra("homeItem", homeItem);
+				mIntent.putExtra("position", position);
 				
 				setResult(Activity.RESULT_OK, mIntent);
 				finish();

@@ -131,7 +131,7 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 				        public boolean onItemLongClick(AdapterView<?> arg0, View arg1,  
 				                int arg2, long arg3) {  
 				        	
-				        	Dialog alertDialog = createOperateDialog(arg1);
+				        	Dialog alertDialog = createOperateDialog(arg1, arg2);
 							if (alertDialog != null) {				
 								alertDialog.show();
 							}
@@ -158,14 +158,14 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 					tab2ListView.setDivider( this.getResources().getDrawable(R.drawable.list_driver) );
 					HomeAdapter ext = new HomeAdapter( HomeSettingAccessor.getInstance(this).getHomeItemList(2) );
 					tab2ListView.setAdapter(ext);
-					tab2ListView.setOnItemClickListener(new ListItemClickListener());
+					tab2ListView.setOnItemClickListener(new ListItemClickListener()); 
 					tab2ListView.setOnItemLongClickListener(new OnItemLongClickListener() {  
 						  
 				        @Override  
 				        public boolean onItemLongClick(AdapterView<?> arg0, View arg1,  
 				                int arg2, long arg3) {  
 				        	
-				        	Dialog alertDialog = createOperateDialog(arg1);
+				        	Dialog alertDialog = createOperateDialog(arg1, arg2);
 							if (alertDialog != null) {				
 								alertDialog.show();
 							}
@@ -200,7 +200,7 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 				        public boolean onItemLongClick(AdapterView<?> arg0, View arg1,  
 				                int arg2, long arg3) {  
 				        	
-				        	Dialog alertDialog = createOperateDialog(arg1);
+				        	Dialog alertDialog = createOperateDialog(arg1, arg2);
 							if (alertDialog != null) {				
 								alertDialog.show();
 							}
@@ -235,7 +235,7 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 				        public boolean onItemLongClick(AdapterView<?> arg0, View arg1,  
 				                int arg2, long arg3) {  
 				        	
-				        	Dialog alertDialog = createOperateDialog(arg1);
+				        	Dialog alertDialog = createOperateDialog(arg1, arg2);
 							if (alertDialog != null) {				
 								alertDialog.show();
 							}
@@ -270,7 +270,7 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 				        public boolean onItemLongClick(AdapterView<?> arg0, View arg1,  
 				                int arg2, long arg3) {  
 				        	
-				        	Dialog alertDialog = createOperateDialog(arg1);
+				        	Dialog alertDialog = createOperateDialog(arg1, arg2);
 							if (alertDialog != null) {				
 								alertDialog.show();
 							}
@@ -305,7 +305,7 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 				        public boolean onItemLongClick(AdapterView<?> arg0, View arg1,  
 				                int arg2, long arg3) {  
 				        	
-				        	Dialog alertDialog = createOperateDialog(arg1);
+				        	Dialog alertDialog = createOperateDialog(arg1, arg2);
 							if (alertDialog != null) {				
 								alertDialog.show();
 							}
@@ -511,12 +511,20 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 			
 			case (DIALOG_EDIT):
 				HomeItem homeItemEdit = (HomeItem)data.getSerializableExtra("homeItem");
+				int position = data.getIntExtra("position", 0);
 			//修改列表
 			lastListView = getSelectListView(roomID);
 			
 			if (lastListView!=null){
 				HomeAdapter selectHomeAdapter = (HomeAdapter)lastListView.getAdapter();
-				selectHomeAdapter.editHomeItem(homeItemEdit);
+				HomeItem selectHomeItem = (HomeItem)selectHomeAdapter.getItem( position );
+				
+				selectHomeItem.itemId = homeItemEdit.itemId;
+				selectHomeItem.itemControlPanelID = homeItemEdit.itemControlPanelID;
+				selectHomeItem.itemImgResID = homeItemEdit.itemImgResID;
+				selectHomeItem.itemRoomID = homeItemEdit.itemRoomID;
+				selectHomeItem.itemTitleName = homeItemEdit.itemTitleName;
+						
 				selectHomeAdapter.notifyDataSetChanged();	//刷新数据集
 			}
 			//保存数据库
@@ -537,8 +545,7 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 	 * @param simpleTheme
 	 * @return
 	 */
-	public Dialog createOperateDialog(View opObj) {
-				
+	public Dialog createOperateDialog(View opObj,final int position) { 
 		ItemCache itemCache = (ItemCache)opObj.getTag();
 		final HomeItem deleteHomeItem = itemCache.homeItem;
 		final HomeItem homeItem = itemCache.homeItem;
@@ -556,24 +563,13 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 							HomeSettingActivity.this.startActivityForResult(intent0, DIALOG_ADD);
 							break;
 						case 1://修改设备
-							try {
-								HomeSettingAccessor.getInstance(HomeSettingActivity.this).deleteHomeSetting(itemID);
-							} catch (Exception e) {
-								e.printStackTrace();
-							}							
-							
-							lastListView = getSelectListView(roomID);
-							
-							if (lastListView!=null){
-								HomeAdapter selectHomeAdapter = (HomeAdapter)lastListView.getAdapter();
-								selectHomeAdapter.deleteHomeItem(deleteHomeItem);
-								selectHomeAdapter.notifyDataSetChanged();	//刷新数据集
-							}
-							
 							Intent intent1 = new Intent();
 							intent1.setClass(HomeSettingActivity.this, HomeSettingDialog.class);
+							intent1.putExtra("position", position);
 							intent1.putExtra("roomID", roomID);
 							intent1.putExtra("itemTitleName", homeItem.itemTitleName);
+							intent1.putExtra("homeItem", homeItem);
+							
 							HomeSettingActivity.this.startActivityForResult(intent1, DIALOG_EDIT);
 							break;
 						case 2://删除设备
