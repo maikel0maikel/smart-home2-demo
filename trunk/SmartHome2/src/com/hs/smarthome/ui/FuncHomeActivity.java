@@ -22,6 +22,7 @@ import com.hs.smarthome.R;
 import com.hs.smarthome.db.ControlPanel;
 import com.hs.smarthome.db.HomeItem;
 import com.hs.smarthome.db.HomeSettingAccessor;
+import com.hs.smarthome.db.SmartHomeAccessor;
 
 public class FuncHomeActivity extends Activity implements View.OnClickListener {
 
@@ -79,7 +80,7 @@ public class FuncHomeActivity extends Activity implements View.OnClickListener {
 
 		showView(tabButton1);
 		
-		temp.notifyDataSetChanged();	//刷新数据集
+		
 	}
 
 	public void showView(View paramView) {
