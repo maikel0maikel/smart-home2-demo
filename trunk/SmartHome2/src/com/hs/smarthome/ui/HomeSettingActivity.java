@@ -35,6 +35,7 @@ import com.hs.smarthome.db.WirelessItem;
 
 
 
+
 public class HomeSettingActivity extends Activity implements View.OnClickListener{
 	
 	
@@ -158,6 +159,20 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 					HomeAdapter ext = new HomeAdapter( HomeSettingAccessor.getInstance(this).getHomeItemList(2) );
 					tab2ListView.setAdapter(ext);
 					tab2ListView.setOnItemClickListener(new ListItemClickListener());
+					tab2ListView.setOnItemLongClickListener(new OnItemLongClickListener() {  
+						  
+				        @Override  
+				        public boolean onItemLongClick(AdapterView<?> arg0, View arg1,  
+				                int arg2, long arg3) {  
+				        	
+				        	Dialog alertDialog = createOperateDialog(arg1);
+							if (alertDialog != null) {				
+								alertDialog.show();
+							}
+							
+				            return true;  
+				        }  
+				      });
 					ext.notifyDataSetChanged(); // 刷新数据集
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -179,6 +194,20 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 					HomeAdapter ext = new HomeAdapter( HomeSettingAccessor.getInstance(this).getHomeItemList(3) );
 					tab3ListView.setAdapter(ext);
 					tab3ListView.setOnItemClickListener(new ListItemClickListener());
+					tab3ListView.setOnItemLongClickListener(new OnItemLongClickListener() {  
+						  
+				        @Override  
+				        public boolean onItemLongClick(AdapterView<?> arg0, View arg1,  
+				                int arg2, long arg3) {  
+				        	
+				        	Dialog alertDialog = createOperateDialog(arg1);
+							if (alertDialog != null) {				
+								alertDialog.show();
+							}
+							
+				            return true;  
+				        }  
+				      });
 					ext.notifyDataSetChanged(); // 刷新数据集
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -200,6 +229,20 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 					HomeAdapter ext = new HomeAdapter( HomeSettingAccessor.getInstance(this).getHomeItemList(4) );
 					tab4ListView.setAdapter(ext);
 					tab4ListView.setOnItemClickListener(new ListItemClickListener());
+					tab4ListView.setOnItemLongClickListener(new OnItemLongClickListener() {  
+						  
+				        @Override  
+				        public boolean onItemLongClick(AdapterView<?> arg0, View arg1,  
+				                int arg2, long arg3) {  
+				        	
+				        	Dialog alertDialog = createOperateDialog(arg1);
+							if (alertDialog != null) {				
+								alertDialog.show();
+							}
+							
+				            return true;  
+				        }  
+				      });
 					ext.notifyDataSetChanged(); // 刷新数据集
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -221,6 +264,20 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 					HomeAdapter ext = new HomeAdapter( HomeSettingAccessor.getInstance(this).getHomeItemList(5) );
 					tab5ListView.setAdapter(ext);
 					tab5ListView.setOnItemClickListener(new ListItemClickListener());
+					tab5ListView.setOnItemLongClickListener(new OnItemLongClickListener() {  
+						  
+				        @Override  
+				        public boolean onItemLongClick(AdapterView<?> arg0, View arg1,  
+				                int arg2, long arg3) {  
+				        	
+				        	Dialog alertDialog = createOperateDialog(arg1);
+							if (alertDialog != null) {				
+								alertDialog.show();
+							}
+							
+				            return true;  
+				        }  
+				      });
 					ext.notifyDataSetChanged(); // 刷新数据集
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -242,6 +299,20 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 					HomeAdapter ext = new HomeAdapter( HomeSettingAccessor.getInstance(this).getHomeItemList(6) );
 					tab6ListView.setAdapter(ext);
 					tab6ListView.setOnItemClickListener(new ListItemClickListener());
+					tab6ListView.setOnItemLongClickListener(new OnItemLongClickListener() {  
+						  
+				        @Override  
+				        public boolean onItemLongClick(AdapterView<?> arg0, View arg1,  
+				                int arg2, long arg3) {  
+				        	
+				        	Dialog alertDialog = createOperateDialog(arg1);
+							if (alertDialog != null) {				
+								alertDialog.show();
+							}
+							
+				            return true;  
+				        }  
+				      });
 					ext.notifyDataSetChanged(); // 刷新数据集
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -277,7 +348,61 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
-	
+			
+			ItemCache cache = (ItemCache) view.getTag();
+
+			switch ( cache.homeItem.itemControlPanelID ){
+			
+			case ControlPanel.PANEL1:
+				Intent intent1 = new Intent();
+				intent1.setClass(HomeSettingActivity.this, EquipementControlOpenOff.class);
+				HomeSettingActivity.this.startActivity(intent1);
+			break;
+			
+			case ControlPanel.PANEL2:
+				Intent intent2 = new Intent();
+				intent2.setClass(HomeSettingActivity.this, EquipementControlKongTiao.class);
+				HomeSettingActivity.this.startActivity(intent2);
+			break;
+			
+			case ControlPanel.PANEL3:
+					Intent intent3 = new Intent();
+					intent3.setClass(HomeSettingActivity.this, EquipementControlTV.class);
+					HomeSettingActivity.this.startActivity(intent3);
+				break;
+		
+			case ControlPanel.PANEL4:
+				Intent intent4 = new Intent();
+				intent4.setClass(HomeSettingActivity.this, EquipementControlPlay.class);
+				HomeSettingActivity.this.startActivity(intent4);
+			break;
+			
+			case ControlPanel.PANEL5:
+				Intent intent5 = new Intent();
+				intent5.setClass(HomeSettingActivity.this, EquipementControlPlay.class);
+				HomeSettingActivity.this.startActivity(intent5);
+			break;
+			
+			case ControlPanel.PANEL6:
+				Intent intent6 = new Intent();
+				intent6.setClass(HomeSettingActivity.this, EquipementControlKongTiao.class);
+				HomeSettingActivity.this.startActivity(intent6);
+			break;
+			
+			
+			case ControlPanel.PANEL7:
+				Intent intent7 = new Intent();
+				intent7.setClass(HomeSettingActivity.this, EquipementControlOpenOff_1.class);
+				HomeSettingActivity.this.startActivity(intent7);
+			break;
+			
+			case ControlPanel.PANEL8:
+				Intent intent8 = new Intent();
+				intent8.setClass(HomeSettingActivity.this, EquipementControlOpenOff_2.class);
+				HomeSettingActivity.this.startActivity(intent8);
+			break;
+				
+			}
 		}
     }
 	
