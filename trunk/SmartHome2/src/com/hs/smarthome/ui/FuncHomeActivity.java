@@ -58,6 +58,9 @@ public class FuncHomeActivity extends Activity implements View.OnClickListener {
 
 		mInflater = LayoutInflater.from( this );
 		
+		HomeAdapter temp = new HomeAdapter();
+		temp.notifyDataSetChanged();	//刷新数据集
+		
 		this.tabButton1 = (FrameLayout) findViewById(R.id.drawingRoom);
 		this.tabButton2 = (FrameLayout) findViewById(R.id.bedRoom);
 		this.tabButton3 = (FrameLayout) findViewById(R.id.studyRoom);
@@ -75,6 +78,8 @@ public class FuncHomeActivity extends Activity implements View.OnClickListener {
 		tabContainer = (FrameLayout) findViewById(R.id.tabs);
 
 		showView(tabButton1);
+		
+		temp.notifyDataSetChanged();	//刷新数据集
 	}
 
 	public void showView(View paramView) {
@@ -293,6 +298,7 @@ public class FuncHomeActivity extends Activity implements View.OnClickListener {
 
 	private class HomeAdapter extends BaseAdapter {
 
+		public HomeAdapter(){super();}
 		ArrayList<HomeItem> homeItemList = new ArrayList<HomeItem>();
 		
 		public HomeAdapter(ArrayList<HomeItem> homeItemList){
