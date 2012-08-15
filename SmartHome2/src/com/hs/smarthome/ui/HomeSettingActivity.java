@@ -291,6 +291,12 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 			this.homeItemList = homeItemList;
 		}
 		
+		
+		public void editHomeItem(HomeItem homeItem){
+			this.homeItemList.remove(homeItem);
+			this.homeItemList.add(homeItem);
+		}
+		
 		public void addHomeItem(HomeItem homeItem){
 			this.homeItemList.add(homeItem);
 		}
@@ -379,6 +385,21 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 			break;
 			
 			case (DIALOG_EDIT):
+				HomeItem homeItemEdit = (HomeItem)data.getSerializableExtra("homeItem");
+			//修改列表
+			lastListView = getSelectListView(roomID);
+			
+			if (lastListView!=null){
+				HomeAdapter selectHomeAdapter = (HomeAdapter)lastListView.getAdapter();
+				selectHomeAdapter.editHomeItem(homeItemEdit);
+				selectHomeAdapter.notifyDataSetChanged();	//刷新数据集
+			}
+			//保存数据库
+			try {
+				HomeSettingAccessor.getInstance(this).updateHomeItem(homeItemEdit);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 				
 			break;
 		}
@@ -392,9 +413,10 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 	 * @return
 	 */
 	public Dialog createOperateDialog(View opObj) {
-		
+				
 		ItemCache itemCache = (ItemCache)opObj.getTag();
 		final HomeItem deleteHomeItem = itemCache.homeItem;
+		final HomeItem homeItem = itemCache.homeItem;
 		final int itemID = itemCache.homeItem.itemId;
 		
 		return new AlertDialog.Builder(HomeSettingActivity.this).setTitle("操作").
@@ -409,8 +431,24 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 							HomeSettingActivity.this.startActivityForResult(intent0, DIALOG_ADD);
 							break;
 						case 1://修改设备
+							try {
+								HomeSettingAccessor.getInstance(HomeSettingActivity.this).deleteHomeSetting(itemID);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}							
+							
+							lastListView = getSelectListView(roomID);
+							
+							if (lastListView!=null){
+								HomeAdapter selectHomeAdapter = (HomeAdapter)lastListView.getAdapter();
+								selectHomeAdapter.deleteHomeItem(deleteHomeItem);
+								selectHomeAdapter.notifyDataSetChanged();	//刷新数据集
+							}
+							
 							Intent intent1 = new Intent();
 							intent1.setClass(HomeSettingActivity.this, HomeSettingDialog.class);
+							intent1.putExtra("roomID", roomID);
+							intent1.putExtra("itemTitleName", homeItem.itemTitleName);
 							HomeSettingActivity.this.startActivityForResult(intent1, DIALOG_EDIT);
 							break;
 						case 2://删除设备

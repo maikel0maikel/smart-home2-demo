@@ -12,6 +12,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.hs.smarthome.R;
+import com.hs.smarthome.db.HomeItem;
 
 
 public class HomeSettingDialog extends Activity implements View.OnClickListener{
@@ -116,16 +117,21 @@ public void onClick(View paramView) {
 			case R.id.Ok:
 				//TODO 判断Edit是否为空
 				
+	HomeItem homeItem = new HomeItem();
+				
+				homeItem.itemTitleName = Edit.getText().toString();
+				homeItem.itemRoomID = room_Spinner.getSelectedItemPosition()+1;
+				homeItem.itemControlPanelID = panel_Spinner.getSelectedItemPosition()+1;
+				
 				Intent mIntent = new Intent(HomeSettingDialog.this, HomeSettingActivity.class);
-				mIntent.putExtra("itemTitleName", Edit.getText().toString());
-				mIntent.putExtra("position", position);
+				mIntent.putExtra("homeItem", homeItem);
 				
 				setResult(Activity.RESULT_OK, mIntent);
 				finish();
 				break;
 			case R.id.Cancel:
 				finish();
-				break;				
+				break;					
 		}
 	}
     
