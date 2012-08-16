@@ -2,11 +2,13 @@
 <RelativeLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent" android:background="@drawable/main_bk"
   xmlns:android="http://schemas.android.com/apk/res/android">
   <LinearLayout android:id="@+id/title_bar" android:orientation="horizontal" 
-      android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_alignParentTop="true"
-      android:background="@drawable/title_bar_background" android:gravity="bottom|center_horizontal">
-      <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="left" android:src="@drawable/back_btn"  android:layout_alignParentLeft="true"  />
+      android:layout_width="fill_parent" android:layout_height="30dip" android:layout_alignParentTop="true"
+      android:background="@drawable/title_bar_background"  >
+      <ImageView android:id="@+id/back" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="left" android:src="@drawable/back_btn"  android:layout_alignParentLeft="true"  />
       <TextView android:id="@+id/setting_title" android:layout_gravity="center" android:layout_width="wrap_content" android:layout_height="wrap_content"
-          android:text="家居设备绑定" android:textSize="20dp" android:textColor="#ffffffff" />
+          android:text="家居设备绑定" android:textSize="20dp" android:textColor="#ffffffff" android:layout_marginLeft="25dip"  android:layout_marginRight="25dip"   />
+      <Button android:id="@+id/add" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="right" android:text="添加" 
+          android:background="@drawable/title_bar_background" android:textColor="#ffffffff" android:layout_marginLeft="20dip" android:textSize="20dp" android:layout_alignParentRight="true" />
   </LinearLayout>
        <include layout="@layout/home_tab_bar" />
     <FrameLayout android:id="@id/tabs" android:paddingBottom="55.0dip" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_below="@id/tab_bar" 

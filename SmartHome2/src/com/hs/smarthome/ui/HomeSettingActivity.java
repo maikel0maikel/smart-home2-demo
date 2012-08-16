@@ -14,11 +14,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -59,6 +61,9 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 	
 	private ListView lastListView;
 	
+	private ImageView back;
+	private Button add;
+	
 	private int roomID;
 
 	private LayoutInflater mInflater = null;
@@ -68,6 +73,7 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 	/**修改设备*/
 	private final static int DIALOG_EDIT = 2;
 	
+		
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -82,6 +88,15 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 		this.tabButton4 = (FrameLayout) findViewById(R.id.kitchenRoom);
 		this.tabButton5 = (FrameLayout) findViewById(R.id.Other);
 		this.tabButton6 = (FrameLayout) findViewById(R.id.Other2);
+		
+		this.back = (ImageView) findViewById(R.id.back);
+		this.add = (Button) findViewById(R.id.add);
+		
+		//返回 
+		back.setOnClickListener(new BackButtonListener());
+		//添加
+		add.setOnClickListener(new AddButtonListener());
+		
 
 		this.tabButton1.setOnClickListener(this);
 		this.tabButton2.setOnClickListener(this);
@@ -94,6 +109,29 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 
 		showView(tabButton1);
 	}
+	
+    class BackButtonListener implements OnClickListener{
+    	
+		@Override
+		public void onClick(View arg0) {
+			finish();	
+			
+		}
+    	
+    }
+    class AddButtonListener implements OnClickListener{
+    	
+		@Override
+		public void onClick(View arg0) {
+			Intent intent0 = new Intent();
+			intent0.setClass(HomeSettingActivity.this, HomeAddDialog.class);
+			intent0.putExtra("roomID", roomID);
+			
+			HomeSettingActivity.this.startActivityForResult(intent0, DIALOG_ADD);
+			
+		}
+    	
+    }
 	
 	public void onClick(View v) {
 
