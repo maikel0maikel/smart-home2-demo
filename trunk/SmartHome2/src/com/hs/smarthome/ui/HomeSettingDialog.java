@@ -74,6 +74,9 @@ public class HomeSettingDialog extends Activity implements View.OnClickListener{
         panel_Spinner.setAdapter(paneldapter);
         room_Spinner.setAdapter(roomdapter);
 
+        panel_Spinner.setSelection(homeItem.itemControlPanelID-1);
+        room_Spinner.setSelection(homeItem.itemRoomID-1);
+        
 		// 添加Spinner事件监听
         panel_Spinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
 
