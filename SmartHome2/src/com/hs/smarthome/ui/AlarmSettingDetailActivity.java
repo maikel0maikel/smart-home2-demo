@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
@@ -20,6 +21,7 @@ import com.hs.smarthome.db.AlarmSettingAccessor;
 import com.hs.smarthome.db.InfraredItem;
 import com.hs.smarthome.db.InfraredSettingAccessor;
 import com.hs.smarthome.db.SwitchItem;
+import com.hs.smarthome.ui.AlarmSettingActivity.BackButtonListener;
 
 public class AlarmSettingDetailActivity extends Activity{
 
@@ -30,6 +32,9 @@ public class AlarmSettingDetailActivity extends Activity{
 	
 	private AlarmItem mAlarmItem;
 	
+	private ImageView back;
+	private TextView setting_title;
+	
 	/**路径设置*/
 	private final static int DIALOG_PATH_SETTING = 1;
 	
@@ -38,6 +43,13 @@ public class AlarmSettingDetailActivity extends Activity{
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.func_alarm_detail);
+		
+		setting_title = (TextView) findViewById(R.id.setting_title);
+		setting_title.setText("选项设置");
+		
+		back = (ImageView) findViewById(R.id.back);
+		//返回 
+		back.setOnClickListener(new BackButtonListener());
 		
 		//mAlarmItem = (AlarmItem)getIntent().getSerializableExtra("alarmItem");
 		
@@ -49,6 +61,8 @@ public class AlarmSettingDetailActivity extends Activity{
 			e.printStackTrace();
 		}
 		
+		
+		setting_title.setText(mAlarmItem.itemTitleName+"-选项设置");
 		mInflater = LayoutInflater.from( this );
 		
 		func_alarm_detail_lv = (ListView)findViewById(R.id.func_alarm_detail_lv);
@@ -59,6 +73,17 @@ public class AlarmSettingDetailActivity extends Activity{
 		
 		alarmSettingDetailAdapter.notifyDataSetChanged();	//刷新数据集
 	}
+	
+	
+    class BackButtonListener implements OnClickListener{
+    	
+		@Override
+		public void onClick(View arg0) {
+			finish();	
+			
+		}
+    	
+    }
 	
 	@Override
 	protected void onPause() {
