@@ -17,4 +17,7 @@
         <item>编辑设备</item>
         <item>删除设备</item>
     </string-array>
+     <string-array name="alarmsetting_menu">
+        <item>修改名称</item>
+       </string-array>
 </resources>
