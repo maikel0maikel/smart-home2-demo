@@ -3,7 +3,10 @@ package com.hs.smarthome.ui;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,12 +20,14 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hs.smarthome.R;
 import com.hs.smarthome.db.ControlPanel;
 import com.hs.smarthome.db.HomeItem;
 import com.hs.smarthome.db.HomeSettingAccessor;
-import com.hs.smarthome.db.SmartHomeAccessor;
+import com.hs.smarthome.db.RoomItem;
+import com.hs.smarthome.db.RoomSettingAccessor;
 
 public class FuncHomeActivity extends Activity implements View.OnClickListener {
 
@@ -50,6 +55,10 @@ public class FuncHomeActivity extends Activity implements View.OnClickListener {
 
 	/** 重命名 */
 	private final static int DIALOG_RENAME = 1;
+	
+	public static final String ACTION_NAME = "com.hs.smarthome.UPDATE_HOMESETTING"; 
+	
+	public static final String ACTION_ROOM_NAME = "com.hs.smarthome.UPDATE_ROOMSETTING"; 
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -76,13 +85,27 @@ public class FuncHomeActivity extends Activity implements View.OnClickListener {
 		this.tabButton5.setOnClickListener(this);
 		this.tabButton6.setOnClickListener(this);
 
+		setTabBarTitle();
+		
 		tabContainer = (FrameLayout) findViewById(R.id.tabs);
 
 		showView(tabButton1);
 		
-		
+		IntentFilter myIntentFilter = new IntentFilter(); 
+        myIntentFilter.addAction(ACTION_NAME); 
+        myIntentFilter.addAction(ACTION_ROOM_NAME); 
+        //注册广播       
+        registerReceiver(mBroadcastReceiver, myIntentFilter); 
 	}
 
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		
+		unregisterReceiver(mBroadcastReceiver);
+	}
+	
 	public void showView(View paramView) {
 
 		ListView tmpTabListView = null;
@@ -358,4 +381,92 @@ public class FuncHomeActivity extends Activity implements View.OnClickListener {
 		}
 	}
 
+	private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver(){ 
+        @Override 
+        public void onReceive(Context context, Intent intent) { 
+            String action = intent.getAction(); 
+            		
+            if(action.equals(ACTION_NAME)){ 
+            	try{
+            		ListView tmpListView;
+            		int roomID = intent.getIntExtra("roomID", 1);
+            		tmpListView = getSelectListView(roomID);
+            		if (tmpListView==null) return;
+	                HomeAdapter ext = new HomeAdapter( HomeSettingAccessor.getInstance(FuncHomeActivity.this).getHomeItemList(1) );
+	                tmpListView.setAdapter(ext);
+					ext.notifyDataSetChanged(); // 刷新数据集
+            	}catch(Exception e){
+            		e.printStackTrace();
+            	}
+            } 
+            if(action.equals(ACTION_ROOM_NAME)){ 
+            	setTabBarTitle();
+            }
+        } 
+         
+    }; 
+    
+    public ListView getSelectListView(int roomNumID){
+		ListView resultList = null;
+		
+		switch (roomNumID) {
+		case 1:
+			resultList = tab1ListView;
+			break;
+		case 2:
+			resultList = tab2ListView;
+			break;
+		case 3:
+			resultList = tab3ListView;
+			break;
+		case 4:
+			resultList = tab4ListView;
+			break;
+		case 5:
+			resultList = tab5ListView;
+			break;
+		case 6:
+			resultList = tab6ListView;
+			break;
+		}
+		
+		return resultList;
+	}
+    
+    public void setTabBarTitle(){
+    	
+    	RoomItem roomItem;
+    	TextView textView = null;
+    	try {
+			ArrayList<RoomItem> roomItemList = RoomSettingAccessor.getInstance(this).getRoomItemList();
+			for (int i=0; i<roomItemList.size(); i++) {
+				roomItem = roomItemList.get(i);
+				switch (roomItem.itemId) {
+				case 1:
+					textView = (TextView)findViewById(R.id.roomtitle1);
+					break;
+				case 2:
+					textView = (TextView)findViewById(R.id.roomtitle2);
+					break;
+				case 3:
+					textView = (TextView)findViewById(R.id.roomtitle3);
+					break;
+				case 4:
+					textView = (TextView)findViewById(R.id.roomtitle4);
+					break;
+				case 5:
+					textView = (TextView)findViewById(R.id.roomtitle5);
+					break;
+				case 6:
+					textView = (TextView)findViewById(R.id.roomtitle6);
+					break;
+				}
+				textView.setText(roomItem.itemTitleName);
+			}
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
 }
