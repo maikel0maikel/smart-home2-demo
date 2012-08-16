@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import com.hs.smarthome.R;
 import com.hs.smarthome.db.AlarmItem;
 import com.hs.smarthome.db.AlarmSettingAccessor;
+import com.hs.smarthome.ui.HomeSettingActivity.BackButtonListener;
 
 
 
@@ -30,6 +32,8 @@ public class AlarmSettingActivity extends Activity{
 	private ListView func_alarm_lv;
 	private ArrayList<AlarmItem> alarmItemList = new ArrayList<AlarmItem>(); 
 	private AlarmAdapter alarmAdapter;
+	private ImageView back;
+	private TextView setting_title;
 	
 	/**重命名*/
 	private final static int DIALOG_RENAME = 1;
@@ -39,6 +43,13 @@ public class AlarmSettingActivity extends Activity{
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.wireless_setting);
+		
+		setting_title = (TextView) findViewById(R.id.setting_title);
+		setting_title.setText("报警铃音设置");
+		
+		back = (ImageView) findViewById(R.id.back);
+		//返回 
+		back.setOnClickListener(new BackButtonListener());
 		
 		mInflater = LayoutInflater.from( this );
 		
@@ -60,6 +71,16 @@ public class AlarmSettingActivity extends Activity{
 		
 		alarmAdapter.notifyDataSetChanged();	//刷新数据集
 	}
+	
+    class BackButtonListener implements OnClickListener{
+    	
+		@Override
+		public void onClick(View arg0) {
+			finish();	
+			
+		}
+    	
+    }
 	
 	private void initAlarmList() {
 		

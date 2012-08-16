@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import com.hs.smarthome.R;
 import com.hs.smarthome.db.SmartHomeAccessor;
 import com.hs.smarthome.db.SwitchItem;
+import com.hs.smarthome.ui.WirelessSettingActivity.BackButtonListener;
 
 
 
@@ -30,6 +32,8 @@ public class RelaySettingActivity extends Activity{
 	private ListView func_relay_lv;
 	private ArrayList<SwitchItem> relayItemList = new ArrayList<SwitchItem>(); 
 	private RelayAdapter relayAdapter;
+	private ImageView back;
+	private TextView setting_title;
 	
 	/**重命名*/
 	private final static int DIALOG_RENAME = 1;
@@ -39,6 +43,13 @@ public class RelaySettingActivity extends Activity{
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.wireless_setting);
+		
+		setting_title = (TextView) findViewById(R.id.setting_title);
+		setting_title.setText("继电器名称设置");
+		
+		back = (ImageView) findViewById(R.id.back);
+		//返回 
+		back.setOnClickListener(new BackButtonListener());
 		
 		mInflater = LayoutInflater.from( this );
 		
@@ -60,6 +71,16 @@ public class RelaySettingActivity extends Activity{
 		
 		relayAdapter.notifyDataSetChanged();	//刷新数据集
 	}
+	
+    class BackButtonListener implements OnClickListener{
+    	
+		@Override
+		public void onClick(View arg0) {
+			finish();	
+			
+		}
+    	
+    }
 	
 	private void initRelayList() {
 		
