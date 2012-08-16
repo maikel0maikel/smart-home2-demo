@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <LinearLayout android:orientation="vertical" android:id="@+id/infrared_setting" android:background="@drawable/main_bk" android:layout_width="fill_parent" android:layout_height="fill_parent"
   xmlns:android="http://schemas.android.com/apk/res/android">
+  <LinearLayout android:id="@+id/title_bar" android:orientation="horizontal" 
+      android:layout_width="fill_parent" android:layout_height="30dip" android:layout_alignParentTop="true"
+      android:background="@drawable/title_bar_background"  >
+      <ImageView android:id="@id/back" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="left" android:src="@drawable/back_btn"  android:layout_alignParentLeft="true"  />
+      <TextView android:id="@id/setting_title" android:layout_gravity="center" android:layout_width="wrap_content" android:layout_height="wrap_content"
+         android:textSize="20dp" android:textColor="#ffffffff" android:layout_marginLeft="25dip"  android:layout_marginRight="25dip"   />
+      </LinearLayout>
     <ListView android:id="@id/result_list" android:background="@drawable/round_bk" android:fadingEdge="none" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginLeft="10.0dip" android:layout_marginTop="5.0dip" android:layout_marginRight="10.0dip" android:layout_marginBottom="10.0dip" android:scrollingCache="false" android:cacheColorHint="#00000000" android:divider="@drawable/list_driver" />
 </LinearLayout>

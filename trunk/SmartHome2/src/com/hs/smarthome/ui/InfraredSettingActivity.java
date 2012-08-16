@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import com.hs.smarthome.R;
 import com.hs.smarthome.db.InfraredItem;
 import com.hs.smarthome.db.InfraredSettingAccessor;
+import com.hs.smarthome.ui.WirelessSettingActivity.BackButtonListener;
 
 
 
@@ -30,6 +32,8 @@ public class InfraredSettingActivity extends Activity{
 	private ListView func_infrared_lv;
 	private ArrayList<InfraredItem> infraredItemList = new ArrayList<InfraredItem>(); 
 	private InfraredAdapter infraredAdapter;
+	private ImageView back;
+	private TextView setting_title;
 	
 	/**重命名*/
 	private final static int DIALOG_RENAME = 1;
@@ -39,6 +43,12 @@ public class InfraredSettingActivity extends Activity{
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.infrared_setting);
+		setting_title = (TextView) findViewById(R.id.setting_title);
+		setting_title.setText("红外遥控名称设置");
+		
+		back = (ImageView) findViewById(R.id.back);
+		//返回 
+		back.setOnClickListener(new BackButtonListener());
 		
 		mInflater = LayoutInflater.from( this );
 		
@@ -60,6 +70,16 @@ public class InfraredSettingActivity extends Activity{
 		
 		infraredAdapter.notifyDataSetChanged();	//刷新数据集
 	}
+    class BackButtonListener implements OnClickListener{
+    	
+		@Override
+		public void onClick(View arg0) {
+			finish();	
+			
+		}
+    	
+    }
+	
 	
 	private void initInfraredList() {
 		

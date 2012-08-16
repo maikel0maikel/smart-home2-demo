@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import com.hs.smarthome.R;
 import com.hs.smarthome.db.WirelessItem;
 import com.hs.smarthome.db.WirelessSettingAccessor;
+import com.hs.smarthome.ui.AlarmSettingActivity.BackButtonListener;
 
 
 public class WirelessSettingActivity extends Activity{
@@ -29,6 +31,8 @@ public class WirelessSettingActivity extends Activity{
 	private ListView func_wireless_lv;
 	private ArrayList<WirelessItem> wirelessItemList = new ArrayList<WirelessItem>(); 
 	private WirelessAdapter wirelessAdapter;
+	private ImageView back;
+	private TextView setting_title;
 	
 	/**重命名*/
 	private final static int DIALOG_RENAME = 1;
@@ -38,6 +42,13 @@ public class WirelessSettingActivity extends Activity{
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.wireless_setting);
+		
+		setting_title = (TextView) findViewById(R.id.setting_title);
+		setting_title.setText("无线名称设置");
+		
+		back = (ImageView) findViewById(R.id.back);
+		//返回 
+		back.setOnClickListener(new BackButtonListener());
 		
 		mInflater = LayoutInflater.from( this );
 		
@@ -59,6 +70,17 @@ public class WirelessSettingActivity extends Activity{
 		
 		wirelessAdapter.notifyDataSetChanged();	//刷新数据集
 	}
+	
+    class BackButtonListener implements OnClickListener{
+    	
+		@Override
+		public void onClick(View arg0) {
+			finish();	
+			
+		}
+    	
+    }
+	
 	
 	private void initWirelessList() {
 		
