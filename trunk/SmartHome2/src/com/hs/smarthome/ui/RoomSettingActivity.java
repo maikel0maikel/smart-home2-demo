@@ -225,6 +225,9 @@ public class RoomSettingActivity extends Activity{
 					}
 				}
 				
+				//发送广播
+				Intent mIntent = new Intent(FuncHomeActivity.ACTION_ROOM_NAME); 
+                sendBroadcast(mIntent); 
 			break;
 		}
 	};

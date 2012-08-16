@@ -13,8 +13,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -31,7 +31,6 @@ import com.hs.smarthome.R;
 import com.hs.smarthome.db.ControlPanel;
 import com.hs.smarthome.db.HomeItem;
 import com.hs.smarthome.db.HomeSettingAccessor;
-import com.hs.smarthome.db.WirelessItem;
 
 
 
@@ -545,6 +544,11 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 					e.printStackTrace();
 				}
 				
+				//发送广播
+				Intent mIntent = new Intent(FuncHomeActivity.ACTION_NAME); 
+                mIntent.putExtra("roomID", roomID); 
+                sendBroadcast(mIntent); 
+				
 			break;
 			
 			case (DIALOG_EDIT):
@@ -572,6 +576,11 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 				e.printStackTrace();
 			}
 				
+			//发送广播
+			Intent mEditIntent = new Intent(FuncHomeActivity.ACTION_NAME); 
+			mEditIntent.putExtra("roomID", roomID); 
+            sendBroadcast(mEditIntent); 
+            
 			break;
 		}
 	};
@@ -627,6 +636,11 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 								selectHomeAdapter.notifyDataSetChanged();	//刷新数据集
 							}
 							
+							//发送广播
+							Intent mEditIntent = new Intent(FuncHomeActivity.ACTION_NAME); 
+							mEditIntent.putExtra("roomID", roomID); 
+				            sendBroadcast(mEditIntent); 
+				            
 							Toast.makeText(HomeSettingActivity.this, "删除设备", Toast.LENGTH_LONG).show();
 							break;
 						}
