@@ -5,6 +5,9 @@ package com.hs.smarthome.ui;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,6 +16,7 @@ import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -21,7 +25,10 @@ import android.widget.TextView;
 import com.hs.smarthome.R;
 import com.hs.smarthome.db.AlarmItem;
 import com.hs.smarthome.db.AlarmSettingAccessor;
+import com.hs.smarthome.db.HomeItem;
+import com.hs.smarthome.db.WirelessItem;
 import com.hs.smarthome.ui.HomeSettingActivity.BackButtonListener;
+
 
 
 
@@ -69,7 +76,43 @@ public class AlarmSettingActivity extends Activity{
 		func_alarm_lv.setAdapter(alarmAdapter);
 		func_alarm_lv.setOnItemClickListener(new ListItemClickListener());
 		
+		//长按
+		func_alarm_lv.setOnItemLongClickListener(new OnItemLongClickListener() {  
+			  
+	        @Override  
+	        public boolean onItemLongClick(AdapterView<?> arg0, View arg1,  
+	                int arg2, long arg3) {  
+	        	
+	        	Dialog alertDialog = createOperateDialog(arg1, arg2);
+				if (alertDialog != null) {				
+					alertDialog.show();
+				}
+				
+	            return true;  
+	        }  
+	      });
+		
+		
 		alarmAdapter.notifyDataSetChanged();	//刷新数据集
+	}
+	
+	public Dialog createOperateDialog(View opObj,final int position) { 
+				
+		return new AlertDialog.Builder(AlarmSettingActivity.this).setTitle("修改操作").
+				setItems(R.array.alarmsetting_menu, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichcountry) {
+						AlarmItem alarmItem = alarmItemList.get(position);
+						alarmAdapter.notifyDataSetChanged();	//刷新数据集
+						
+						Intent intent = new Intent();
+						intent.setClass(AlarmSettingActivity.this, AlarmSettingNameDialog.class);
+						intent.putExtra("position", position);
+						intent.putExtra("itemTitleName", alarmItem.itemTitleName);
+						AlarmSettingActivity.this.startActivityForResult(intent, DIALOG_RENAME);
+							
+						
+					}
+				}).create();
 	}
 	
     class BackButtonListener implements OnClickListener{
