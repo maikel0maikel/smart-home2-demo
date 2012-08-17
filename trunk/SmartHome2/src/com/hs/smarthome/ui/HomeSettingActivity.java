@@ -430,6 +430,7 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 			case ControlPanel.PANEL3:
 					Intent intent3 = new Intent();
 					intent3.setClass(HomeSettingActivity.this, EquipementControlSettingTV.class);
+					intent3.putExtra("homeItem",cache.homeItem);
 					HomeSettingActivity.this.startActivity(intent3);
 				break;
 		
