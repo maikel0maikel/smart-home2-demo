@@ -1,5 +1,7 @@
 package com.hs.smarthome.ui;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,12 +16,14 @@ import android.widget.TextView;
 import com.hs.smarthome.R;
 import com.hs.smarthome.db.ControlPanel;
 import com.hs.smarthome.db.HomeItem;
+import com.hs.smarthome.db.RoomItem;
+import com.hs.smarthome.db.RoomSettingAccessor;
 
 
 public class HomeAddDialog extends Activity implements View.OnClickListener{
 	
 	private static final String[] panel_Countries = { "开关面板", "空调面板", "电视机面板", "播放器", "多媒体控制面板","空调多功能面板","1路开关面板","2路开关面板" };
-	private static final String[] room_Countries = { "客厅", "卧室", "书房", "厨房", "其他","其他2" };
+	public String[] room_Countries = { "客厅", "卧室", "书房", "厨房", "其他","其他2" };
 	
 	public TextView Title;
 	public TextView Name;
@@ -34,6 +38,8 @@ public class HomeAddDialog extends Activity implements View.OnClickListener{
 	private ArrayAdapter<String> roomdapter;
 	
 	private int roomID;
+	
+	private ArrayList<RoomItem> roomItemList = new ArrayList<RoomItem>(); 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,6 +67,17 @@ public class HomeAddDialog extends Activity implements View.OnClickListener{
         Ok.setText("确定");
         Cancel.setText("取消");
         
+        try {
+        	RoomSettingAccessor.getInstance(this).initRoomTable();
+			roomItemList = RoomSettingAccessor.getInstance(this).getRoomItemList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+        for(int i = 0;i < 6; i++){
+        RoomItem roomItem = roomItemList.get(i);
+        room_Countries[i] =roomItem.itemTitleName;
+        }
+      
     	// 将可选内容与ArrayAdapter连接
         paneldapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, panel_Countries);
         roomdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, room_Countries);
