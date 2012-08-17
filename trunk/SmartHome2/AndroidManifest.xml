@@ -37,6 +37,12 @@
         <activity android:name=".ui.EquipementControlOpenOff"/>
         <activity android:name=".ui.EquipementControlPlay"/>
         <activity android:name=".ui.EquipementControlOpenOff_2"/>
+        <activity android:name=".ui.EquipementControlSettingTV"/>
+        <activity android:name=".ui.EquipementControlSettingKongTiao"/>
+        <activity android:name=".ui.EquipementControlSettingOpenOff_1"/>
+        <activity android:name=".ui.EquipementControlSettingOpenOff"/>
+        <activity android:name=".ui.EquipementControlSettingPlay"/>
+        <activity android:name=".ui.EquipementControlSettingOpenOff_2"/>
          <activity android:name=".ui.HomeSettingActivity"/>
         <activity android:name=".ui.WirelessSettingDialog" android:theme="@android:style/Theme.Dialog"/>
         <activity android:name=".ui.InfraredSettingDialog" android:theme="@android:style/Theme.Dialog"/>
