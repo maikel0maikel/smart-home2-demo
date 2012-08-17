@@ -1,24 +1,34 @@
 package com.hs.smarthome.ui;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.hs.smarthome.R;
 import com.hs.smarthome.db.HomeItem;
+import com.hs.smarthome.db.HomeSettingAccessor;
+import com.hs.smarthome.db.RoomItem;
+import com.hs.smarthome.db.RoomSettingAccessor;
+
 
 
 public class HomeSettingDialog extends Activity implements View.OnClickListener{
 	
 	private static final String[] panel_Countries = { "开关面板", "空调面板", "电视机面板", "播放器", "多媒体控制面板","空调多功能面板","1路开关面板","2路开关面板" };
-	private static final String[] room_Countries = { "客厅", "卧室", "书房", "厨房", "其他","其他2" };
+	public String[] room_Countries = { "客厅", "卧室", "书房", "厨房", "其他","其他2" };
 	
 	public TextView Title;
 	public TextView Name;
@@ -35,6 +45,8 @@ public class HomeSettingDialog extends Activity implements View.OnClickListener{
 	private int position;
 	
 	private HomeItem homeItem;
+	
+	public static final String ACTION_ROOM_NAME = "com.hs.smarthome.UPDATE_ROOMSETTING"; 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,6 +74,14 @@ public class HomeSettingDialog extends Activity implements View.OnClickListener{
         Ok.setText("确定");
         Cancel.setText("取消");
         
+        setTabBarTitle();
+        
+        IntentFilter myIntentFilter = new IntentFilter(); 
+        myIntentFilter.addAction(ACTION_ROOM_NAME); 
+        //注册广播       
+        registerReceiver(mBroadcastReceiver, myIntentFilter); 
+       
+        setTabBarTitle();
     	// 将可选内容与ArrayAdapter连接
         paneldapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, panel_Countries);
         roomdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, room_Countries);
@@ -138,4 +158,39 @@ public void onClick(View paramView) {
 		}
 	}
     
+protected void onDestroy() {
+	// TODO Auto-generated method stub
+	super.onDestroy();
+	
+	unregisterReceiver(mBroadcastReceiver);
+}
+private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver(){ 
+    @Override 
+    public void onReceive(Context context, Intent intent) { 
+        String action = intent.getAction(); 
+        		
+        if(action.equals(ACTION_ROOM_NAME)){ 
+        	setTabBarTitle();
+        }
+    } 
+     
+};
+public void setTabBarTitle(){
+	
+	RoomItem roomItem;
+	
+	try {
+		ArrayList<RoomItem> roomItemList = RoomSettingAccessor.getInstance(this).getRoomItemList();
+		for (int i=0; i<roomItemList.size(); i++) {
+			roomItem = roomItemList.get(i);
+			room_Countries[i] = RoomSettingAccessor.getInstance(this).getRoomItem(i).itemTitleName;
+		  	
+		
+		}
+		
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+}
 }

@@ -7,8 +7,11 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -31,6 +34,10 @@ import com.hs.smarthome.R;
 import com.hs.smarthome.db.ControlPanel;
 import com.hs.smarthome.db.HomeItem;
 import com.hs.smarthome.db.HomeSettingAccessor;
+import com.hs.smarthome.db.RoomItem;
+import com.hs.smarthome.db.RoomSettingAccessor;
+
+
 
 
 
@@ -72,6 +79,9 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 	/**修改设备*/
 	private final static int DIALOG_EDIT = 2;
 	
+	public static final String ACTION_NAME = "com.hs.smarthome.UPDATE_HOMESETTING"; 
+	public static final String ACTION_ROOM_NAME = "com.hs.smarthome.UPDATE_ROOMSETTING"; 
+	
 		
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -104,9 +114,24 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 		this.tabButton5.setOnClickListener(this);
 		this.tabButton6.setOnClickListener(this);
 
+		setTabBarTitle();
+		
 		tabContainer = (FrameLayout) findViewById(R.id.tabs);
 
 		showView(tabButton1);
+		IntentFilter myIntentFilter = new IntentFilter(); 
+	    myIntentFilter.addAction(ACTION_NAME); 
+        myIntentFilter.addAction(ACTION_ROOM_NAME); 
+        //注册广播       
+        registerReceiver(mBroadcastReceiver, myIntentFilter); 
+	}
+	
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		
+		unregisterReceiver(mBroadcastReceiver);
 	}
 	
     class BackButtonListener implements OnClickListener{
@@ -676,5 +701,68 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 		
 		return resultList;
 	}
+	
+	private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver(){ 
+        @Override 
+        public void onReceive(Context context, Intent intent) { 
+            String action = intent.getAction(); 
+            
+            if(action.equals(ACTION_NAME)){ 
+            	try{
+            		ListView tmpListView;
+            		int roomID = intent.getIntExtra("roomID", 1);
+            		tmpListView = getSelectListView(roomID);
+            		if (tmpListView==null) return;
+	                HomeAdapter ext = new HomeAdapter( HomeSettingAccessor.getInstance(HomeSettingActivity.this).getHomeItemList(1) );
+	                tmpListView.setAdapter(ext);
+					ext.notifyDataSetChanged(); // 刷新数据集
+            	}catch(Exception e){
+            		e.printStackTrace();
+            	}
+            } 
+            		
+              if(action.equals(ACTION_ROOM_NAME)){ 
+            	setTabBarTitle();
+            }
+        } 
+         
+    }; 
+    
+ public void setTabBarTitle(){
+    	
+    	RoomItem roomItem;
+    	TextView textView = null;
+    	try {
+			ArrayList<RoomItem> roomItemList = RoomSettingAccessor.getInstance(this).getRoomItemList();
+			for (int i=0; i<roomItemList.size(); i++) {
+				roomItem = roomItemList.get(i);
+				switch (roomItem.itemId) {
+				case 1:
+					textView = (TextView)findViewById(R.id.roomtitle1);
+					break;
+				case 2:
+					textView = (TextView)findViewById(R.id.roomtitle2);
+					break;
+				case 3:
+					textView = (TextView)findViewById(R.id.roomtitle3);
+					break;
+				case 4:
+					textView = (TextView)findViewById(R.id.roomtitle4);
+					break;
+				case 5:
+					textView = (TextView)findViewById(R.id.roomtitle5);
+					break;
+				case 6:
+					textView = (TextView)findViewById(R.id.roomtitle6);
+					break;
+				}
+				textView.setText(roomItem.itemTitleName);
+			}
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
 	
 }
