@@ -22,6 +22,8 @@ import com.hs.smarthome.db.HomeItem;
 import com.hs.smarthome.db.HomeSettingAccessor;
 import com.hs.smarthome.db.RoomItem;
 import com.hs.smarthome.db.RoomSettingAccessor;
+import com.hs.smarthome.db.SmartHomeAccessor;
+import com.hs.smarthome.db.SwitchItem;
 
 
 
@@ -45,6 +47,8 @@ public class HomeSettingDialog extends Activity implements View.OnClickListener{
 	private int position;
 	
 	private HomeItem homeItem;
+	
+	private ArrayList<RoomItem> roomItemList = new ArrayList<RoomItem>(); 
 	
 	public static final String ACTION_ROOM_NAME = "com.hs.smarthome.UPDATE_ROOMSETTING"; 
 
@@ -74,14 +78,17 @@ public class HomeSettingDialog extends Activity implements View.OnClickListener{
         Ok.setText("确定");
         Cancel.setText("取消");
         
-        setTabBarTitle();
-        
-        IntentFilter myIntentFilter = new IntentFilter(); 
-        myIntentFilter.addAction(ACTION_ROOM_NAME); 
-        //注册广播       
-        registerReceiver(mBroadcastReceiver, myIntentFilter); 
-       
-        setTabBarTitle();
+        try {
+        	RoomSettingAccessor.getInstance(this).initRoomTable();
+			roomItemList = RoomSettingAccessor.getInstance(this).getRoomItemList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+        for(int i = 0;i < 6; i++){
+        RoomItem roomItem = roomItemList.get(i);
+        room_Countries[i] =roomItem.itemTitleName;
+        }
+      
     	// 将可选内容与ArrayAdapter连接
         paneldapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, panel_Countries);
         roomdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, room_Countries);
@@ -158,39 +165,5 @@ public void onClick(View paramView) {
 		}
 	}
     
-protected void onDestroy() {
-	// TODO Auto-generated method stub
-	super.onDestroy();
-	
-	unregisterReceiver(mBroadcastReceiver);
-}
-private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver(){ 
-    @Override 
-    public void onReceive(Context context, Intent intent) { 
-        String action = intent.getAction(); 
-        		
-        if(action.equals(ACTION_ROOM_NAME)){ 
-        	setTabBarTitle();
-        }
-    } 
-     
-};
-public void setTabBarTitle(){
-	
-	RoomItem roomItem;
-	
-	try {
-		ArrayList<RoomItem> roomItemList = RoomSettingAccessor.getInstance(this).getRoomItemList();
-		for (int i=0; i<roomItemList.size(); i++) {
-			roomItem = roomItemList.get(i);
-			room_Countries[i] = RoomSettingAccessor.getInstance(this).getRoomItem(i).itemTitleName;
-		  	
-		
-		}
-		
-	} catch (Exception e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-}
+
 }
