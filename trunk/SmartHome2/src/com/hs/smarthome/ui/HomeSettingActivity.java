@@ -417,50 +417,50 @@ public class HomeSettingActivity extends Activity implements View.OnClickListene
 			
 			case ControlPanel.PANEL1:
 				Intent intent1 = new Intent();
-				intent1.setClass(HomeSettingActivity.this, EquipementControlOpenOff.class);
+				intent1.setClass(HomeSettingActivity.this, EquipementControlSettingOpenOff.class);
 				HomeSettingActivity.this.startActivity(intent1);
 			break;
 			
 			case ControlPanel.PANEL2:
 				Intent intent2 = new Intent();
-				intent2.setClass(HomeSettingActivity.this, EquipementControlKongTiao.class);
+				intent2.setClass(HomeSettingActivity.this, EquipementControlSettingKongTiao.class);
 				HomeSettingActivity.this.startActivity(intent2);
 			break;
 			
 			case ControlPanel.PANEL3:
 					Intent intent3 = new Intent();
-					intent3.setClass(HomeSettingActivity.this, EquipementControlTV.class);
+					intent3.setClass(HomeSettingActivity.this, EquipementControlSettingTV.class);
 					HomeSettingActivity.this.startActivity(intent3);
 				break;
 		
 			case ControlPanel.PANEL4:
 				Intent intent4 = new Intent();
-				intent4.setClass(HomeSettingActivity.this, EquipementControlPlay.class);
+				intent4.setClass(HomeSettingActivity.this, EquipementControlSettingPlay.class);
 				HomeSettingActivity.this.startActivity(intent4);
 			break;
 			
 			case ControlPanel.PANEL5:
 				Intent intent5 = new Intent();
-				intent5.setClass(HomeSettingActivity.this, EquipementControlPlay.class);
+				intent5.setClass(HomeSettingActivity.this, EquipementControlSettingPlay.class);
 				HomeSettingActivity.this.startActivity(intent5);
 			break;
 			
 			case ControlPanel.PANEL6:
 				Intent intent6 = new Intent();
-				intent6.setClass(HomeSettingActivity.this, EquipementControlKongTiao.class);
+				intent6.setClass(HomeSettingActivity.this, EquipementControlSettingKongTiao.class);
 				HomeSettingActivity.this.startActivity(intent6);
 			break;
 			
 			
 			case ControlPanel.PANEL7:
 				Intent intent7 = new Intent();
-				intent7.setClass(HomeSettingActivity.this, EquipementControlOpenOff_1.class);
+				intent7.setClass(HomeSettingActivity.this, EquipementControlSettingOpenOff_1.class);
 				HomeSettingActivity.this.startActivity(intent7);
 			break;
 			
 			case ControlPanel.PANEL8:
 				Intent intent8 = new Intent();
-				intent8.setClass(HomeSettingActivity.this, EquipementControlOpenOff_2.class);
+				intent8.setClass(HomeSettingActivity.this, EquipementControlSettingOpenOff_2.class);
 				HomeSettingActivity.this.startActivity(intent8);
 			break;
 				
