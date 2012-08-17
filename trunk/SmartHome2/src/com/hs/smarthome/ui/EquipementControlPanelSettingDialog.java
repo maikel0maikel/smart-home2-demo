@@ -27,7 +27,7 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
-public class EquipementControlPanelSettingDialog extends Activity{
+public class EquipementControlPanelSettingDialog extends Activity implements View.OnClickListener{
 
 	private int clickButtonID;
 	
@@ -52,8 +52,8 @@ public class EquipementControlPanelSettingDialog extends Activity{
 		
 		rbGroupCommand_WX = (RadioButton)findViewById(R.id.rbGroupCommand_WX);
 		rbGroupCommand_HW = (RadioButton)findViewById(R.id.rbGroupCommand_HW);
-		this.rbGroupCommand_WX.setOnClickListener((OnClickListener) this);
-		this.rbGroupCommand_HW.setOnClickListener((OnClickListener) this);
+		this.rbGroupCommand_WX.setOnClickListener(this);
+		this.rbGroupCommand_HW.setOnClickListener(this);
 		mInflater = LayoutInflater.from( this );
 		tabContainer = (FrameLayout) findViewById(R.id.tabs);
 
@@ -240,5 +240,11 @@ public class EquipementControlPanelSettingDialog extends Activity{
 			icon = (ImageView) view.findViewById(R.id.icon);
 			label = (TextView) view.findViewById(R.id.label);
 		}
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		
 	}
 }
