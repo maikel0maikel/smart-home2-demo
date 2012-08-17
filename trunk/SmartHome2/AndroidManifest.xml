@@ -47,6 +47,7 @@
         <activity android:name=".ui.HomeSettingDialog" android:theme="@android:style/Theme.Dialog"/>
         <activity android:name=".ui.HomeAddDialog" android:theme="@android:style/Theme.Dialog"/>
         <activity android:name=".ui.AlarmSettingNameDialog" android:theme="@android:style/Theme.Dialog"/>
+        <activity android:name=".ui.EquipementControlPanelSettingDialog" android:theme="@android:style/Theme.Dialog"/>
     </application>
 
 </manifest>
