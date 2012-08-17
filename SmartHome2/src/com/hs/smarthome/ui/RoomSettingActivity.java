@@ -226,8 +226,12 @@ public class RoomSettingActivity extends Activity{
 				}
 				
 				//发送广播
-				Intent mIntent = new Intent(FuncHomeActivity.ACTION_ROOM_NAME); 
-                sendBroadcast(mIntent); 
+				Intent mIntent1 = new Intent(FuncHomeActivity.ACTION_ROOM_NAME); 
+				Intent mIntent2 = new Intent(HomeSettingActivity.ACTION_ROOM_NAME);
+				Intent mIntent3 = new Intent(HomeSettingDialog.ACTION_ROOM_NAME);
+                sendBroadcast(mIntent1); 
+                sendBroadcast(mIntent2);
+                sendBroadcast(mIntent3);
 			break;
 		}
 	};
