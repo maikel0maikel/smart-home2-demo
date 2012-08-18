@@ -244,7 +244,7 @@ public class EquipementControlPanelSettingDialog extends Activity implements Vie
 
 	@Override
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
-		
+
+		showView(v);
 	}
 }
