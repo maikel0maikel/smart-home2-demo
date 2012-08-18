@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <LinearLayout android:gravity="center_horizontal" android:orientation="horizontal" android:id="@id/equipement_control_panel" android:background="@drawable/main_bk" android:layout_width="fill_parent" android:layout_height="fill_parent"
   xmlns:android="http://schemas.android.com/apk/res/android">
-    <LinearLayout android:orientation="vertical" android:background="@drawable/panel_background" android:layout_width="300.0dip" android:layout_height="fill_parent" android:layout_marginTop="10.0dip" android:layout_marginBottom="10.0dip">
-        <RelativeLayout android:layout_width="fill_parent" android:layout_height="wrap_content">
+    <LinearLayout android:orientation="vertical" android:background="@drawable/panel_background" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_marginTop="0.0dip" android:layout_marginBottom="10.0dip">
+         <LinearLayout android:id="@+id/title_bar" android:orientation="horizontal" 
+      android:layout_width="fill_parent" android:layout_height="30dip" android:layout_alignParentTop="true"
+      android:background="@drawable/title_bar_background"  >
+      <TextView android:id="@+id/setting_title" android:layout_gravity="center" android:layout_width="wrap_content" android:layout_height="wrap_content"
+          android:text="空调" android:textSize="20dp" android:textColor="#ffffffff" android:layout_marginLeft="135dip"  android:layout_marginRight="25dip"   />
+       </LinearLayout>
+        <RelativeLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="5.0dip" android:layout_marginLeft="10.0dip">
             <Button android:id="@id/btClose" android:background="@drawable/panel_close_button_style" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="10.0dip" android:layout_marginTop="10.0dip" />
             <Button android:id="@id/btOpen" android:background="@drawable/panel_close_open_style" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="70.0dip" android:layout_marginTop="10.0dip" android:layout_alignParentLeft="true" android:layout_alignParentTop="true" />
         </RelativeLayout>
