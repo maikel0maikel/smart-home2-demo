@@ -40,8 +40,8 @@ public class EquipementControlPanelSettingDialog extends Activity implements Vie
 	private ListView tab2ListView;
 	private FrameLayout tabContainer;
 	private LayoutInflater mInflater = null;
-	private ArrayList<WirelessItem> wirelessItemList = new ArrayList<WirelessItem>(); 
-	private ArrayList<InfraredItem> infraredItemList = new ArrayList<InfraredItem>(); 
+
+	
 	
 	
 	@Override
@@ -145,12 +145,12 @@ public class EquipementControlPanelSettingDialog extends Activity implements Vie
 		
 		@Override
 		public int getCount() {
-			return wirelessItemList.size();
+			return WirelessItemList.size();
 		}
 
 		@Override
 		public Object getItem(int position) {
-			return wirelessItemList.get(position);
+			return WirelessItemList.get(position);
 		}
 
 		@Override
@@ -161,7 +161,7 @@ public class EquipementControlPanelSettingDialog extends Activity implements Vie
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			
-			WirelessItem wirelessItem = wirelessItemList.get(position);
+			WirelessItem wirelessItem = WirelessItemList.get(position);
 			
 			View view = convertView;
 			
