@@ -1,16 +1,47 @@
 package com.hs.smarthome.ui;
 
 import com.hs.smarthome.R;
+import com.hs.smarthome.db.HomeItem;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
-public class EquipementControlSettingOpenOff_1 extends Activity{
+public class EquipementControlSettingOpenOff_1 extends Activity implements View.OnClickListener{
+	
+	private Button panel_kg_bt1;
+	
+	private HomeItem homeItem;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.equipement_control_panel_openoff_1);
+		
+	homeItem = (HomeItem)getIntent().getSerializableExtra("homeItem");
+		
+		panel_kg_bt1 = (Button)findViewById(R.id.panel_kg_bt1);
+		
+		this.panel_kg_bt1.setOnClickListener(this);
+	}
+	
+	@Override
+	public void onClick(View paramView) {
+		
+		Intent reqIntent = null;
+		switch (paramView.getId()) {
+		case R.id.panel_kg_bt1:
+			reqIntent =new Intent(this, EquipementControlPanelSettingDialog.class);
+			reqIntent.putExtra("homeItem",homeItem);
+			reqIntent.putExtra("clickButtonID", R.id.panel_kg_bt1);
+			break;
+		
+		}
+		
+		startActivity(reqIntent);
 	}
 }
