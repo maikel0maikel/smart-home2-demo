@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="vifrification">#00000000</color>   <!-- 透明 -->
+    <color name="transparent">#00000000</color>    
+    <color name="mycolor">#7fff00ff</color>
+    <color name="movearc">#FF00CC00</color>    
+    <color name="dark">#ff414142</color>
+    <color name="shortcutmain">#d0000000</color>         
+</resources>

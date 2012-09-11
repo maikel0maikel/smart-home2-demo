@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent"
+    android:gravity="center"
+  xmlns:android="http://schemas.android.com/apk/res/android" >
+	    <LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content" android:gravity="center_horizontal">
+	        <TextView android:layout_width="wrap_content" android:layout_height="fill_parent" android:text="@string/net_traffic_bytes_gprs_desc"></TextView>
+	        <TextView android:id="@+id/net_traffic_bytes_gprs_day" android:layout_width="wrap_content" android:layout_height="fill_parent" android:text="@string/net_traffic_bytes_gprs_day"></TextView>
+	        <TextView android:id="@+id/net_traffic_bytes_gprs_month" android:layout_width="wrap_content" android:layout_height="fill_parent" android:text="@string/net_traffic_bytes_gprs_month"></TextView>
+	    </LinearLayout>
+	    <LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content" android:gravity="center_horizontal">
+	        <TextView android:layout_width="wrap_content" android:layout_height="fill_parent" android:text="@string/net_traffic_bytes_wifi_desc"></TextView>
+	        <TextView android:id="@+id/net_traffic_bytes_wifi_day" android:layout_width="wrap_content" android:layout_height="fill_parent" android:text="@string/net_traffic_bytes_wifi_day"></TextView>
+	        <TextView android:id="@+id/net_traffic_bytes_wifi_month" android:layout_width="wrap_content" android:layout_height="fill_parent" android:text="@string/net_traffic_bytes_wifi_month"></TextView>
+	        
+	        <Button
+	            android:id="@+id/startRanking"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="流量排行" />
+
+	        <Button
+	            android:id="@+id/btnstart"
+	            android:layout_width="160dip"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="center"
+	            android:gravity="center"
+	            android:text="悬浮开"
+	            android:textSize="20dp"
+	            android:textStyle="bold" />
+
+	        <Button
+	            android:id="@+id/btnstop"
+	            android:layout_width="160dip"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="center"
+	            android:gravity="center"
+	            android:text="悬浮关"
+	            android:textSize="20dp"
+	            android:textStyle="bold" />
+	        
+	        <Button
+	            android:id="@+id/btncheck_notify"
+	            android:layout_width="160dip"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="center"
+	            android:gravity="center"
+	            android:text="广告检测"
+	            android:textSize="20dp"
+	            android:textStyle="bold" />	        
+</LinearLayout>	  
+	      
+</LinearLayout>

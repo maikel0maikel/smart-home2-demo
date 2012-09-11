@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 设置dialog弹出，退出动画 -->
+
+<resources>
+    
+    <style name="listview">
+        <item name="android:listSelector">@drawable/selector_list_item</item>
+        <item name="android:cacheColorHint">@android:color/transparent</item>
+        <item name="android:divider">@color/list_divider</item>
+        <item name="android:dividerHeight">1.0px</item>
+    </style>    
+</resources>
