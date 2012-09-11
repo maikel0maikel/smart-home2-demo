@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.felix.demo"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk android:minSdkVersion="8" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    
+    <application
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name" >
+
+        <activity
+            android:name=".activity.NetTrafficBytesMain"
+            android:label="流量监控" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>    
+         <activity
+            android:name=".activity.NetTrafficRankingMain"
+            android:label="流量监控" >
+        </activity>   
+       <!-- 流量排行 -->    
+         <receiver android:name=".activity.NetTrafficBootAndShutdownBroadcast"
+			android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
+			<intent-filter>
+				<action android:name="android.intent.action.BOOT_COMPLETED"></action>
+				<action android:name="android.intent.action.ACTION_SHUTDOWN"></action>
+			</intent-filter>
+		</receiver>
+		<receiver android:name=".activity.NetTrafficRankingPackageBroadcast">
+			<intent-filter>
+				<action android:name="android.intent.action.PACKAGE_REMOVED" />
+				<data android:scheme="package" />
+			</intent-filter>
+		</receiver>
+		<receiver android:name=".activity.NetTrafficConnectivityChangeBroadcast">
+			<intent-filter>
+				<action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+				<action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+			</intent-filter>
+		</receiver>				
+		<!-- 实时监控服务
+		<service android:name=".activity.NetTrafficBytesService"></service>
+		<service android:name=".activity.NetTrafficBytesFloatService" android:persistent="true"></service>
+		 -->
+    </application>
+
+</manifest>

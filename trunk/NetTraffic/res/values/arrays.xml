@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 配置数组串资源，array only -->
+
+<resources>
+    <string-array name="shortcut_slot_choose_dialog_operate_type">
+	  <item>直接打电话给他/她</item>
+		<item>直接发短信给他/她</item>
+		<item>直接打开最爱的应用</item>	
+	</string-array>	
+</resources>
