@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
     
     <application
         android:icon="@drawable/ic_launcher"
@@ -26,6 +27,12 @@
             android:name=".activity.NetTrafficRankingMain"
             android:label="流量监控" >
         </activity>   
+        
+        <activity
+            android:name=".notify.NotifyListActivity"
+            android:label="通知栏检测" >
+        </activity> 
+         
        <!-- 流量排行 -->    
          <receiver android:name=".activity.NetTrafficBootAndShutdownBroadcast"
 			android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
