@@ -60,6 +60,13 @@ public class NotifyListActivity extends Activity {
 		this.listview = (ListView) this.findViewById(R.id.app_list);
 		this.appListEmptyTV = (TextView) this.findViewById(R.id.app_list_empty);
 		
+		new Thread() {
+			public void run() {
+				queryNotifyList();
+				handler.sendEmptyMessage(0);
+			}
+		}.start();
+		/*
 		if ( NotifyApi.hasRootAccess(this) ){
 		
 			new Thread() {
@@ -76,6 +83,7 @@ public class NotifyListActivity extends Activity {
 			appListEmptyTV.setText("您的手机未Root,无法使用通知栏广告检测功能");
 			listview.setVisibility(View.GONE);
 		}
+		*/
     }
     
     public void queryNotifyList(){
@@ -103,6 +111,7 @@ public class NotifyListActivity extends Activity {
                 reader = new BufferedReader(new InputStreamReader(process.getInputStream()));   
                 String line = ""; 
                 Pattern pattern = Pattern.compile("pkg=[^\\s]+"); 
+                Pattern idPattern = Pattern.compile("id=[^\\s]+"); 
                 while ((line = reader.readLine()) != null) { 
                     if(line != null && line.trim().startsWith("NotificationRecord")){ 
                     	
@@ -115,6 +124,11 @@ public class NotifyListActivity extends Activity {
                             //跳过白名单
                             if ("com.android.systemui".equals(notifyRec.pkgName)){
                             	continue;
+                            }
+                            
+                            Matcher idMatcher = idPattern.matcher(line);
+                            if (idMatcher.find()){
+                            	notifyRec.noId = Integer.parseInt(idMatcher.group().replace("id=", ""),16);
                             }
                             
                             //往下读取 contentIntent并判断, 输出的具体结构查看命令dumpsys notification效果
@@ -273,7 +287,11 @@ public class NotifyListActivity extends Activity {
 				
 				@Override
 				public void onClick(View v) {
+					
+					ItemCache cache = (ItemCache)v.getTag();
+					
 					NotificationManager nManager = (NotificationManager) getSystemService(Service.NOTIFICATION_SERVICE);
+					nManager.cancel( cache.app.noId );					
 				}
 			});
     		
