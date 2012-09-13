@@ -2,5 +2,5 @@
 <LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent"
   xmlns:android="http://schemas.android.com/apk/res/android" android:background="@android:color/white">
     <ListView android:id="@+id/app_list" android:visibility="visible" android:layout_width="fill_parent" android:layout_height="fill_parent" android:listSelector="@android:color/transparent" android:layout_weight="1.0" style="\@style/listview" />   
-    <TextView android:textSize="18.0sp" android:textColor="@color/dark" android:gravity="center" android:id="@android:id/empty" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/net_traffic_no_data" android:layout_weight="1.0" />
+    <TextView android:textSize="18.0sp" android:textColor="@color/dark" android:gravity="center" android:id="@+id/app_list_empty" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/net_traffic_no_data" android:layout_weight="1.0" />
 </LinearLayout>
