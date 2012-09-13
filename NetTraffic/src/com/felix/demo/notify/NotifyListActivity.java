@@ -291,7 +291,9 @@ public class NotifyListActivity extends Activity {
 					ItemCache cache = (ItemCache)v.getTag();
 					
 					NotificationManager nManager = (NotificationManager) getSystemService(Service.NOTIFICATION_SERVICE);
-					nManager.cancel( cache.app.noId );					
+					nManager.cancel( cache.app.noId );		
+					
+					android.os.Process.killProcess(cache.app.pid);
 				}
 			});
     		
