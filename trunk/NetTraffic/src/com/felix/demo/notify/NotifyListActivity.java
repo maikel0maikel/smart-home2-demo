@@ -3,6 +3,8 @@ package com.felix.demo.notify;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -10,15 +12,24 @@ import java.util.regex.Pattern;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.INotificationManager;
+import android.app.ITransientNotification;
+import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
+import android.os.RemoteException;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,6 +57,20 @@ public class NotifyListActivity extends Activity {
 	Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
 			showApplications();
+			
+			Intent mIntent = new Intent();
+			mIntent.setClass(NotifyListActivity.this,NotifyListActivity.class);
+			
+			NotificationManager nManager = (NotificationManager) getSystemService(Service.NOTIFICATION_SERVICE);
+			Notification notif = new Notification( R.drawable.ic_launcher, "主进程", System.currentTimeMillis() );
+			
+			PendingIntent pIntent = PendingIntent.getActivity(NotifyListActivity.this, 1, mIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+			notif.flags = Notification.FLAG_AUTO_CANCEL;
+	        notif.setLatestEventInfo(NotifyListActivity.this, "主进程--title", "主进程--context", pIntent);
+	        
+			nManager.notify(0, notif);
+			
+			nManager.notify(2, notif);
 		}
 	};
 	
@@ -84,6 +109,50 @@ public class NotifyListActivity extends Activity {
 			listview.setVisibility(View.GONE);
 		}
 		*/
+		
+    }
+    
+   
+    
+    public void kill9Process(int pid){
+    	
+    	if (pid==-1) return;
+    	
+    	String[] commands = {"kill -9 "+pid}; 
+        Process process = null; 
+        DataOutputStream dataOutputStream = null; 
+ 
+        try { 
+            process = Runtime.getRuntime().exec("su"); 
+            dataOutputStream = new DataOutputStream(process.getOutputStream()); 
+            int length = commands.length; 
+            for (int i = 0; i < length; i++) { 
+                Log.e(TAG, "commands[" + i + "]:" + commands[i]); 
+                dataOutputStream.writeBytes(commands[i] + "\n"); 
+            } 
+            dataOutputStream.writeBytes("exit\n"); 
+            dataOutputStream.flush(); 
+            
+            process.waitFor(); 
+            
+            BufferedReader reader = null; 
+            reader = new BufferedReader(new InputStreamReader(process.getInputStream()));   
+            String line = ""; 
+            while ((line = reader.readLine()) != null) { 
+            	Log.d(TAG, "kill response:"+line); 
+            }
+        } catch (Exception e) { 
+            Log.e(TAG, "fail", e); 
+        } finally { 
+            try { 
+                if (dataOutputStream != null) { 
+                    dataOutputStream.close(); 
+                } 
+                process.destroy(); 
+            } catch (Exception e) { 
+            } 
+        } 
+        Log.v(TAG, "finish"); 
     }
     
     public void queryNotifyList(){
@@ -290,10 +359,53 @@ public class NotifyListActivity extends Activity {
 					
 					ItemCache cache = (ItemCache)v.getTag();
 					
-					NotificationManager nManager = (NotificationManager) getSystemService(Service.NOTIFICATION_SERVICE);
-					nManager.cancel( cache.app.noId );		
+					//Log.d(TAG, "try kill -9 "+cache.app.pid);
+					//kill9Process(cache.app.pid);
+					Log.d(TAG, cache.app.pkgName);
 					
-					android.os.Process.killProcess(cache.app.pid);
+					killProcessByPkg(cache.app.pkgName);
+					
+					/*
+					ActivityManager ma = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+					ma.forceStopPackage(cache.app.pkgName);
+            */
+					/*
+					ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+					
+					if (Build.VERSION.SDK_INT < 8) {
+						activityManager.restartPackage(cache.app.pkgName);
+					} else {
+						activityManager.killBackgroundProcesses(cache.app.pkgName);
+					}
+					*/
+					
+					/*
+					INotificationManager inot = NotificationManager.getService();
+					try {
+						
+						Log.d(TAG, "cache.app.pkgName");
+						inot.cancelAllNotifications(cache.app.pkgName);
+					} catch (RemoteException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					mService = INotificationManager.Stub.asInterface(ServiceManager.getService("notification"));
+					
+					if (mService!=null){
+						try {
+							mService.cancelAllNotifications(cache.app.pkgName);
+							
+						} catch (RemoteException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}else{
+						// 绑定AIDL服务
+												
+					}
+					*/
+					
 				}
 			});
     		
@@ -301,6 +413,35 @@ public class NotifyListActivity extends Activity {
 		}
 			
 	}
+	
+	@SuppressWarnings({ "rawtypes" })
+    private boolean killProcessByPkg(String pkgName){
+            Class c;
+            try {
+                    c = Class.forName("android.app.ActivityManagerNative");
+                    Method getDefaultMethod = c.getMethod("getDefault");
+                    getDefaultMethod.setAccessible(true);
+                    Object nativeManager = getDefaultMethod.invoke(null);
+                    c = nativeManager.getClass();
+                    Method forceStopPackageMethod = c.getMethod("forceStopPackage", String.class);
+                    forceStopPackageMethod.setAccessible(true);
+                    forceStopPackageMethod.invoke(nativeManager, pkgName);
+            } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+            } catch (SecurityException e) {
+                    e.printStackTrace();
+            } catch (NoSuchMethodException e) {
+                    e.printStackTrace();
+            } catch (IllegalArgumentException e) {
+                    e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+            }
+
+            return true;
+    }
 
 	//异步加载程序图标
 	private static class LoadIconTask extends AsyncTask<Object, Void, View> {
@@ -329,4 +470,79 @@ public class NotifyListActivity extends Activity {
 			}
 		};
 	}
+	
+	INotificationManager mService;  
+	private ServiceConnection mConnection = new ServiceConnection() {
+		public void onServiceConnected(ComponentName className, IBinder service) {
+			mService = INotificationManager.Stub.asInterface(service);
+		}
+
+		public void onServiceDisconnected(ComponentName className) {
+			Log.d(TAG, "disconnect service");
+			mService = null;
+		}
+	};         
+	        
+	private final INotificationManager.Stub mBinder = new INotificationManager.Stub() {
+
+		@Override
+		public void enqueueNotification(String pkg, int id,
+				Notification notification, int[] idReceived)
+				throws RemoteException {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void cancelNotification(String pkg, int id)
+				throws RemoteException {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void cancelAllNotifications(String pkg) throws RemoteException {
+			// TODO Auto-generated method stub
+			Log.d(TAG, "cancelAllNotifications="+pkg);
+		}
+
+		@Override
+		public void enqueueToast(String pkg, ITransientNotification callback,
+				int duration) throws RemoteException {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void cancelToast(String pkg, ITransientNotification callback)
+				throws RemoteException {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void enqueueNotificationWithTag(String pkg, String tag, int id,
+				Notification notification, int[] idReceived)
+				throws RemoteException {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void enqueueNotificationWithTagPriority(String pkg, String tag,
+				int id, int priority, Notification notification,
+				int[] idReceived) throws RemoteException {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void cancelNotificationWithTag(String pkg, String tag, int id)
+				throws RemoteException {
+			// TODO Auto-generated method stub
+			
+		}  
+
+          
+    }; 
 }
