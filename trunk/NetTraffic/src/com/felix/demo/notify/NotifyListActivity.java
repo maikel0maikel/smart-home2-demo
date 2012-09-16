@@ -12,24 +12,21 @@ import java.util.regex.Pattern;
 
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.app.INotificationManager;
-import android.app.ITransientNotification;
+import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.IBinder;
 import android.os.Message;
-import android.os.RemoteException;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -197,7 +194,7 @@ public class NotifyListActivity extends Activity {
                             
                             Matcher idMatcher = idPattern.matcher(line);
                             if (idMatcher.find()){
-                            	notifyRec.noId = Integer.parseInt(idMatcher.group().replace("id=", ""),16);
+                            	notifyRec.noId = Long.parseLong(idMatcher.group().replace("id=", ""),16);
                             }
                             
                             //往下读取 contentIntent并判断, 输出的具体结构查看命令dumpsys notification效果
@@ -357,18 +354,28 @@ public class NotifyListActivity extends Activity {
 				@Override
 				public void onClick(View v) {
 					
-					ItemCache cache = (ItemCache)v.getTag();
+					final ItemCache cache = (ItemCache)v.getTag();
 					
 					//Log.d(TAG, "try kill -9 "+cache.app.pid);
 					//kill9Process(cache.app.pid);
 					Log.d(TAG, cache.app.pkgName);
-					
-					killProcessByPkg(cache.app.pkgName);
-					
-					/*
-					ActivityManager ma = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-					ma.forceStopPackage(cache.app.pkgName);
-            */
+					//确认是否删除
+                	new AlertDialog.Builder(NotifyListActivity.this)
+    				.setIcon(android.R.drawable.ic_dialog_alert)
+    				.setTitle("是否确定卸载“"+cache.app.appName+"”")
+    				.setPositiveButton("确定",
+    						new DialogInterface.OnClickListener() {
+    							public void onClick(DialogInterface dialog,
+    									int whichButton) {
+    								uninstallApp(NotifyListActivity.this,cache.app.pkgName);
+    							}
+    						})
+    				.setNegativeButton("取消",
+    						new DialogInterface.OnClickListener() {
+    							public void onClick(DialogInterface dialog,
+    									int whichButton) {
+    							}
+    						}).create().show(); 
 					/*
 					ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
 					
@@ -378,7 +385,12 @@ public class NotifyListActivity extends Activity {
 						activityManager.killBackgroundProcesses(cache.app.pkgName);
 					}
 					*/
+					//killProcessByPkg(cache.app.pkgName);
 					
+					/*
+					ActivityManager ma = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+					ma.forceStopPackage(cache.app.pkgName);
+            */
 					/*
 					INotificationManager inot = NotificationManager.getService();
 					try {
@@ -470,79 +482,15 @@ public class NotifyListActivity extends Activity {
 			}
 		};
 	}
-	
-	INotificationManager mService;  
-	private ServiceConnection mConnection = new ServiceConnection() {
-		public void onServiceConnected(ComponentName className, IBinder service) {
-			mService = INotificationManager.Stub.asInterface(service);
-		}
 
-		public void onServiceDisconnected(ComponentName className) {
-			Log.d(TAG, "disconnect service");
-			mService = null;
-		}
-	};         
-	        
-	private final INotificationManager.Stub mBinder = new INotificationManager.Stub() {
-
-		@Override
-		public void enqueueNotification(String pkg, int id,
-				Notification notification, int[] idReceived)
-				throws RemoteException {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void cancelNotification(String pkg, int id)
-				throws RemoteException {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void cancelAllNotifications(String pkg) throws RemoteException {
-			// TODO Auto-generated method stub
-			Log.d(TAG, "cancelAllNotifications="+pkg);
-		}
-
-		@Override
-		public void enqueueToast(String pkg, ITransientNotification callback,
-				int duration) throws RemoteException {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void cancelToast(String pkg, ITransientNotification callback)
-				throws RemoteException {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void enqueueNotificationWithTag(String pkg, String tag, int id,
-				Notification notification, int[] idReceived)
-				throws RemoteException {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void enqueueNotificationWithTagPriority(String pkg, String tag,
-				int id, int priority, Notification notification,
-				int[] idReceived) throws RemoteException {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void cancelNotificationWithTag(String pkg, String tag, int id)
-				throws RemoteException {
-			// TODO Auto-generated method stub
-			
-		}  
-
-          
-    }; 
+	/**
+	 * 卸载应用程序
+	 * @param ctx
+	 * @param packageName
+	 */
+	private static void uninstallApp(Context ctx, String packageName){
+		Uri uri = Uri.fromParts("package", packageName, null);
+		Intent it = new Intent(Intent.ACTION_DELETE, uri);
+		ctx.startActivity(it);
+	}
 }

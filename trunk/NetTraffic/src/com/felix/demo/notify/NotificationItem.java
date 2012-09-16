@@ -5,7 +5,7 @@ import android.graphics.drawable.Drawable;
 
 public class NotificationItem {
 	
-	public int noId; 
+	public long noId; 
 	
 	/**软件包名*/
 	public String pkgName;
