@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent" android:layout_height="fill_parent" >
+	<RelativeLayout android:id="@+id/downtask_go_down" android:layout_width="376dip"
+		android:layout_height="176dip" android:orientation="vertical"
+		android:paddingTop="5.0dip" android:paddingBottom="5.0dip"
+		android:paddingLeft="5.0dip" android:background="@drawable/nd_hilauncher_theme_manage_downtask_notask_bg"
+		android:layout_centerInParent="true">
+		<TextView android:id="@+id/notask_bottom_more_desc" android:textSize="18sp" android:layout_alignParentBottom="true" android:layout_marginBottom="5dip"
+			android:layout_alignParentRight="true" android:layout_marginRight="70dip"
+			android:textStyle="bold" android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:textColor="@color/ndtheme_white" android:text="@string/ndtheme_manage_downtasks_nodowntask_more_txt"/>
+	</RelativeLayout>
+	<TextView android:id="@+id/notask_bottom_desc" android:textSize="18sp" android:layout_centerInParent="true"
+			android:textStyle="bold" android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:textColor="@color/ndtheme_black" android:text="@string/ndtheme_manage_downtasks_nodowntask_txt"/>
+</RelativeLayout>

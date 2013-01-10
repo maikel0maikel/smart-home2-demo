@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/downtaskHead" android:orientation="horizontal" 
+    android:layout_height="40dip"  android:layout_width="fill_parent"
+    android:gravity="center_vertical" android:background="@drawable/nd_hilauncher_theme_manage_downtask_title_bg">
+				
+    <TextView android:id="@+id/theme_shop_v2_manage_downtasks_downing_tv" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="20dip"
+        android:layout_marginRight="10dip" android:text="@string/ndtheme_manage_downtasks_downing_txt" android:textSize="16sp" android:textColor="#D93D00"/>		        
+    <TextView android:id="@+id/theme_shop_v2_manage_downtasks_downtask_nums_tv" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="8dip"
+        android:layout_marginRight="20dip" android:text="@string/ndtheme_manage_downtasks_downtask_nums_txt" android:textSize="16sp" android:textColor="#FF000000"
+        android:layout_toRightOf="@+id/theme_shop_v2_manage_downtasks_downing_tv"/>
+    <TextView android:id="@+id/downingtaskNums" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="4dip"
+        android:layout_marginRight="4dip" android:text="0" android:textSize="16sp" android:textColor="#D93D00"
+        android:layout_toRightOf="@+id/theme_shop_v2_manage_downtasks_downtask_nums_tv"/>
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" 
+        android:text="@string/ndtheme_manage_downtasks_downtask_nums_txt_unit" android:textSize="16sp" android:textColor="#FF000000"
+		android:layout_toRightOf="@+id/downingtaskNums"/>
+      
+	 <ImageView
+        android:id="@+id/theme_shop_v2_manage_downtasks_tubiao"
+        android:background="@drawable/nd_hilauncher_theme_manage_downtask_group_btn" 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="15dip" >
+    </ImageView> 	            
+</RelativeLayout>

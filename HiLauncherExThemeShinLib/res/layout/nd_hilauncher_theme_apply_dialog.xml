@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/container_layout"
+	android:layout_width="300dip"	
+	android:layout_height="200dip">
+	
+	<RelativeLayout android:id="@+id/top_layout"
+		android:layout_width="match_parent"
+		android:layout_height="45dip"
+		android:layout_alignParentTop="true"
+		android:orientation="horizontal"
+		android:gravity="center_vertical"
+		android:background="@drawable/nd_hilauncher_theme_app_choose_top_background">
+		
+		<TextView android:id="@+id/app_choose_title"
+			android:layout_width="wrap_content"
+			android:layout_height="match_parent"
+			android:layout_alignParentLeft="true"
+			android:paddingTop="2dip"
+			android:paddingLeft="10dip"
+			android:gravity="center" 
+			android:textSize="16sp" 
+			android:textColor="#48b1e2" />
+			
+		<TextView android:id="@+id/app_choose_limit"
+			android:layout_width="wrap_content"
+			android:layout_height="match_parent"
+			android:layout_alignParentRight="true"
+			android:paddingTop="2dip"
+			android:paddingRight="10dip"
+			android:gravity="center" 
+			android:textSize="16sp" 
+			android:textColor="#48b1e2" />
+			
+	</RelativeLayout>
+	
+	<RelativeLayout android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_below="@id/top_layout"
+		android:background="@drawable/nd_hilauncher_theme_app_choose_bottom_background">
+	
+		<LinearLayout android:id="@+id/bottom_layout"
+			android:layout_width="match_parent"
+			android:layout_height="45dip" 
+			android:layout_alignParentBottom="true"
+			android:orientation="horizontal"
+			android:gravity="center">
+			
+			<Button	android:id="@+id/confirm_btn"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"				
+				android:layout_weight="1"
+				android:text="确定"
+				android:textColor="@color/nd_hilauncher_theme_app_choose_btn_color"
+				android:background="@drawable/nd_hilauncher_theme_app_choose_btn"
+	            android:paddingTop="3dip"
+	            android:gravity="center" />
+	            
+	        <ImageView android:layout_width="wrap_content"
+				android:layout_height="match_parent"
+				android:background="@drawable/nd_hilauncher_theme_app_choose_vertical_line" />
+	            
+			<Button	android:id="@+id/cancel_btn"				
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_weight="1"
+				android:textColor="@color/nd_hilauncher_theme_app_choose_btn_color"
+				android:text="取消"
+				android:background="@drawable/nd_hilauncher_theme_app_choose_btn"
+				android:paddingTop="3dip"		
+	            android:gravity="center" />
+	            				
+		</LinearLayout>
+	  <LinearLayout android:orientation="vertical" android:gravity="center" android:layout_width="fill_parent" 
+	      android:layout_height="fill_parent" android:layout_above="@id/bottom_layout">
+			<LinearLayout
+	            android:layout_width="fill_parent"
+	            android:layout_height="fill_parent"	    
+	            android:gravity="center"
+	            android:orientation="vertical">
+	            <TextView
+	                android:id="@+id/tv_nodata_main"	               
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"/>
+	        </LinearLayout>
+		</LinearLayout>
+	</RelativeLayout>
+		
+</RelativeLayout>

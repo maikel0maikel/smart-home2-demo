@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <FrameLayout android:id="@+id/web_progress_bar_fl" android:layout_width="fill_parent"
+                 android:layout_height="8dip" android:background="@drawable/nd_hilauncher_theme_webload_process_title_bg" android:layout_alignParentTop="true">
+	     <ProgressBar
+	        android:id="@+id/web_progress_bar"
+	        style="?android:attr/progressBarStyleHorizontal"
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent"
+	        android:max="100"
+	        android:progressDrawable="@drawable/nd_hilauncher_theme_webload_progress_bg" />
+    </FrameLayout>
+    <Button android:id="@+id/downtask" android:layout_alignParentBottom="true" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="下载管理"/>
+    <WebView android:id="@+id/theme_list_content"
+	    android:layout_below="@+id/web_progress_bar_fl"
+	    android:layout_above="@+id/downtask"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"/>
+</RelativeLayout>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>   
+
+    <style name="NdTheme.DownTaskPause.Button" parent="@android:style/Widget.Button">
+        <item name="android:gravity">bottom|center</item>
+        <item name="android:background">@drawable/nd_hilauncher_theme_manage_downtask_pause_btn</item>
+        <item name="android:paddingBottom">12.0dip</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:focusable">false</item>
+    </style> 	
+        
+    <style name="NdTheme.DownTaskDelete.Button" parent="@android:style/Widget.Button">
+        <item name="android:gravity">bottom|center</item>
+        <item name="android:background">@drawable/nd_hilauncher_theme_manage_downtask_delete_btn</item>
+        <item name="android:paddingBottom">12.0dip</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:focusable">false</item>
+    </style> 
+        
+    <style name="NdTheme.DownTaskDown.Button" parent="@android:style/Widget.Button">
+        <item name="android:gravity">bottom|center</item>
+        <item name="android:background">@drawable/nd_hilauncher_theme_manage_downtask_down_btn</item>
+        <item name="android:paddingBottom">12.0dip</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:focusable">false</item>
+    </style> 	  
+        
+    <style name="NdTheme.DownTaskReDown.Button" parent="@android:style/Widget.Button">
+        <item name="android:gravity">bottom|center</item>
+        <item name="android:background">@drawable/nd_hilauncher_theme_manage_downtask_redown_btn</item>
+        <item name="android:paddingBottom">12.0dip</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:focusable">false</item>
+    </style> 
+    
+	<style name="NdTheme.CustomDialog" parent="@android:style/Theme.Dialog">
+		<item name="android:windowBackground">@android:color/transparent</item>
+		<item name="android:windowFrame">@null</item>
+		<item name="android:windowNoTitle">true</item>
+		<item name="android:windowIsFloating">true</item>
+		<item name="android:windowIsTranslucent">false</item>
+		<item name="android:backgroundDimEnabled">true</item>
+	</style>
+</resources>

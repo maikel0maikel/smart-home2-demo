@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ndtheme_app_name">皮肤主题插件Demo</string>
+    <string name="ndtheme_theme_fetch_loading">加载中...</string>
+	<string name="ndtheme_sdcard_unfound_msg">SDCard未发现</string>	
+	<string name="ndtheme_down_old">已下载安装过!</string>
+	<string name="ndtheme_down_again">是否重新下载?</string>
+	<string name="ndtheme_down_ok">确定</string>	
+	<string name="ndtheme_down_cancel_down">取消下载</string>
+	<string name="ndtheme_txt_downloading">正在下载..</string>
+	<string name="ndtheme_theme_not_exsit">此主题文件不存在</string>
+	<string name="ndtheme_txt_start_download_theme">开始下载主题</string>
+	<string name="ndtheme_text_unsuccessfully_downloaded">下载失败</string>
+    <string name="ndtheme_theme_download_fail_tip">下载失败</string>
+	<string name="ndtheme_theme_wait_for_downloading">等待下载</string>
+	<string name="ndtheme_theme_downloading_tip">下载中，请稍等...</string>    	
+	<string name="ndtheme_alert_dialog_confim_del">是否确定删除该主题!</string>
+	<string name="ndtheme_apply_theme_dialog_title">主题应用</string>
+	<string name="ndtheme_alert_dialog_ok">确定</string>
+	<string name="ndtheme_common_button_cancell">取消</string>
+	<string name="ndtheme_manage_downtasks_finish">已下载</string>
+	<string name="ndtheme_manage_downstate_downing">暂停下载</string>
+	<string name="ndtheme_manage_downstate_finish">应用主题</string>
+	<string name="ndtheme_manage_downstate_fail">重新下载</string>
+	<string name="ndtheme_manage_downstate_pause">继续下载</string>
+	<string name="ndtheme_manage_downstate_delete">删除任务</string>
+	<string name="ndtheme_manage_downstate_delete_theme">删除主题</string>			
+	<string name="ndtheme_manage_downtasks_downing_txt">下载中</string>
+    <string name="ndtheme_manage_downtasks_downtask_nums_txt">共有下载任务</string>
+    <string name="ndtheme_manage_downtasks_downtask_nums_txt_unit">个</string>
+    <string name="ndtheme_manage_downtasks_theme_version_txt">版本%1$s.0</string>
+    <string name="ndtheme_manage_downtasks_downtask_finish_nums_txt">共有主题</string>
+    <string name="ndtheme_manage_downtasks_nodowntask_txt">  当前没有正在进行的任务</string> 
+    <string name="ndtheme_manage_downtasks_nodowntask_more_txt">更多主题>></string>
+    <string name="ndtheme_theme_detail_installing_txt">正在安装......</string>
+    <string name="ndtheme_manage_downtasks_down100">下载完成 正在解压主题,请稍后</string>
+    <string name="ndtheme_apply_theme_title">提示</string>
+    <string name="ndtheme_apply_theme_text">应用</string>
+    
+</resources>

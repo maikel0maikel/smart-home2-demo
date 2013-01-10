@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<selector
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_selected="true" android:drawable="@drawable/nd_hilauncher_theme_manage_downtask_open_btn" />
+    <item android:state_expanded="true" android:drawable="@drawable/nd_hilauncher_theme_manage_downtask_open_btn" />    
+    <item android:drawable="@drawable/nd_hilauncher_theme_manage_downtask_close_btn" />
+</selector>
