@@ -22,9 +22,9 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
 import com.nd.android.lib.theme.R;
+import com.nd.hilauncherdev.kitset.analytics.OtherAnalytics;
 import com.nd.hilauncherdev.lib.theme.HiLauncherExDownTaskManagerActivity;
 import com.nd.hilauncherdev.lib.theme.NdLauncherExThemeApi;
-import com.nd.hilauncherdev.lib.theme.analytics.OtherAnalytics;
 import com.nd.hilauncherdev.lib.theme.db.DowningTaskItem;
 import com.nd.hilauncherdev.lib.theme.db.LocalAccessor;
 import com.nd.hilauncherdev.lib.theme.down.DownloadService;
@@ -72,6 +72,11 @@ public class HiLauncherExThemeShinView  extends FrameLayout {
 	
 	/**91桌面包名*/
 	public static final String THEME_MANAGE_PACKAGE_NAME = "com.nd.android.pandahome2";
+	
+	/**
+	 * 手机助手下载地址
+	 */
+	private final String assit_app_download_url="http://dl.sj.91.com/business/91soft/91assistant_Andphone167.apk";
 	
 	private Handler handler = new Handler();
 	
@@ -186,7 +191,17 @@ public class HiLauncherExThemeShinView  extends FrameLayout {
 								String downloadUrl=OtherAnalytics.get91LauncherAppDownloadUrl(ctx);
 								//未获取到采用默认地址
 								if(SUtil.isEmpty(downloadUrl))
-									downloadUrl="assit_app_download_url";
+									downloadUrl=assit_app_download_url;
+								
+								//添加桌面的下载任务
+								ThemeItem mThemeItem = new ThemeItem();
+								mThemeItem.setItemType(ThemeItem.ITEM_TYPE_LAUNCHER);
+								mThemeItem.setDownloadUrl(downloadUrl);
+								mThemeItem.setLargePostersUrl("");
+								mThemeItem.setName("91桌面");
+								mThemeItem.setId(tidRequestValue + ("" + mThemeItem.getItemType()));
+								DownloadTask manager = new DownloadTask();
+								manager.downloadTheme(ctx, mThemeItem);
 							}
 							ThemeItem mThemeItem = new ThemeItem();
 							String buildDownloadUrl = buildDownloadParam(tidRequestValue, widRequestValue, wtypeRequestValue, dtypeRequestValue);

@@ -1,4 +1,4 @@
-package com.nd.hilauncherdev.lib.theme.analytics;
+package com.nd.hilauncherdev.kitset.analytics;
 
 
 import java.io.ByteArrayInputStream;
@@ -6,7 +6,6 @@ import java.io.ByteArrayInputStream;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -17,9 +16,14 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.nd.hilauncherdev.framework.httplib.HttpCommon;
+import com.nd.hilauncherdev.kitset.json.JSONObject;
 import com.nd.hilauncherdev.lib.theme.util.TelephoneUtil;
 
-
+/**
+ * 新增的数据统类，不依赖于数据统计的jar包
+ * @author zhuchenghua
+ * @date 2012-10-12
+ */
 public class OtherAnalytics {
 	
 	private static final String TAG = "OtherAnalytics";

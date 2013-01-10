@@ -28,6 +28,7 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.nd.android.lib.theme.R;
+import com.nd.hilauncherdev.kitset.util.ApkTools;
 import com.nd.hilauncherdev.lib.theme.HiLauncherExDownTaskManagerActivity;
 import com.nd.hilauncherdev.lib.theme.NdLauncherExThemeApi;
 import com.nd.hilauncherdev.lib.theme.api.ThemeLauncherExAPI;
@@ -245,6 +246,15 @@ public class DownloadService extends Service {
                 	final DowningTaskItem dTaskItem = itemMap.get( url );
                     itemMap.remove(url);
                     
+                    if ( ThemeLauncherExAPI.checkItemLauncherType(serverThemeID) ){
+                    	//91Launcher Apk filePath
+                    	File launcherApk=new File(filePath);
+                    	if(launcherApk.exists()){
+                    		ApkTools.installApplication(mContext, launcherApk);
+                    	}
+                    	return ;
+                    }
+                    
                     if ( ThemeLauncherExAPI.checkItemSkinType(serverThemeID) ){
                     	
                     	String tmpSkinPath = NdLauncherExThemeApi.ND_HILAUNCHER_THEME_APP_SKIN_PATH_VALUE;
@@ -262,10 +272,9 @@ public class DownloadService extends Service {
                         	return ;
                         }else{
                         	//保存解析后的地址到数据库看中
-                        	dTaskItem.tmpFilePath = unZipPath;
-                        	LocalAccessor.getInstance(mContext).updateDownTaskItemForDownState( dTaskItem.themeID, DowningTaskItem.DownState_Finish, unZipPath);
+                        	LocalAccessor.getInstance(mContext).updateDownTaskItemForNewThemeID( dTaskItem.themeID, unZipPath);
                         	//发送安装完成的广播更新下载列表界面
-                        	ThemeDownloadStateManager.sendDownloadFinishMessage(mContext, serverThemeID, serverThemeID, unZipPath);
+                        	ThemeDownloadStateManager.sendDownloadFinishMessage(mContext, serverThemeID, serverThemeID, dTaskItem.tmpFilePath);
                         }
                     }
 
@@ -306,7 +315,7 @@ public class DownloadService extends Service {
      */
     private String downloadFile(String destUrl, String filePath, Context context, 
 			int position, String title, String content, PendingIntent pIntent) {
-//        Log.d(TAG, "downloadFile:" + destUrl);
+
     	String sourceUrl = destUrl;
         HttpURLConnection httpUrl = null;
         if (destUrl.contains(".aspx") || destUrl.contains(".ashx")) {
@@ -385,7 +394,7 @@ public class DownloadService extends Service {
             downingTaskItem.tmpFilePath = tempFilePath;
             LocalAccessor.getInstance(context).updateDowningTaskItem(downingTaskItem);
             String themeID = downingTaskItem.themeID;
-          //记录下载临时文件的保存位置到DB End
+            //记录下载临时文件的保存位置到DB End
             
 			byte[] tmpBytes=new byte[download_bytes];//8K
 			int len=-1;

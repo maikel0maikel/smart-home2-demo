@@ -1,4 +1,4 @@
-package com.nd.hilauncherdev.lib.theme.analytics;
+package com.nd.hilauncherdev.kitset.analytics;
 
 
 import java.net.URLEncoder;

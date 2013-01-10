@@ -73,11 +73,28 @@ public class ThemeLauncherExAPI {
 	 */
 	public static boolean checkItemSkinType(String serverResID){
 		
-		//如果是皮肤则解压
         boolean bResult = false;//2为主题,1为皮肤插件 
         if ( serverResID!=null && serverResID.length()>0 ) {
 			String itemType = serverResID.substring(serverResID.length()-1);
 			if ("1".equals(itemType)){
+				bResult = true;
+			}
+		}
+		return bResult;
+	}
+	
+	/**
+	 * 通过服务端资源ID判断是否是91桌面
+	 * (id末尾为3的为91桌面)
+	 * @param serverResID
+	 * @return
+	 */
+	public static boolean checkItemLauncherType(String serverResID){
+		
+        boolean bResult = false;//3为91桌面,2为主题,1为皮肤插件 
+        if ( serverResID!=null && serverResID.length()>0 ) {
+			String itemType = serverResID.substring(serverResID.length()-1);
+			if ("3".equals(itemType)){
 				bResult = true;
 			}
 		}
