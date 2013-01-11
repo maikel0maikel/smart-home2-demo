@@ -11,7 +11,7 @@ import android.widget.Toast;
 import com.nd.android.lib.theme.R;
 import com.nd.hilauncherdev.lib.theme.api.ThemeLauncherExAPI;
 import com.nd.hilauncherdev.lib.theme.db.DowningTaskItem;
-import com.nd.hilauncherdev.lib.theme.db.LocalAccessor;
+import com.nd.hilauncherdev.lib.theme.db.ThemeLibLocalAccessor;
 import com.nd.hilauncherdev.lib.theme.util.HiLauncherThemeGlobal;
 import com.nd.hilauncherdev.lib.theme.util.SUtil;
 import com.nd.hilauncherdev.lib.theme.util.TelephoneUtil;
@@ -28,25 +28,6 @@ public final class DownloadTask {
 	private ThemeItem mTheme;
 	
 	public static HashMap<String ,String> hashMap = new HashMap<String,String>();
-	
-	public void downloadThemeFormShopDownTask( Context ctx, ThemeItem theme ) {
-		this.ctx = ctx;
-		mTheme = theme;
-		
-		if (!SUtil.isSdPresent()) {
-			Toast.makeText(ctx, R.string.ndtheme_sdcard_unfound_msg,
-					Toast.LENGTH_SHORT).show();
-			return;
-		}
-		
-		if( null == mTheme ) {
-			Toast.makeText(ctx, R.string.ndtheme_theme_fetch_loading,
-					Toast.LENGTH_SHORT).show();
-			return;
-		}
-
-		startChineseThemeDownloadService();
-	}
 	
 	/**
 	 * 下载主题
@@ -66,8 +47,11 @@ public final class DownloadTask {
 					Toast.LENGTH_SHORT).show();
 			return;
 		}
-		if(mTheme.getDownloadUrl().indexOf("&imei=")==-1)
-			mTheme.setDownloadUrl(mTheme.getDownloadUrl()+"&imei="+TelephoneUtil.getIMEI(ctx));
+		
+		if ( mTheme.getItemType()!=ThemeItem.ITEM_TYPE_LAUNCHER ) {
+			if(mTheme.getDownloadUrl().indexOf("&imei=")==-1)
+				mTheme.setDownloadUrl(mTheme.getDownloadUrl()+"&imei="+TelephoneUtil.getIMEI(ctx));
+		}
 		startChineseThemeDownloadService();
 	}
 	
@@ -104,7 +88,7 @@ public final class DownloadTask {
 	private boolean hasDownloaded() {
 		
 		try{
-			DowningTaskItem newDowningTaskItem = LocalAccessor.getInstance(ctx).getDowningTaskItem(mTheme.getId());
+			DowningTaskItem newDowningTaskItem = ThemeLibLocalAccessor.getInstance(ctx).getDowningTaskItem(mTheme.getId());
 		
 			if (newDowningTaskItem!=null){ 
 				if (newDowningTaskItem.state==DowningTaskItem.DownState_Finish){

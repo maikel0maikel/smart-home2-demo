@@ -1,7 +1,7 @@
 package com.nd.hilauncherdev.lib.theme.api;
 
 
-import com.nd.hilauncherdev.lib.theme.db.LocalAccessor;
+import com.nd.hilauncherdev.lib.theme.db.ThemeLibLocalAccessor;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -24,8 +24,7 @@ public class ThemeInstallResultReceiver extends BroadcastReceiver {
 			
 			if (newId!=null && !"".equals(newId) ){
 				try {
-					LocalAccessor.getInstance(context).updateDownTaskItemForNewThemeID(serverThemeID, newId);
-					//LocalAccessor.getInstance(context).updateDownTaskItemForNewThemeIDByAptPath(aptPath+"", themeid);
+					ThemeLibLocalAccessor.getInstance(context).updateDownTaskItemForNewThemeID(serverThemeID, newId);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

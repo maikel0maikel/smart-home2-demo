@@ -4,6 +4,8 @@ import java.io.File;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 
 /**
@@ -29,6 +31,25 @@ public class ApkTools {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return true;
+	}
+	
+	/**
+	 * android查询指定的程序是否安装上 查询安装包
+	 * @param mContext
+	 * @param pkgName
+	 * @return
+	 */
+	public static boolean isInstallAPK(Context mContext, String pkgName){
+		
+		PackageManager packageManager= mContext.getPackageManager();
+		try {
+			packageManager.getApplicationInfo(pkgName, PackageManager.GET_META_DATA);
+		} catch (NameNotFoundException e) {			
+			e.printStackTrace();
+			return false; 
+		}
+		
 		return true;
 	}
 }

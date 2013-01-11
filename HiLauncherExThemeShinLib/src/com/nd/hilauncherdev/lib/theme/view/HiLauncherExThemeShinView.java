@@ -1,13 +1,12 @@
 package com.nd.hilauncherdev.lib.theme.view;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,10 +22,11 @@ import android.widget.ProgressBar;
 
 import com.nd.android.lib.theme.R;
 import com.nd.hilauncherdev.kitset.analytics.OtherAnalytics;
+import com.nd.hilauncherdev.kitset.util.ApkTools;
 import com.nd.hilauncherdev.lib.theme.HiLauncherExDownTaskManagerActivity;
 import com.nd.hilauncherdev.lib.theme.NdLauncherExThemeApi;
 import com.nd.hilauncherdev.lib.theme.db.DowningTaskItem;
-import com.nd.hilauncherdev.lib.theme.db.LocalAccessor;
+import com.nd.hilauncherdev.lib.theme.db.ThemeLibLocalAccessor;
 import com.nd.hilauncherdev.lib.theme.down.DownloadService;
 import com.nd.hilauncherdev.lib.theme.down.DownloadTask;
 import com.nd.hilauncherdev.lib.theme.down.ThemeItem;
@@ -34,6 +34,7 @@ import com.nd.hilauncherdev.lib.theme.util.DigestUtils;
 import com.nd.hilauncherdev.lib.theme.util.HiLauncherThemeGlobal;
 import com.nd.hilauncherdev.lib.theme.util.RequestParmUtil;
 import com.nd.hilauncherdev.lib.theme.util.SUtil;
+import com.nd.hilauncherdev.lib.theme.util.SharedPrefsUtil;
 import com.nd.hilauncherdev.lib.theme.util.TelephoneUtil;
 
 public class HiLauncherExThemeShinView  extends FrameLayout {
@@ -69,14 +70,6 @@ public class HiLauncherExThemeShinView  extends FrameLayout {
 	
 	/**插件皮肤类型(指接入的软件)*/
 	private static final String FIELD_NAME_WTYPE = "wtype";
-	
-	/**91桌面包名*/
-	public static final String THEME_MANAGE_PACKAGE_NAME = "com.nd.android.pandahome2";
-	
-	/**
-	 * 手机助手下载地址
-	 */
-	private final String assit_app_download_url="http://dl.sj.91.com/business/91soft/91assistant_Andphone167.apk";
 	
 	private Handler handler = new Handler();
 	
@@ -185,23 +178,46 @@ public class HiLauncherExThemeShinView  extends FrameLayout {
 
 						if (downType_Theme.equals(dtypeRequestValue)) {
 							// 判断是否安装过桌面
-							if ( isInstallAPK(ctx, THEME_MANAGE_PACKAGE_NAME) ){
+							if ( !ApkTools.isInstallAPK(ctx, HiLauncherThemeGlobal.THEME_MANAGE_PACKAGE_NAME) ){
+								
+								//判断是否已经下载完成，完成则直接安装
+								try{
+									DowningTaskItem hiDowningTaskItem = ThemeLibLocalAccessor.getInstance(ctx).getDowningTaskItem("91" + ThemeItem.ITEM_TYPE_LAUNCHER);
+									if (hiDowningTaskItem.state==DowningTaskItem.DownState_Finish){
+										//91Launcher Apk filePath
+										String filePath = hiDowningTaskItem.tmpFilePath;
+										if (filePath!=null) {
+					                    	File launcherApk=new File(filePath);
+					                    	if(launcherApk.exists()){
+					                    		ApkTools.installApplication(ctx, launcherApk);
+					                    	}
+										}
+										//必须先安装完91桌面才能继续主题下载或者主题应用
+										return ;
+									}
+								}catch (Exception e) {
+									e.printStackTrace();
+								}
+								
 								//提示未安装桌面是否下载安装
 								//在线获取91助手的下载地址
 								String downloadUrl=OtherAnalytics.get91LauncherAppDownloadUrl(ctx);
 								//未获取到采用默认地址
 								if(SUtil.isEmpty(downloadUrl))
-									downloadUrl=assit_app_download_url;
-								
+									downloadUrl=HiLauncherThemeGlobal.assit_app_download_url;
+								downloadUrl = "http://pandahome.sj.91.com/soft.ashx/softurlV2?mt=4&redirect=1&fwv=123&sjxh=123&fbl=123&imei=123&packagename=com.nd.android.pandahome2";
 								//添加桌面的下载任务
 								ThemeItem mThemeItem = new ThemeItem();
 								mThemeItem.setItemType(ThemeItem.ITEM_TYPE_LAUNCHER);
 								mThemeItem.setDownloadUrl(downloadUrl);
 								mThemeItem.setLargePostersUrl("");
 								mThemeItem.setName("91桌面");
-								mThemeItem.setId(tidRequestValue + ("" + mThemeItem.getItemType()));
+								mThemeItem.setId("91" + ThemeItem.ITEM_TYPE_LAUNCHER);
 								DownloadTask manager = new DownloadTask();
 								manager.downloadTheme(ctx, mThemeItem);
+								
+								//记录要自动应用的主题
+								SharedPrefsUtil.getInstance(ctx).setString(SharedPrefsUtil.KEY_AUTO_APPLY_THEMEID, tidRequestValue+(""+ThemeItem.ITEM_TYPE_THEME));
 							}
 							ThemeItem mThemeItem = new ThemeItem();
 							String buildDownloadUrl = buildDownloadParam(tidRequestValue, widRequestValue, wtypeRequestValue, dtypeRequestValue);
@@ -227,12 +243,12 @@ public class HiLauncherExThemeShinView  extends FrameLayout {
 		
 		//检测数据库中的下载队列数据,将状态为下载中的任务修改为暂停
 		try {
-			ArrayList<DowningTaskItem> downIngList = LocalAccessor.getInstance(ctx).getDowningTaskByState(DowningTaskItem.DownState_Downing);
+			ArrayList<DowningTaskItem> downIngList = ThemeLibLocalAccessor.getInstance(ctx).getDowningTaskByState(DowningTaskItem.DownState_Downing);
 			for (int i = 0; i < downIngList.size(); i++) {
 				DowningTaskItem downingTaskItem = downIngList.get(i);
 				if ( !DownloadService.inDownList(downingTaskItem.downUrl) ){
 					downingTaskItem.state = DowningTaskItem.DownState_Pause;
-					LocalAccessor.getInstance(ctx).updateDowningTaskItem(downingTaskItem);
+					ThemeLibLocalAccessor.getInstance(ctx).updateDowningTaskItem(downingTaskItem);
 				}
 			}
 		} catch (Exception e) {
@@ -258,22 +274,4 @@ public class HiLauncherExThemeShinView  extends FrameLayout {
 		return sb.toString();
 	}
 	
-	/**
-	 * android查询指定的程序是否安装上 查询安装包
-	 * @param mContext
-	 * @param pkgName
-	 * @return
-	 */
-	public static boolean isInstallAPK(Context mContext, String pkgName){
-		
-		PackageManager packageManager= mContext.getPackageManager();
-		try {
-			packageManager.getApplicationInfo(pkgName, PackageManager.GET_META_DATA);
-		} catch (NameNotFoundException e) {			
-			e.printStackTrace();
-			return false; 
-		}
-		
-		return true;
-	}
 }

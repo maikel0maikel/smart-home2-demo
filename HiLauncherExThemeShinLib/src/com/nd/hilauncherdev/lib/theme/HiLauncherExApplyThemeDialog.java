@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.nd.android.lib.theme.R;
 import com.nd.hilauncherdev.lib.theme.api.ThemeLauncherExAPI;
 import com.nd.hilauncherdev.lib.theme.db.DowningTaskItem;
-import com.nd.hilauncherdev.lib.theme.util.ZipUtil;
+import com.nd.hilauncherdev.lib.theme.down.ThemeItem;
 
 public class HiLauncherExApplyThemeDialog extends Activity implements OnClickListener{
 	
@@ -23,12 +23,9 @@ public class HiLauncherExApplyThemeDialog extends Activity implements OnClickLis
 	private TextView tv_nodata_main;
 	
 	private DowningTaskItem dTaskItem;
-	
-	public static Activity parentActivity;
 		
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.nd_hilauncher_theme_apply_dialog);
@@ -60,24 +57,18 @@ public class HiLauncherExApplyThemeDialog extends Activity implements OnClickLis
 				return ;
 			}
 			
-			if ( ThemeLauncherExAPI.checkItemSkinType(serverThemeID) ){
-				//发送皮肤广播
-				//开启进度加载
+			if ( ThemeLauncherExAPI.checkItemType(serverThemeID, ThemeItem.ITEM_TYPE_SKIN) ){
 				ThemeLauncherExAPI.sendApplySkin(this, dTaskItem);
 			}else{
+				//如果未安装桌面的情况下
 				if ( newThemeID==null || "".equals(newThemeID) ) {
 					ThemeLauncherExAPI.installAndApplyAPT(this, filePath, serverThemeID, notifyPosition);
 				}else{
 					ThemeLauncherExAPI.sendApplyAPT(this, newThemeID);
 				}
 			}
-			if (parentActivity!=null){
-				//parentActivity.finish();
-				parentActivity = null;
-			}
 			finish();
 		} else if (v == cancelBtn) {
-			parentActivity = null;
 			finish();
 		}		
 	}

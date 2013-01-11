@@ -14,47 +14,24 @@ import android.database.sqlite.SQLiteDatabase;
  * 下载队列数据存储
  * @author cfb
  */
-public class LocalAccessor{
+public class ThemeLibLocalAccessor{
 
-	private static final String DATABASE_NAME = "hi_themelib_data.db"; 	
 	private static final String T_DOWNINGTask = "DowningTask";
-	
-	private static final String SQL_CREATE_TABLE_DOWNING_TASK = ""
-			+ "CREATE TABLE IF NOT EXISTS DowningTask "
-			+ "  ( "
-			+ "		_id INTEGER PRIMARY KEY AUTOINCREMENT,"
-			+ "     themename   TEXT, "
-			+ "     themeid     TEXT, "
-			+ "     startid     TEXT, "     //状态栏消息ID
-			+ "     state       INTEGER, "  //1  正在下载,2  暂停,-1 下载失败
-			+ "     downurl     TEXT, "
-			+ "     picurl      TEXT, "
-			+ "     tmpfilepath TEXT, "
-			+ "     totalsize   INTEGER, "
-			+ "     newthemeid  TEXT "
-			+ "  )";
 
 	private Context ctx;	
 
-	private LocalAccessor(Context ctx){
+	private ThemeLibLocalAccessor(Context ctx){
 		this.ctx = ctx;
-		SQLiteDatabase db = openDB();
-		db.execSQL(SQL_CREATE_TABLE_DOWNING_TASK);
-		db.close();
 	}	
 
-	static private LocalAccessor accessor; 
+	static private ThemeLibLocalAccessor accessor; 
 	
-	public static LocalAccessor getInstance(Context context){
+	public static ThemeLibLocalAccessor getInstance(Context context){
 
 		if(accessor == null){
-			accessor = new LocalAccessor(context);
+			accessor = new ThemeLibLocalAccessor(context);
 		}
 		return accessor;
-	}
-	
-	private SQLiteDatabase openDB(){		
-		return ctx.openOrCreateDatabase(DATABASE_NAME, Context.MODE_PRIVATE, null);
 	}
 	
 	public boolean updateDowningTaskItemState(String themeID, int newState) throws Exception{
@@ -78,7 +55,7 @@ public class LocalAccessor{
 			values.put("totalSize", item.totalSize);
 		values.put("newThemeID", item.newThemeID);
 		
-		SQLiteDatabase db = openDB();
+		ThemeLibDB db = new ThemeLibDB(ctx);
 		if(this.getDowningTaskItem(item.themeID)== null){//insert
 			values.put("themeID", item.themeID);
 			db.insertOrThrow(T_DOWNINGTask, null, values);			
@@ -94,9 +71,9 @@ public class LocalAccessor{
 
 		ArrayList<DowningTaskItem> ret = new ArrayList<DowningTaskItem>();
 
-		SQLiteDatabase db = openDB();
+		ThemeLibDB db = new ThemeLibDB(ctx);
 		String sql = "select * from "+T_DOWNINGTask+" where state =" + state+" order by _id desc";
-		Cursor c = db.rawQuery(sql, null);
+		Cursor c = db.query(sql);
 		c.moveToFirst();
 
 		while (!c.isAfterLast()) {
@@ -147,20 +124,8 @@ public class LocalAccessor{
 
 	public DowningTaskItem getDowningTaskItem(String themeID) throws Exception{
 		DowningTaskItem ret = null;
-		SQLiteDatabase db = openDB();
-        Cursor c = db.rawQuery("select * from "+T_DOWNINGTask+" where themeID=?", new String[] {themeID});        
-        if (c.moveToFirst()) {            
-            ret = buildDowningTask(c);
-        }
-        c.close();
-        db.close();
-        return ret;	
-	}	
-	
-	public DowningTaskItem getDowningTaskItemByAptPath(String aptPath) throws Exception{
-		DowningTaskItem ret = null;
-		SQLiteDatabase db = openDB();
-        Cursor c = db.rawQuery("select * from "+T_DOWNINGTask+" where tmpFilePath=?", new String[] {aptPath});        
+		ThemeLibDB db = new ThemeLibDB(ctx);
+        Cursor c = db.query("select * from "+T_DOWNINGTask+" where themeID=?", new String[] {themeID});        
         if (c.moveToFirst()) {            
             ret = buildDowningTask(c);
         }
@@ -171,7 +136,7 @@ public class LocalAccessor{
 	
 	public DowningTaskItem getDowningTaskItemByDownUrl(String downURL) throws Exception{
 		DowningTaskItem ret = null;
-		SQLiteDatabase db = openDB();
+		ThemeLibDB db = new ThemeLibDB(ctx);
         Cursor c = db.query(T_DOWNINGTask, null, "downUrl='"+downURL+ "'", null, null, null, null);        
         if (c.moveToFirst()) {            
             ret = buildDowningTask(c);
@@ -181,29 +146,29 @@ public class LocalAccessor{
         return ret;	
 	}
 	
-	public int deleteDowningTask(DowningTaskItem downingTaskItem) throws Exception{
-		SQLiteDatabase db = openDB();
-		int count = db.delete(T_DOWNINGTask, "themeID=?", new String[]{downingTaskItem.themeID});
+	public boolean deleteDowningTask(DowningTaskItem downingTaskItem) throws Exception{
+		ThemeLibDB db = new ThemeLibDB(ctx);
+		boolean result = db.delete(T_DOWNINGTask, "themeID=?", new String[]{downingTaskItem.themeID});
 		db.close();
-		return count;
+		return result;
 	}
 
 	
-	public int deleteDowningTaskByNewThemeID(String newThemeID) throws Exception{
-		SQLiteDatabase db = openDB();
-		int count = db.delete(T_DOWNINGTask, "newThemeID=?", new String[]{newThemeID});
+	public boolean deleteDowningTaskByNewThemeID(String newThemeID) throws Exception{
+		ThemeLibDB db = new ThemeLibDB(ctx);
+		boolean result = db.delete(T_DOWNINGTask, "newThemeID=?", new String[]{newThemeID});
 		db.close();
-		return count;
+		return result;
 	}
 	
 	public void clearDowningTask() {
-		SQLiteDatabase db = openDB();		
+		ThemeLibDB db = new ThemeLibDB(ctx);	
 		db.delete(T_DOWNINGTask, null, null);
 		db.close();		
 	}
 	
 	public boolean isDowningTaskEmpty(){
-		SQLiteDatabase db = openDB();		
+		ThemeLibDB db = new ThemeLibDB(ctx);	
 		Cursor c = db.query(T_DOWNINGTask, null, null, null, null, null, null);
 		boolean ret = c.getCount() == 0 ? true : false ;
 		c.close();

@@ -36,6 +36,12 @@
 				<action android:name="nd.pandahome.external.response.theme.apt.install" />
 			</intent-filter>
 		</receiver>
+		<receiver android:name="com.nd.hilauncherdev.lib.theme.api.LauncherInstallReceiver">             
+            <intent-filter>  
+            	<action android:name="android.intent.action.PACKAGE_ADDED" />                
+            	<data android:scheme="package" />
+            </intent-filter>  
+        </receiver> 
     </application>
 
 </manifest>

@@ -29,6 +29,9 @@ public class ThemeLauncherExAPI {
 	
 	/**广播参数服务端主题ID*/
 	private static final String THEME_PARAMETER_SERVER_THEME_ID = "serverThemeID";
+	
+	/**主题应用广播*/
+	public static final String ND_HILAUNCHER_THEME_APPLY_ACTION = "nd.pandahome.external.response.themelib.apt.apply";
 
 	/**
 	 * 91桌面主题应用接口
@@ -36,6 +39,8 @@ public class ThemeLauncherExAPI {
 	 * @param newThemeID 安装后的主题ID
 	 */
 	public static void sendApplyAPT(Context context,String newThemeID){
+		
+		sendLauncherThemeApplyBsd(context);
 		
 		Intent it = new Intent();
 		it.setClassName(THEME_MANAGE_PACKAGE_NAME, THEME_MANAGE_CLASS_NAME);
@@ -52,6 +57,9 @@ public class ThemeLauncherExAPI {
 	 * @param serverThemeID  主题包的服务端资源ID
 	 */
 	public static void installAndApplyAPT(Context context, String aptPath, String serverThemeID, int notifyPosition){
+		
+		sendLauncherThemeApplyBsd(context);
+		
 		//清除之前的通知栏
 		NotificationManager nManager = (NotificationManager) context.getSystemService(Service.NOTIFICATION_SERVICE);
 		nManager.cancel(notifyPosition);
@@ -66,40 +74,36 @@ public class ThemeLauncherExAPI {
 	}
 	
 	/**
+	 * 发送主题皮肤应用广播,用于通知关闭下载任务窗口
+	 * @param context
+	 */
+	private static void sendLauncherThemeApplyBsd(Context context){
+		//发送广播关闭
+		Intent intent = new Intent(ND_HILAUNCHER_THEME_APPLY_ACTION);
+		intent.addFlags(32);
+		context.sendBroadcast(intent);
+	}
+	
+	
+	/**
 	 * 通过服务端资源ID判断是否是皮肤插件
 	 * (id末尾为1的为皮肤插件)
 	 * @param serverResID
+	 * @param iItemType  插件类型
 	 * @return
 	 */
-	public static boolean checkItemSkinType(String serverResID){
+	public static boolean checkItemType(String serverResID, int iItemType){
 		
-        boolean bResult = false;//2为主题,1为皮肤插件 
+        boolean bResult = false;//3为91桌面,2为主题,1为皮肤插件 
         if ( serverResID!=null && serverResID.length()>0 ) {
 			String itemType = serverResID.substring(serverResID.length()-1);
-			if ("1".equals(itemType)){
+			if ( (iItemType+"").equals(itemType)){
 				bResult = true;
 			}
 		}
 		return bResult;
 	}
 	
-	/**
-	 * 通过服务端资源ID判断是否是91桌面
-	 * (id末尾为3的为91桌面)
-	 * @param serverResID
-	 * @return
-	 */
-	public static boolean checkItemLauncherType(String serverResID){
-		
-        boolean bResult = false;//3为91桌面,2为主题,1为皮肤插件 
-        if ( serverResID!=null && serverResID.length()>0 ) {
-			String itemType = serverResID.substring(serverResID.length()-1);
-			if ("3".equals(itemType)){
-				bResult = true;
-			}
-		}
-		return bResult;
-	}
 	
 	/**
 	 * 显示主题及皮肤应用窗口
@@ -123,7 +127,7 @@ public class ThemeLauncherExAPI {
 		
 		Intent intent = new Intent(NdLauncherExThemeApi.ND_HILAUNCHER_THEME_SKIN_APPLY_ACTION);
 		intent.putExtra(NdLauncherExThemeApi.ND_HILAUNCHER_THEME_APP_ID_KEY, NdLauncherExThemeApi.ND_HILAUNCHER_THEME_APP_ID_VALUE);
-		intent.putExtra(NdLauncherExThemeApi.ND_HILAUNCHER_THEME_APP_SKIN_PATH_KEY, dTaskItem.tmpFilePath);
+		intent.putExtra(NdLauncherExThemeApi.ND_HILAUNCHER_THEME_APP_SKIN_PATH_KEY, dTaskItem.newThemeID);
 		intent.addFlags(32);
 		context.sendBroadcast(intent);
 	}

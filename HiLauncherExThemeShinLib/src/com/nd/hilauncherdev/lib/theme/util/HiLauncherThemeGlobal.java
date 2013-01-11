@@ -31,6 +31,12 @@ public class HiLauncherThemeGlobal {
 	
 	public static final String TAG = "com.nd.hilauncherdev.lib.theme.util.HiLauncherThemeGlobal";
 	
+	/**91桌面包名*/
+	public static final String THEME_MANAGE_PACKAGE_NAME = "com.nd.android.pandahome2";
+	
+	/**手机助手下载地址*/
+	public static final String assit_app_download_url="http://dl.sj.91.com/business/91soft/91assistant_Andphone167.apk";
+	
 	public static final int CONNECTION_TIMEOUT = 10000;
     
 	/**设置*/

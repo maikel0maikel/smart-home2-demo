@@ -33,11 +33,12 @@ import com.nd.hilauncherdev.lib.theme.HiLauncherExDownTaskManagerActivity;
 import com.nd.hilauncherdev.lib.theme.NdLauncherExThemeApi;
 import com.nd.hilauncherdev.lib.theme.api.ThemeLauncherExAPI;
 import com.nd.hilauncherdev.lib.theme.db.DowningTaskItem;
-import com.nd.hilauncherdev.lib.theme.db.LocalAccessor;
+import com.nd.hilauncherdev.lib.theme.db.ThemeLibLocalAccessor;
 import com.nd.hilauncherdev.lib.theme.util.FileUtil;
 import com.nd.hilauncherdev.lib.theme.util.HiLauncherThemeGlobal;
 import com.nd.hilauncherdev.lib.theme.util.SUtil;
 import com.nd.hilauncherdev.lib.theme.util.ZipUtil;
+import com.nd.hilauncherdev.lib.theme.view.HiLauncherExThemeShinView;
 
 
 public class DownloadService extends Service {
@@ -121,7 +122,7 @@ public class DownloadService extends Service {
 		downList.add(url);
 
 		try {
-			LocalAccessor.getInstance(mContext).updateDowningTaskItem(item);
+			ThemeLibLocalAccessor.getInstance(mContext).updateDowningTaskItem(item);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -180,11 +181,11 @@ public class DownloadService extends Service {
                         	int newState = 0;
                         	if ( ret.equalsIgnoreCase("pause") ) {
                         		newState = DowningTaskItem.DownState_Pause;
-                        		LocalAccessor.getInstance(mContext).updateDownTaskItemForDownState( dTaskItem.themeID, newState);
+                        		ThemeLibLocalAccessor.getInstance(mContext).updateDownTaskItemForDownState( dTaskItem.themeID, newState);
                         	}else{
                         		newState = DowningTaskItem.DownState_Finish;
                         		dTaskItem.tmpFilePath = ret;
-                        		LocalAccessor.getInstance(mContext).updateDownTaskItemForDownState( dTaskItem.themeID, newState, ret);    
+                        		ThemeLibLocalAccessor.getInstance(mContext).updateDownTaskItemForDownState( dTaskItem.themeID, newState, ret);    
                         	}
                             //修改队列状态 End
                             
@@ -204,7 +205,7 @@ public class DownloadService extends Service {
 	                            thread.start();
                             }
                         } else { //失败
-                        	LocalAccessor.getInstance(mContext).updateDownTaskItemForDownState( dTaskItem.themeID, DowningTaskItem.DownState_Fail );                        	                            
+                        	ThemeLibLocalAccessor.getInstance(mContext).updateDownTaskItemForDownState( dTaskItem.themeID, DowningTaskItem.DownState_Fail );                        	                            
                         	
                         	DownloadNotification.downloadFailedNotification( mContext, dTaskItem.startID, dTaskItem.themeName, pIntent );
                         	ThemeDownloadStateManager.sendDownloadFailMessage(mContext, dTaskItem.themeID);
@@ -246,7 +247,14 @@ public class DownloadService extends Service {
                 	final DowningTaskItem dTaskItem = itemMap.get( url );
                     itemMap.remove(url);
                     
-                    if ( ThemeLauncherExAPI.checkItemLauncherType(serverThemeID) ){
+                    //如果91桌面未安装则主题都不弹出应用窗口
+                    if ( !ApkTools.isInstallAPK(mContext, HiLauncherThemeGlobal.THEME_MANAGE_PACKAGE_NAME) ){ 
+                    	if ( ThemeLauncherExAPI.checkItemType(serverThemeID, ThemeItem.ITEM_TYPE_THEME) ){
+                    		return ;
+                    	}
+                    }
+                    
+                    if ( ThemeLauncherExAPI.checkItemType(serverThemeID, ThemeItem.ITEM_TYPE_LAUNCHER) ){
                     	//91Launcher Apk filePath
                     	File launcherApk=new File(filePath);
                     	if(launcherApk.exists()){
@@ -255,7 +263,7 @@ public class DownloadService extends Service {
                     	return ;
                     }
                     
-                    if ( ThemeLauncherExAPI.checkItemSkinType(serverThemeID) ){
+                    if ( ThemeLauncherExAPI.checkItemType(serverThemeID, ThemeItem.ITEM_TYPE_SKIN) ){
                     	
                     	String tmpSkinPath = NdLauncherExThemeApi.ND_HILAUNCHER_THEME_APP_SKIN_PATH_VALUE;
 
@@ -272,7 +280,7 @@ public class DownloadService extends Service {
                         	return ;
                         }else{
                         	//保存解析后的地址到数据库看中
-                        	LocalAccessor.getInstance(mContext).updateDownTaskItemForNewThemeID( dTaskItem.themeID, unZipPath);
+                        	ThemeLibLocalAccessor.getInstance(mContext).updateDownTaskItemForNewThemeID( dTaskItem.themeID, unZipPath);
                         	//发送安装完成的广播更新下载列表界面
                         	ThemeDownloadStateManager.sendDownloadFinishMessage(mContext, serverThemeID, serverThemeID, dTaskItem.tmpFilePath);
                         }
@@ -389,10 +397,10 @@ public class DownloadService extends Service {
 			in=httpUrl.getInputStream();
 		
 			//记录下载临时文件的保存位置到DB Begin
-            DowningTaskItem downingTaskItem = LocalAccessor.getInstance(context).getDowningTaskItemByDownUrl(sourceUrl);
+            DowningTaskItem downingTaskItem = ThemeLibLocalAccessor.getInstance(context).getDowningTaskItemByDownUrl(sourceUrl);
             downingTaskItem.totalSize = fileTotalBytes;
             downingTaskItem.tmpFilePath = tempFilePath;
-            LocalAccessor.getInstance(context).updateDowningTaskItem(downingTaskItem);
+            ThemeLibLocalAccessor.getInstance(context).updateDowningTaskItem(downingTaskItem);
             String themeID = downingTaskItem.themeID;
             //记录下载临时文件的保存位置到DB End
             

@@ -33,7 +33,7 @@ import com.nd.android.lib.theme.R;
 import com.nd.hilauncherdev.lib.theme.HiLauncherExApplyThemeDialog;
 import com.nd.hilauncherdev.lib.theme.api.ThemeLauncherExAPI;
 import com.nd.hilauncherdev.lib.theme.db.DowningTaskItem;
-import com.nd.hilauncherdev.lib.theme.db.LocalAccessor;
+import com.nd.hilauncherdev.lib.theme.db.ThemeLibLocalAccessor;
 import com.nd.hilauncherdev.lib.theme.down.AsyncImageLoader;
 import com.nd.hilauncherdev.lib.theme.down.AsyncImageLoader.ImageCallback;
 import com.nd.hilauncherdev.lib.theme.down.DownloadNotification;
@@ -92,7 +92,7 @@ public class DownTaskManageView extends FrameLayout {
 		downingTaskItem.state = newState;
 		
 		try {
-			LocalAccessor.getInstance(ctx).updateDowningTaskItem(downingTaskItem);
+			ThemeLibLocalAccessor.getInstance(ctx).updateDowningTaskItem(downingTaskItem);
 		} catch (Exception e) {
 	   	 	e.printStackTrace();
 	    }					
@@ -134,16 +134,16 @@ public class DownTaskManageView extends FrameLayout {
 	public void refreshDownList(){
 		try {
 			//加载下载任务
-			ArrayList<DowningTaskItem> failList = LocalAccessor.getInstance(ctx).getDowningTaskByState(DowningTaskItem.DownState_Fail);
-			ArrayList<DowningTaskItem> downIngList = LocalAccessor.getInstance(ctx).getDowningTaskByState(DowningTaskItem.DownState_Downing);
-			ArrayList<DowningTaskItem> pauseList = LocalAccessor.getInstance(ctx).getDowningTaskByState(DowningTaskItem.DownState_Pause);
+			ArrayList<DowningTaskItem> failList = ThemeLibLocalAccessor.getInstance(ctx).getDowningTaskByState(DowningTaskItem.DownState_Fail);
+			ArrayList<DowningTaskItem> downIngList = ThemeLibLocalAccessor.getInstance(ctx).getDowningTaskByState(DowningTaskItem.DownState_Downing);
+			ArrayList<DowningTaskItem> pauseList = ThemeLibLocalAccessor.getInstance(ctx).getDowningTaskByState(DowningTaskItem.DownState_Pause);
 			LinkedList<LinkedList<DowningTaskItem>> childArray = new LinkedList<LinkedList<DowningTaskItem>>();
 			LinkedList<DowningTaskItem> downingTaskList = new LinkedList<DowningTaskItem>();
 			downingTaskList.addAll(failList);		
 			downingTaskList.addAll(downIngList);
 			downingTaskList.addAll(pauseList);
 			
-			ArrayList<DowningTaskItem> finishList = LocalAccessor.getInstance(ctx).getDowningTaskByState(DowningTaskItem.DownState_Finish);
+			ArrayList<DowningTaskItem> finishList = ThemeLibLocalAccessor.getInstance(ctx).getDowningTaskByState(DowningTaskItem.DownState_Finish);
 			LinkedList<DowningTaskItem> finishTaskList = new LinkedList<DowningTaskItem>();
 			finishTaskList.addAll(finishList);		
 			
@@ -396,7 +396,7 @@ public class DownTaskManageView extends FrameLayout {
 			
 			
 			//判断如果是进度100并且是主题则算完成,皮肤包则显示正在安装...
-			if ( downingTaskItem.progress==100 && !ThemeLauncherExAPI.checkItemSkinType(downingTaskItem.themeID) ) {
+			if ( downingTaskItem.progress==100 && !ThemeLauncherExAPI.checkItemType(downingTaskItem.themeID, ThemeItem.ITEM_TYPE_SKIN) ) {
 				downingTaskItem.state = DowningTaskItem.DownState_Finish;
 			}
 			if ( (downingTaskItem.state!=DowningTaskItem.DownState_Finish) && downingTaskItem.progress>0 ) {
@@ -456,7 +456,7 @@ public class DownTaskManageView extends FrameLayout {
 						case DowningTaskItem.DownState_Finish:
 							
 							try{
-								DowningTaskItem newDowningTaskItem = LocalAccessor.getInstance(ctx).getDowningTaskItem(downingTaskItem.themeID);
+								DowningTaskItem newDowningTaskItem = ThemeLibLocalAccessor.getInstance(ctx).getDowningTaskItem(downingTaskItem.themeID);
 			            		ThemeLauncherExAPI.showThemeApplyActivity(ctx, newDowningTaskItem);
 							}catch (Exception e) {
 								e.printStackTrace();
@@ -609,7 +609,7 @@ public class DownTaskManageView extends FrameLayout {
 					
 					if ( !isFind ){
 						try {
-							DowningTaskItem newDowningTaskItem = LocalAccessor.getInstance(ctx).getDowningTaskItem(themeID);	
+							DowningTaskItem newDowningTaskItem = ThemeLibLocalAccessor.getInstance(ctx).getDowningTaskItem(themeID);	
 							newDowningTaskItem.state = DowningTaskItem.DownState_Downing;
 							addDowningTaskItem(newDowningTaskItem);														
 							notifyDataSetChanged();
@@ -637,7 +637,7 @@ public class DownTaskManageView extends FrameLayout {
 					
 					if ( !isFindProgress ){
 						try {
-							DowningTaskItem newDowningTaskItem = LocalAccessor.getInstance(ctx).getDowningTaskItem(themeID);
+							DowningTaskItem newDowningTaskItem = ThemeLibLocalAccessor.getInstance(ctx).getDowningTaskItem(themeID);
 							newDowningTaskItem.state = DowningTaskItem.DownState_Downing;
 							addDowningTaskItem(newDowningTaskItem);														
 							notifyDataSetChanged();
@@ -743,7 +743,7 @@ public class DownTaskManageView extends FrameLayout {
 			                	
 			                	//删除数据库信息
 			                	try {
-			            			LocalAccessor.getInstance(ctx).deleteDowningTask(downingTaskItem);
+			            			ThemeLibLocalAccessor.getInstance(ctx).deleteDowningTask(downingTaskItem);
 			            		} catch (Exception e) {
 			            	   	 	e.printStackTrace();
 			            	    }
