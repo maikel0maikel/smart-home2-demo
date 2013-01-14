@@ -1,8 +1,12 @@
 package com.nd.hilauncherdev.lib.theme.down;
 
 
+import java.io.File;
+
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 
 import com.nd.hilauncherdev.lib.theme.db.DowningTaskItem;
 

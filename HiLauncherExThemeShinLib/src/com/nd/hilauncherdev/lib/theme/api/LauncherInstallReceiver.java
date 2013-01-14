@@ -34,8 +34,9 @@ public class LauncherInstallReceiver extends BroadcastReceiver {
             		//2.判断主题是否下载完成
             		//3.完成则直接应用
             		String autoApplyThemeID = SharedPrefsUtil.getInstance(context).getString(SharedPrefsUtil.KEY_AUTO_APPLY_THEMEID,null);
-            		if( autoApplyThemeID!=null ){
+            		if( autoApplyThemeID!=null && !"".equals(autoApplyThemeID) ){
             			try {
+            				SharedPrefsUtil.getInstance(context).setString(SharedPrefsUtil.KEY_AUTO_APPLY_THEMEID,"");
             				DowningTaskItem downingTaskItem = ThemeLibLocalAccessor.getInstance(context).getDowningTaskItem(autoApplyThemeID);
             				if (downingTaskItem!=null){
             					ThemeLauncherExAPI.installAndApplyAPT(context, downingTaskItem.tmpFilePath, downingTaskItem.themeID, downingTaskItem.startID);

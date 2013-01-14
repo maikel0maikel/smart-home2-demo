@@ -1,10 +1,14 @@
 package com.nd.hilauncherdev.lib.theme.down;
 
+import java.io.File;
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.widget.RemoteViews;
 
 import com.nd.android.lib.theme.R;
@@ -43,24 +47,21 @@ public class DownloadNotification {
 		notification.contentView = view;
 		notification.contentIntent = pIntent;//pIntentView;
 		nManager.notify(position, notification);
-
 	}
 	
-	/**
-	 * <br>Description: 下载成功通知
-	 * <br>Author:caizp
-	 * <br>Date:2010-11-4上午10:34:09
-	 * @param context
-	 * @param position
-	 * @param title
-	 * @param pIntentApply 对应应用按钮行文 
-	 */
-	public static void downloadCompletedNotification(Context context, int position, String title, String content, PendingIntent pIntent ,int flags){
+	public static void sendHiLauncerExFinishMessage(Context context, int position, String title, String content, String filePath){
 		
 		NotificationManager nManager = (NotificationManager) context.getSystemService(Service.NOTIFICATION_SERVICE);
-		
 		//清除之前的通知栏
 		nManager.cancel(position);
+		
+		File file=new File(filePath);
+		Uri uri = Uri.fromFile(file); 
+		Intent intent = new Intent(Intent.ACTION_VIEW);
+		intent.setDataAndType(uri, "application/vnd.android.package-archive" ); 
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		PendingIntent pIntent = PendingIntent.getActivity( context, position, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+		pIntent=PendingIntent.getActivity(context, 0, intent, 0);
 		
 		RemoteViews view = new RemoteViews(context.getPackageName(),R.layout.nd_hilauncher_theme_download_complete_notify);		
 		view.setImageViewResource(R.id.notify_image, android.R.drawable.stat_sys_download_done);
@@ -68,15 +69,12 @@ public class DownloadNotification {
 		view.setTextViewText( R.id.notify_content, content );		
 
 		Notification notification=new Notification();
-		notification.flags = flags;
+		notification.flags = Notification.FLAG_AUTO_CANCEL;
 		notification.icon = android.R.drawable.stat_sys_download_done;
 		notification.contentView = view;
-		notification.contentIntent = pIntent;//pIntentView;
+		notification.contentIntent = pIntent;
 		nManager.notify(position, notification);
-
 	}
-	
-	
 	
 	/**
 	 * <br>Description: 下载失败通知
@@ -132,14 +130,14 @@ public class DownloadNotification {
 			view.setProgressBar(R.id.progress, 100, progress, false);
 			
 			Notification notification=new Notification();
-			//notification.flags = Notification.FLAG_AUTO_CANCEL;
+			notification.flags = Notification.FLAG_AUTO_CANCEL;
 			notification.icon = android.R.drawable.stat_sys_download;
 			notification.contentView = view;
-			notification.contentIntent = pIntent;
+			//notification.contentIntent = pIntent;
 			nManager.notify(position, notification);
 		} catch( Exception e ) {
 			e.printStackTrace();
 		}
 	}
-	
+
 }

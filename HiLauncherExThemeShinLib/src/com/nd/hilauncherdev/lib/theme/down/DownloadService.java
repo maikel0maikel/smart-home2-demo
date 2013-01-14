@@ -258,6 +258,7 @@ public class DownloadService extends Service {
                     	//91Launcher Apk filePath
                     	File launcherApk=new File(filePath);
                     	if(launcherApk.exists()){
+                    		DownloadNotification.sendHiLauncerExFinishMessage(mContext, dTaskItem.startID, dTaskItem.themeName+"下载完成", "点击安装", filePath);
                     		ApkTools.installApplication(mContext, launcherApk);
                     	}
                     	return ;

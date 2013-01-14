@@ -8,6 +8,7 @@
 	<string name="ndtheme_down_ok">确定</string>	
 	<string name="ndtheme_down_cancel_down">取消下载</string>
 	<string name="ndtheme_txt_downloading">正在下载..</string>
+	<string name="ndtheme_txt_download_finish">下载完成</string>
 	<string name="ndtheme_theme_not_exsit">此主题文件不存在</string>
 	<string name="ndtheme_txt_start_download_theme">开始下载主题</string>
 	<string name="ndtheme_text_unsuccessfully_downloaded">下载失败</string>
@@ -37,4 +38,8 @@
     <string name="ndtheme_apply_theme_title">提示</string>
     <string name="ndtheme_apply_theme_text">应用</string>
     
+    <string name="ndtheme_net_break_text">网络连接不成功,请检查网络是否已断开</string>
+    <string name="ndtheme_net_break_btn">网络设置</string>
+    <string name="ndtheme_show_netsetting_err">打开网络设置失败</string>
+    <string name="ndtheme_net_slowly_reflesh_btn">刷新</string>
 </resources>
