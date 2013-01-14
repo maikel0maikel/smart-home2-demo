@@ -22,12 +22,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
+        <!-- 下载任务管理 -->
         <activity android:name="com.nd.hilauncherdev.lib.theme.HiLauncherExDownTaskManagerActivity"/>
-        <activity
-            android:name="com.nd.hilauncherdev.lib.theme.HiLauncherExApplyThemeDialog"
-            android:screenOrientation="portrait"
-            android:theme="@style/NdTheme.CustomDialog" />
         <!-- 下载服务 -->
 		<service android:name="com.nd.hilauncherdev.lib.theme.down.DownloadService"></service>
 		<!--桌面主题安装结果接收器-->
