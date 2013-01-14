@@ -1,18 +1,15 @@
 package com.nd.hilauncherdev.lib.theme.api;
 
-import com.nd.android.lib.theme.R;
-import com.nd.hilauncherdev.lib.theme.HiLauncherExApplyThemeDialog;
-import com.nd.hilauncherdev.lib.theme.NdLauncherExThemeApi;
-import com.nd.hilauncherdev.lib.theme.db.DowningTaskItem;
-import com.nd.hilauncherdev.lib.theme.down.DownloadNotification;
-import com.nd.hilauncherdev.lib.theme.down.ThemeItem;
-import com.nd.hilauncherdev.lib.theme.util.HiLauncherThemeGlobal;
-
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+
+import com.nd.hilauncherdev.lib.theme.NdLauncherExThemeApi;
+import com.nd.hilauncherdev.lib.theme.db.DowningTaskItem;
+import com.nd.hilauncherdev.lib.theme.down.DownloadNotification;
+import com.nd.hilauncherdev.lib.theme.down.ThemeItem;
 
 /**
  * 91桌面主题交互接口
@@ -46,13 +43,21 @@ public class ThemeLauncherExAPI {
 	public static void sendApplyAPT(Context context,String newThemeID){
 		
 		sendLauncherThemeApplyBsd(context);
-		
+		context.startActivity(getIntentForApplyAPT(newThemeID));
+	}
+	
+	/**
+	 * 获取主题应用Intent
+	 * @param newThemeID
+	 * @return
+	 */
+	public static Intent getIntentForApplyAPT(String newThemeID){
 		Intent it = new Intent();
 		it.setClassName(THEME_MANAGE_PACKAGE_NAME, THEME_MANAGE_CLASS_NAME);
 		it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		it.putExtra(THEME_PARAMETER_THEME_FROM, "apttheme:" + newThemeID);
 		it.addFlags(32);
-		context.startActivity(it);
+		return it;
 	}
 	
 	/**
@@ -69,13 +74,23 @@ public class ThemeLauncherExAPI {
 		NotificationManager nManager = (NotificationManager) context.getSystemService(Service.NOTIFICATION_SERVICE);
 		nManager.cancel(notifyPosition);
 		
+		context.startActivity(getIntentForInstallAndApplyAPT(aptPath,serverThemeID));
+	}
+	
+	/**
+	 * 获取主题安装及应用的Intent
+	 * @param aptPath
+	 * @param serverThemeID
+	 * @return
+	 */
+	public static Intent getIntentForInstallAndApplyAPT(String aptPath, String serverThemeID){
 		Intent it = new Intent();
 		it.setClassName(THEME_MANAGE_PACKAGE_NAME, THEME_MANAGE_CLASS_NAME);
 		it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		it.putExtra(THEME_PARAMETER_THEME_FROM, "aptpath:" + aptPath);
 		it.putExtra(THEME_PARAMETER_SERVER_THEME_ID, serverThemeID);
 		it.addFlags(32);
-		context.startActivity(it);
+		return it;
 	}
 	
 	/**
@@ -122,48 +137,30 @@ public class ThemeLauncherExAPI {
 		String filePath = dTaskItem.tmpFilePath;
 		String serverThemeID = dTaskItem.themeID;
 		String newThemeID = dTaskItem.newThemeID;
+		String themeName = dTaskItem.themeName;
 		int notifyPosition = dTaskItem.startID; 
 		if (filePath == null) {
 			return ;
 		}
 		
+		//通知栏模式应用 皮肤及主题
 		if ( ThemeLauncherExAPI.checkItemType(serverThemeID, ThemeItem.ITEM_TYPE_SKIN) ){
-			
-			Intent intent = new Intent(NdLauncherExThemeApi.ND_HILAUNCHER_THEME_SKIN_APPLY_ACTION);
-			intent.putExtra(NdLauncherExThemeApi.ND_HILAUNCHER_THEME_APP_ID_KEY, NdLauncherExThemeApi.ND_HILAUNCHER_THEME_APP_ID_VALUE);
-			intent.putExtra(NdLauncherExThemeApi.ND_HILAUNCHER_THEME_APP_SKIN_PATH_KEY, dTaskItem.newThemeID);
-			intent.addFlags(32);
-			PendingIntent pIntent = PendingIntent.getActivity( context, dTaskItem.startID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-			DownloadNotification.downloadCompletedNotification(context, dTaskItem.startID, dTaskItem.themeName+"下载完成", "点击应用皮肤", pIntent);
-			
-			//ThemeLauncherExAPI.sendApplySkin(context, dTaskItem);
+			Intent intent = getIntentForApplySkin(newThemeID);
+			PendingIntent pIntent = PendingIntent.getActivity( context, notifyPosition, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+			DownloadNotification.downloadCompletedNotification(context, notifyPosition, themeName+"下载完成", "点击应用皮肤", pIntent);
 		}else{
-			//如果未安装桌面的情况下
 			if ( newThemeID==null || "".equals(newThemeID) ) {
-				Intent it = new Intent();
-				it.setClassName(THEME_MANAGE_PACKAGE_NAME, THEME_MANAGE_CLASS_NAME);
-				it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				it.putExtra(THEME_PARAMETER_THEME_FROM, "aptpath:" + filePath);
-				it.putExtra(THEME_PARAMETER_SERVER_THEME_ID, serverThemeID);
-				it.addFlags(32);
-				PendingIntent pIntent = PendingIntent.getActivity( context, dTaskItem.startID, it, PendingIntent.FLAG_UPDATE_CURRENT);
-				DownloadNotification.downloadCompletedNotification(context, dTaskItem.startID, dTaskItem.themeName+"下载完成", "点击应用主题", pIntent);
-				
-				//ThemeLauncherExAPI.installAndApplyAPT(context, filePath, serverThemeID, notifyPosition);
+				Intent it = getIntentForInstallAndApplyAPT(filePath, serverThemeID);
+				PendingIntent pIntent = PendingIntent.getActivity( context, notifyPosition, it, PendingIntent.FLAG_UPDATE_CURRENT);
+				DownloadNotification.downloadCompletedNotification(context, notifyPosition, themeName+"下载完成", "点击应用主题", pIntent);
 			}else{
-				Intent it = new Intent();
-				it.setClassName(THEME_MANAGE_PACKAGE_NAME, THEME_MANAGE_CLASS_NAME);
-				it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				it.putExtra(THEME_PARAMETER_THEME_FROM, "apttheme:" + newThemeID);
-				it.addFlags(32);
-				PendingIntent pIntent = PendingIntent.getActivity( context, dTaskItem.startID, it, PendingIntent.FLAG_UPDATE_CURRENT);
-				DownloadNotification.downloadCompletedNotification(context, dTaskItem.startID, dTaskItem.themeName+"下载完成", "点击应用主题", pIntent);
-				
-				//ThemeLauncherExAPI.sendApplyAPT(context, newThemeID);
+				Intent it = getIntentForApplyAPT(newThemeID);
+				PendingIntent pIntent = PendingIntent.getActivity( context, notifyPosition, it, PendingIntent.FLAG_UPDATE_CURRENT);
+				DownloadNotification.downloadCompletedNotification(context, notifyPosition, themeName+"下载完成", "点击应用主题", pIntent);
 			}
 		}
 		 
-		/*
+		/* 对话框模式应用  皮肤及主题
 		Intent intent = new Intent(context, HiLauncherExApplyThemeDialog.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		intent.putExtra("dTaskItem", dTaskItem);
@@ -178,10 +175,19 @@ public class ThemeLauncherExAPI {
 	 */
 	public static void sendApplySkin(Context context, DowningTaskItem dTaskItem){
 		
+		context.sendBroadcast(getIntentForApplySkin(dTaskItem.newThemeID));
+	}
+	
+	/**
+	 * 获取第三方插件皮肤应用Intent
+	 * @param filePath
+	 * @return
+	 */
+	public static Intent getIntentForApplySkin(String filePath){
 		Intent intent = new Intent(NdLauncherExThemeApi.ND_HILAUNCHER_THEME_SKIN_APPLY_ACTION);
 		intent.putExtra(NdLauncherExThemeApi.ND_HILAUNCHER_THEME_APP_ID_KEY, NdLauncherExThemeApi.ND_HILAUNCHER_THEME_APP_ID_VALUE);
-		intent.putExtra(NdLauncherExThemeApi.ND_HILAUNCHER_THEME_APP_SKIN_PATH_KEY, dTaskItem.newThemeID);
+		intent.putExtra(NdLauncherExThemeApi.ND_HILAUNCHER_THEME_APP_SKIN_PATH_KEY, filePath);
 		intent.addFlags(32);
-		context.sendBroadcast(intent);
+		return intent;
 	}
 }

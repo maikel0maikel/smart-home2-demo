@@ -59,30 +59,6 @@ public class AsyncImageLoader {
 	         executorService.execute(t);	         
 	         return null;
 	     }
-	     
-		private static Drawable loadImageFromPath(String imagePath, String themeId) {
-			File pic = new File(imagePath);
-			if (!pic.exists()) {
-				//ThemeFormart.createThemeThumbnail( Global.getContext(), themeId);
-			}
-			
-			Drawable dw = null;
-			try {
-				dw = Drawable.createFromPath(imagePath);
-				//文件存在但是读取出来为空的情况
-				if (dw==null) {
-					Log.e("AsyncImageLoader", "图片文件被损坏 null");
-					//删除图片,等待下次重新下载
-					FileUtil.delFile(imagePath);
-				}
-			} catch (OutOfMemoryError e) {
-				Log.e("AsyncImageLoader", "Out of memory",e);
-				System.gc();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return dw;
-		}
 	  
 	 	/**
 	 	 * 本地化缓存

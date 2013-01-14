@@ -1,7 +1,5 @@
 package com.nd.hilauncherdev.lib.theme;
 
-import java.util.HashMap;
-
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -10,9 +8,14 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 
 import com.nd.hilauncherdev.lib.theme.api.ThemeLauncherExAPI;
-import com.nd.hilauncherdev.lib.theme.down.ThemeDownloadStateManager;
 import com.nd.hilauncherdev.lib.theme.view.DownTaskManageView;
 
+
+/**
+ * 
+ * 下载任务管理
+ *
+ */
 public class HiLauncherExDownTaskManagerActivity extends Activity {
 
 	private DownTaskManageView downTaskManageView;
@@ -23,9 +26,8 @@ public class HiLauncherExDownTaskManagerActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		HashMap<String, Object> initParaMap = new HashMap<String, Object>();
 		downTaskManageView = new DownTaskManageView(this);		
-		downTaskManageView.initView(initParaMap);
+		downTaskManageView.initView();
 		setContentView(downTaskManageView);
 		
 		IntentFilter filter = new IntentFilter();	

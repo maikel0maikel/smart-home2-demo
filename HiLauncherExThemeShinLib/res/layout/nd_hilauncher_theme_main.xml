@@ -12,9 +12,10 @@
 	        android:max="100"
 	        android:progressDrawable="@drawable/nd_hilauncher_theme_webload_progress_bg" />
     </FrameLayout>
-    <Button android:id="@+id/downtask" android:layout_alignParentBottom="true" android:layout_width="0dip" android:layout_height="wrap_content" android:text="下载管理"/>
+    <Button android:id="@+id/downtask" android:layout_alignParentBottom="true" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="下载管理"/>
     <WebView android:id="@+id/theme_list_content"
-	    android:layout_below="@+id/web_progress_bar_fl"	    
+	    android:layout_below="@+id/web_progress_bar_fl"	 
+	    android:layout_above="@+id/downtask"   
 	    android:layout_width="fill_parent"
 	    android:layout_height="fill_parent"/>
     <com.nd.hilauncherdev.lib.theme.view.NetErrorAndSettingView android:background="@color/ndtheme_white" 

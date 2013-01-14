@@ -9,6 +9,7 @@ import android.content.Intent;
 
 /**
  * 91桌面主题安装结果接收器
+ * 用于更新主题安装后的新ID
  * @author cfb
  */
 public class ThemeInstallResultReceiver extends BroadcastReceiver {

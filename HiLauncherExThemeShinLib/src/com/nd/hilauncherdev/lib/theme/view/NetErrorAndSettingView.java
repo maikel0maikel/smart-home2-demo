@@ -14,7 +14,10 @@ import android.widget.Toast;
 
 import com.nd.android.lib.theme.R;
 
-
+/**
+ * 网络错误View
+ *
+ */
 public class NetErrorAndSettingView extends LinearLayout {
 
 	Button netSettingBtn;
@@ -35,7 +38,6 @@ public class NetErrorAndSettingView extends LinearLayout {
 		netSettingBtn = (Button) findViewById(R.id.ndtheme_net_err_btn); 
 		netSettingBtn.setOnClickListener(new OnClickListener() {
 			
-			@Override
 			public void onClick(View v) {
 				try {
 					Intent intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);

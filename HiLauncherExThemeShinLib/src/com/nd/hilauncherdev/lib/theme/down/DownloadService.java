@@ -38,7 +38,6 @@ import com.nd.hilauncherdev.lib.theme.util.FileUtil;
 import com.nd.hilauncherdev.lib.theme.util.HiLauncherThemeGlobal;
 import com.nd.hilauncherdev.lib.theme.util.SUtil;
 import com.nd.hilauncherdev.lib.theme.util.ZipUtil;
-import com.nd.hilauncherdev.lib.theme.view.HiLauncherExThemeShinView;
 
 
 public class DownloadService extends Service {

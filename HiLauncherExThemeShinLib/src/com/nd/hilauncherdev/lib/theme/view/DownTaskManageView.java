@@ -3,10 +3,8 @@ package com.nd.hilauncherdev.lib.theme.view;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -14,7 +12,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +27,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nd.android.lib.theme.R;
-import com.nd.hilauncherdev.lib.theme.HiLauncherExApplyThemeDialog;
+import com.nd.hilauncherdev.lib.theme.NdLauncherExDialogDefaultImp;
+import com.nd.hilauncherdev.lib.theme.NdLauncherExThemeApi.NdLauncherExDialogCallback;
 import com.nd.hilauncherdev.lib.theme.api.ThemeLauncherExAPI;
 import com.nd.hilauncherdev.lib.theme.db.DowningTaskItem;
 import com.nd.hilauncherdev.lib.theme.db.ThemeLibLocalAccessor;
@@ -45,25 +43,21 @@ import com.nd.hilauncherdev.lib.theme.util.HiLauncherThemeGlobal;
 
 
 /**
- * 下载任务
+ * 下载任务View
  * @author cfb
  *
  */
 public class DownTaskManageView extends FrameLayout {
 
 	private Context ctx;
-
 	private LayoutInflater mInflater = null;
-	
 	private ExpandableListView mExpandableListView;
 	public DownExpandableAdapter mDownExpandableAdapter;
-	
 	private RelativeLayout notaskLayout;
-	private RelativeLayout downtask_go_down;
 	
-	//无下载任务时,点击提示发送广播切换到每日推荐界面
-	public static final String INTENT_NODOWNTASK_STATE = "com.nd.android.pandahome2.manage.shop2.managedowntask";
+	public NdLauncherExDialogCallback ndLauncherExDialogCallback = null;
 	
+	/**下载进度接收器*/
 	private ThemeDownloadProgressReceiver mThemeDownloadProgressReceiver = new ThemeDownloadProgressReceiver();	
 	
 	public DownTaskManageView(Context context) {
@@ -71,6 +65,10 @@ public class DownTaskManageView extends FrameLayout {
 		ctx = context;
 		mInflater = LayoutInflater.from( ctx );
 	}	
+	
+	public void setNdLauncherExDialogCallback(NdLauncherExDialogCallback ndLauncherExDialogCallback){
+		this.ndLauncherExDialogCallback = ndLauncherExDialogCallback;
+	}
 	
 	/**
 	 * 接口动态修改item
@@ -179,7 +177,7 @@ public class DownTaskManageView extends FrameLayout {
 		LayoutInflater.from( ctx ).inflate(paramInt, this);
 	}
 	
-	public void initView(HashMap<String, Object> initParaMap) {
+	public void initView() {
 		
 		addView(R.layout.nd_hilauncher_theme_manage_downtask_list_group);
 
@@ -204,27 +202,9 @@ public class DownTaskManageView extends FrameLayout {
 	//判断是否有无正在在下的任务,没有则提示下载更多
 	private void checkNoTaskList(){
 		
-		Log.e("mDownExpandableAdapter 1=", ""+mDownExpandableAdapter.getChildrenCount(0));
-		Log.e("mDownExpandableAdapter 1=", ""+mDownExpandableAdapter.getChildrenCount(1));
-		
 		if ( mDownExpandableAdapter.getChildrenCount(0)==0 &&
 				mDownExpandableAdapter.getChildrenCount(1)==0 ){
 			//没有下载任务的时候
-			/*
-			if ( notaskLayout==null ) {
-				notaskLayout = (RelativeLayout)mInflater.inflate(R.layout.theme_shop_v2_theme_manage_downtask_notask_bg, null);
-				downtask_go_down = (RelativeLayout)notaskLayout.findViewById(R.id.downtask_go_down);
-				downtask_go_down.setOnClickListener(new OnClickListener() {
-					
-					@Override
-					public void onClick(View v) {
-						Intent intent = new Intent( INTENT_NODOWNTASK_STATE );
-						ctx.sendBroadcast( intent );
-					}
-				});
-			}
-			addView(notaskLayout);
-			*/
 		}else{
 			if ( notaskLayout!=null ){
 				notaskLayout.setVisibility(View.GONE);
@@ -419,12 +399,9 @@ public class DownTaskManageView extends FrameLayout {
 				cache.downprocess_horizontal.setVisibility(View.INVISIBLE);
 			}
 			
-			
-			
 			setButtonTitle(downingTaskItem, cache.themeDownloadBtn, cache.themeDownTaskDeleteBtn);
 			
 			cache.themeDownloadBtn.setOnClickListener(new OnClickListener() {
-		            @Override
 		            public void onClick(View v) {
 		            	
 		            	DowningTaskItemCache itemCache = (DowningTaskItemCache)v.getTag();
@@ -454,10 +431,11 @@ public class DownTaskManageView extends FrameLayout {
 							
 						//当任务下载完成时
 						case DowningTaskItem.DownState_Finish:
-							
+							//TODO 分3中情况 91桌面时提示安装
 							try{
 								DowningTaskItem newDowningTaskItem = ThemeLibLocalAccessor.getInstance(ctx).getDowningTaskItem(downingTaskItem.themeID);
 			            		ThemeLauncherExAPI.showThemeApplyActivity(ctx, newDowningTaskItem);
+			            		//提示下载完成
 							}catch (Exception e) {
 								e.printStackTrace();
 							}
@@ -485,7 +463,6 @@ public class DownTaskManageView extends FrameLayout {
 			cache.themeDownTaskDeleteBtn.setTag(cache);
 			cache.themeDownTaskDeleteBtn.setOnClickListener(new OnClickListener(){
 		
-				@Override
 				public void onClick(View v) {
 					
 					DowningTaskItemCache itemCache = (DowningTaskItemCache)v.getTag();
@@ -715,55 +692,62 @@ public class DownTaskManageView extends FrameLayout {
 
 	public Dialog createConfimDialog(final DowningTaskItem downingTaskItem, final LinkedList<DowningTaskItem> mListDowningTask, final int iPosition,
 			final DownExpandableAdapter mDownAdapter) {
-		return new AlertDialog.Builder(ctx)
-				.setIcon(android.R.drawable.ic_dialog_alert)
-				.setTitle(R.string.ndtheme_alert_dialog_confim_del)
-				.setPositiveButton(R.string.ndtheme_alert_dialog_ok,
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int whichButton) {
-								
-								//删除硬盘临时文件
-			                	if ( downingTaskItem.tmpFilePath!=null ) {
-				                 	File tempFile = new File(downingTaskItem.tmpFilePath);
-				                    if( tempFile.exists() ){
-				                    	tempFile.delete();
-				                    }else{
-				                    	//已下载完成的情况
-				                    	String diskFile = downingTaskItem.tmpFilePath;
-				                		if ( diskFile.endsWith(".temp") ) {
-				                			diskFile = downingTaskItem.tmpFilePath.substring(0, diskFile.indexOf(".temp"));
-				                		}
-					                 	File downFile = new File(diskFile);
-					                    if( downFile.exists() ){
-					                    	downFile.delete();
-					                    }
-				                    }
-			                	}
-			                	
-			                	//删除数据库信息
-			                	try {
-			            			ThemeLibLocalAccessor.getInstance(ctx).deleteDowningTask(downingTaskItem);
-			            		} catch (Exception e) {
-			            	   	 	e.printStackTrace();
-			            	    }
-			                                    	
-			                	//动态移除列表信息
-			                	mListDowningTask.remove(iPosition);
-			                	mDownAdapter.notifyDataSetChanged();
-								
-								//发送广播到桌面删除主题.
-								if ( downingTaskItem.state==DowningTaskItem.DownState_Finish ){
-									//通知桌面删除主题
-								}
-							}
-						})
-				.setNegativeButton(R.string.ndtheme_common_button_cancell,
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int whichButton) {
-							}
-						}).create();
+		
+		final DialogInterface.OnClickListener positive = new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface arg0, int arg1) {
+				//删除硬盘临时文件
+            	if ( downingTaskItem.tmpFilePath!=null ) {
+                 	File tempFile = new File(downingTaskItem.tmpFilePath);
+                    if( tempFile.exists() ){
+                    	tempFile.delete();
+                    }else{
+                    	//已下载完成的情况
+                    	String diskFile = downingTaskItem.tmpFilePath;
+                		if ( diskFile.endsWith(".temp") ) {
+                			diskFile = downingTaskItem.tmpFilePath.substring(0, diskFile.indexOf(".temp"));
+                		}
+	                 	File downFile = new File(diskFile);
+	                    if( downFile.exists() ){
+	                    	downFile.delete();
+	                    }
+                    }
+            	}
+            	
+            	//删除数据库信息
+            	try {
+        			ThemeLibLocalAccessor.getInstance(ctx).deleteDowningTask(downingTaskItem);
+        		} catch (Exception e) {
+        	   	 	e.printStackTrace();
+        	    }
+                                	
+            	//动态移除列表信息
+            	mListDowningTask.remove(iPosition);
+            	mDownAdapter.notifyDataSetChanged();
+				
+				//发送广播到桌面删除主题.
+				if ( downingTaskItem.state==DowningTaskItem.DownState_Finish ){
+					//通知桌面删除主题
+				}
+			}
+		};
+		
+		final DialogInterface.OnClickListener negative = new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface arg0, int arg1) {
+			}
+		};
+		
+		final String titleStr = getResources().getString(R.string.ndtheme_apply_theme_title);
+		final String messageStr = getResources().getString(R.string.ndtheme_alert_dialog_confim_del);
+		final String okStr = getResources().getString(R.string.ndtheme_alert_dialog_ok);
+		final String cancleStr = getResources().getString(R.string.ndtheme_common_button_cancel);
+		
+		if (ndLauncherExDialogCallback==null){
+			return (new NdLauncherExDialogDefaultImp()).createThemeDialog(getContext(), android.R.drawable.ic_dialog_alert, titleStr,
+					messageStr, okStr, cancleStr, positive, negative);
+		}else{
+			return ndLauncherExDialogCallback.createThemeDialog(getContext(), android.R.drawable.ic_dialog_alert, titleStr,
+					messageStr, okStr, cancleStr, positive, negative);
+		}
 	}
 	
 	

@@ -44,7 +44,6 @@ public class HiLauncherExApplyThemeDialog extends Activity implements OnClickLis
 			tv_nodata_main.setText( getString(R.string.ndtheme_apply_theme_text)+ dTaskItem.themeName );
 	}
 
-	@Override
 	public void onClick(View v) {
 		if (v == confirmBtn) {
 			if (dTaskItem==null)

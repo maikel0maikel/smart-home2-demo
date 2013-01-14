@@ -6,6 +6,10 @@ import android.content.DialogInterface.OnClickListener;
 
 import com.nd.hilauncherdev.lib.theme.util.HiLauncherThemeGlobal;
 
+/**
+ * 第三方调用接口
+ *
+ */
 public class NdLauncherExThemeApi {
 
 	/**皮肤应用广播*/

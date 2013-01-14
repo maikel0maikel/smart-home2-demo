@@ -16,6 +16,7 @@ import java.util.zip.GZIPInputStream;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -34,8 +35,11 @@ public class HiLauncherThemeGlobal {
 	/**91桌面包名*/
 	public static final String THEME_MANAGE_PACKAGE_NAME = "com.nd.android.pandahome2";
 	
-	/**手机助手下载地址*/
-	public static final String assit_app_download_url="http://dl.sj.91.com/business/91soft/91assistant_Andphone167.apk";
+	/**91桌面默认下载地址*/
+	public static final String assit_app_download_url="http://pandahome.sj.91.com/soft.ashx/softurlV2?mt=4&redirect=1&fwv=40000&sjxh=123&fbl=123&imei=123&packagename=com.nd.android.pandahome2";
+	
+	/**服务器地址*/
+	public static final String HOST = "http://192.168.254.69:803/TpbTheme";
 	
 	public static final int CONNECTION_TIMEOUT = 10000;
     
@@ -43,7 +47,7 @@ public class HiLauncherThemeGlobal {
     public final static String APPLICATION = "application";
 	
     /**BASE_DIR*/
-    public final static String BASE_DIR = "/sdcard/PandaHome2ThemeLib";
+    public final static String BASE_DIR = Environment.getExternalStorageDirectory().getPath()+"PandaHome2ThemeLib";
     
     /**
      * 防止图库扫描该目录图片

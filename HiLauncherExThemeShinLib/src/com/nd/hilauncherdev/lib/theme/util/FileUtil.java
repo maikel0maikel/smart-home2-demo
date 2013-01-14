@@ -175,7 +175,6 @@ public class FileUtil {
 	 */
 	private static void copyAllChildFiles( File sourceDir, File destDir ) {
 		File[]  fs = sourceDir.listFiles( new FileFilter() {
-			@Override
 			public boolean accept(File pathname) {
 				if( pathname.isFile() ) return true;
 				return false;

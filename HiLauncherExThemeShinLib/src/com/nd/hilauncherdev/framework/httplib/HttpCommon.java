@@ -116,7 +116,6 @@ public class HttpCommon {
 	 * handler for request exception
 	 */
 	private HttpRequestRetryHandler mReqRetryHandler = new HttpRequestRetryHandler() {
-		@Override
 		public boolean retryRequest(IOException exception, int executionCount, HttpContext context) {
 			// we will try three times before getting connection
 			if (executionCount >= MAX_REQUEST_RETRY_COUNTS) {

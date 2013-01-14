@@ -3,11 +3,8 @@ package com.nd.hilauncherdev.lib.theme.util;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Display;
-import android.view.View;
 import android.view.WindowManager;
 
 /**

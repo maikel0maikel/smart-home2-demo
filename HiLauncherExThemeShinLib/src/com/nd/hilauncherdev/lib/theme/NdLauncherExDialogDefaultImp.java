@@ -8,9 +8,11 @@ import android.content.DialogInterface.OnClickListener;
 
 import com.nd.hilauncherdev.lib.theme.NdLauncherExThemeApi.NdLauncherExDialogCallback;
 
-public class NdLauncherExDialogImp implements NdLauncherExDialogCallback {
+/**
+ * 对话框默认实现
+ */
+public class NdLauncherExDialogDefaultImp implements NdLauncherExDialogCallback {
 
-	@Override
 	public Dialog createThemeDialog(Context ctx, int icon, CharSequence title, CharSequence message, 
 			CharSequence positive, CharSequence negative, OnClickListener ok, OnClickListener cancle) {
 		
@@ -22,7 +24,6 @@ public class NdLauncherExDialogImp implements NdLauncherExDialogCallback {
 			result.setNegativeButton(negative, cancle);
 		}else{
 			result.setNegativeButton(negative, new OnClickListener() {
-				@Override
 				public void onClick(DialogInterface arg0, int arg1) {
 				}
 			});

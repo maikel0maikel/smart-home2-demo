@@ -1,12 +1,13 @@
 package com.nd.hilauncherdev.lib.theme;
 
-import java.util.HashMap;
-
 import android.app.Activity;
 import android.os.Bundle;
 
 import com.nd.hilauncherdev.lib.theme.view.HiLauncherExThemeShinView;
 
+/**
+ * 调用Demo
+ */
 public class HiLauncherExThemeShinLibActivity extends Activity {
 	
 	private HiLauncherExThemeShinView hiLauncherExThemeShinView;
@@ -24,9 +25,8 @@ public class HiLauncherExThemeShinLibActivity extends Activity {
 		//3. 静态或者动态注册皮肤应用接收器 略
 		
 		//4. 动态创建View
-		HashMap<String, Object> initParaMap = new HashMap<String, Object>();
-		hiLauncherExThemeShinView = new HiLauncherExThemeShinView(this);		
-		hiLauncherExThemeShinView.initView(initParaMap);
+		hiLauncherExThemeShinView = new HiLauncherExThemeShinView(this);	
+		hiLauncherExThemeShinView.initView();
 		setContentView(hiLauncherExThemeShinView);
 	}
 	
