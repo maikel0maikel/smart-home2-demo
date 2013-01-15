@@ -239,10 +239,10 @@ public class HiLauncherExThemeShinView  extends FrameLayout {
 									}
 								};
 								if (ndLauncherExDialogCallback==null){
-									Dialog dialog = (new NdLauncherExDialogDefaultImp()).createThemeDialog(getContext(), -1, "提示", "全套主题需要下载91桌面,确定开始下载.", "确定", "取消", positive, negative);
+									Dialog dialog = (new NdLauncherExDialogDefaultImp()).createThemeDialog(getContext(), -1, "提示", "应用全套主题需要下载安装91桌面,确定开始下载.", "确定", "取消", positive, negative);
 									dialog.show();
 								}else{
-									Dialog dialog = ndLauncherExDialogCallback.createThemeDialog(getContext(), -1, "提示", "全套主题需要下载91桌面,确定开始下载.", "确定", "取消", positive, negative);
+									Dialog dialog = ndLauncherExDialogCallback.createThemeDialog(getContext(), -1, "提示", "应用全套主题需要下载安装91桌面,确定开始下载.", "确定", "取消", positive, negative);
 									if (dialog!=null){
 										dialog.show();
 									}

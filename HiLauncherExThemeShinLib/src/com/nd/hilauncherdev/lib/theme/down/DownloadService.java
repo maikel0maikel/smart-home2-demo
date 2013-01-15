@@ -286,7 +286,7 @@ public class DownloadService extends Service {
                         }
                     }
 
-                    ThemeLauncherExAPI.showThemeApplyActivity(mContext, dTaskItem);
+                    ThemeLauncherExAPI.showThemeApplyActivity(mContext, dTaskItem, true);
                 } catch (Exception e) {
                     Log.e(TAG, "install theme error path: " + filePath);
                 	e.printStackTrace();

@@ -93,7 +93,7 @@ public final class DownloadTask {
 			if (newDowningTaskItem!=null){ 
 				if (newDowningTaskItem.state==DowningTaskItem.DownState_Finish){
 					HiLauncherThemeGlobal.ddpost(HiLauncherThemeGlobal.R(R.string.ndtheme_txt_download_finish));
-		    		ThemeLauncherExAPI.showThemeApplyActivity(ctx, newDowningTaskItem);
+		    		ThemeLauncherExAPI.showThemeApplyActivity(ctx, newDowningTaskItem, true);
 		    		return true;
 				}
 				if(newDowningTaskItem.state==DowningTaskItem.DownState_Downing){
