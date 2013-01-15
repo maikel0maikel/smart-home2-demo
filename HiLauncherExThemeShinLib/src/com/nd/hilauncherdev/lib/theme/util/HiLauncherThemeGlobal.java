@@ -52,7 +52,7 @@ public class HiLauncherThemeGlobal {
     public final static String APPLICATION = "application";
 	
     /**BASE_DIR*/
-    public final static String BASE_DIR = Environment.getExternalStorageDirectory().getPath()+"PandaHome2ThemeLib";
+    public final static String BASE_DIR = "/sdcard/PandaHome2ThemeLib";
     
     /**
      * 防止图库扫描该目录图片

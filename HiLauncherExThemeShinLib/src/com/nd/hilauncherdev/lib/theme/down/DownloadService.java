@@ -254,12 +254,8 @@ public class DownloadService extends Service {
                     }
                     
                     if ( ThemeLauncherExAPI.checkItemType(serverThemeID, ThemeItem.ITEM_TYPE_LAUNCHER) ){
-                    	//91Launcher Apk filePath
-                    	File launcherApk=new File(filePath);
-                    	if(launcherApk.exists()){
-                    		DownloadNotification.sendHiLauncerExFinishMessage(mContext, dTaskItem.startID, dTaskItem.themeName+"下载完成", "点击安装", filePath);
-                    		ApkTools.installApplication(mContext, launcherApk);
-                    	}
+                    	ApkTools.installApplication(mContext, filePath);
+                    	DownloadNotification.sendHiLauncerExFinishMessage(mContext, dTaskItem.startID, dTaskItem.themeName+"下载完成", "点击安装", filePath);
                     	return ;
                     }
                     

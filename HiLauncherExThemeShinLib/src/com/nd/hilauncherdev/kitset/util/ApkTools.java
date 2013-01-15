@@ -21,6 +21,20 @@ public class ApkTools {
 	 * 
 	 * 安装应用程序
 	 */
+	public static void installApplication(Context ctx, String apkFilePath) {
+		String filePath = apkFilePath;
+		if (filePath!=null) {
+        	File launcherApk=new File(filePath);
+        	if(launcherApk.exists()){
+        		ApkTools.installApplication(ctx, launcherApk);
+        	}
+		}
+	}
+	
+	/**
+	 * 
+	 * 安装应用程序
+	 */
 	public static boolean installApplication(Context ctx, File mainFile) {
 		try {
 			Uri data = Uri.fromFile(mainFile);

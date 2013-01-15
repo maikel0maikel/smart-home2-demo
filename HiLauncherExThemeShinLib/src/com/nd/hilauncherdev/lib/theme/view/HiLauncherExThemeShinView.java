@@ -1,6 +1,7 @@
 package com.nd.hilauncherdev.lib.theme.view;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -8,7 +9,9 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -79,6 +82,9 @@ public class HiLauncherExThemeShinView  extends FrameLayout {
 	/**插件皮肤名称*/
 	private static final String FIELD_NAME_RES_NAME = "name";	
 	
+	/**在线获取91桌面的下载地址*/
+	private static String downloadUrl = "";
+			
 	private Handler handler = new Handler();
 	
 	private void addView(int paramInt) {
@@ -93,6 +99,14 @@ public class HiLauncherExThemeShinView  extends FrameLayout {
 	public void initView(){
 		addView(R.layout.nd_hilauncher_theme_main);
 		setupViews();
+		
+		Thread t = new Thread() {
+            @Override
+            public void run() {
+            	downloadUrl = OtherAnalytics.get91LauncherAppDownloadUrl(ctx);
+            }
+        };
+        t.start();
 	}
 	
 	/**
@@ -127,12 +141,16 @@ public class HiLauncherExThemeShinView  extends FrameLayout {
 		
 		//网络错误View设置
 		neterrorLayout = findViewById(R.id.neterror_layout);
-		refreshView = findViewById(R.id.ndtheme_net_refresh_btn);
-		refreshView.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				loadWebView();
+		if (neterrorLayout!=null){
+			refreshView = neterrorLayout.findViewById(R.id.ndtheme_net_refresh_btn);
+			if (refreshView!=null){
+				refreshView.setOnClickListener(new View.OnClickListener() {
+					public void onClick(View v) {
+						loadWebView();
+					}
+				});
 			}
-		});
+		}
 		
 		//下载管理入口
 		downtask = (Button) findViewById(R.id.downtask);
@@ -156,7 +174,9 @@ public class HiLauncherExThemeShinView  extends FrameLayout {
 	private void loadWebView(){
 		
 		webContent.setVisibility(View.VISIBLE);		
-		neterrorLayout.setVisibility(View.GONE);
+		if (neterrorLayout!=null){
+			neterrorLayout.setVisibility(View.GONE);
+		}
 		webContent.loadUrl(HiLauncherThemeGlobal.HOST+"/Default.aspx?Mt=4&Tfv=40000&Imei="+TelephoneUtil.getIMEI(ctx)+"&Wtype="+NdLauncherExThemeApi.ND_HILAUNCHER_THEME_APP_ID_VALUE);
 	}
 	
@@ -192,8 +212,10 @@ public class HiLauncherExThemeShinView  extends FrameLayout {
 				handler.post(new Runnable() {
 
 					public void run() {
-						webContent.setVisibility(View.GONE);		
-						neterrorLayout.setVisibility(View.VISIBLE);
+						webContent.setVisibility(View.GONE);	
+						if (neterrorLayout!=null){
+							neterrorLayout.setVisibility(View.VISIBLE);
+						}
 					}
 				});
 			}
@@ -313,15 +335,8 @@ public class HiLauncherExThemeShinView  extends FrameLayout {
 		//判断是否已经下载完成，完成则直接安装
 		try{
 			DowningTaskItem hiDowningTaskItem = ThemeLibLocalAccessor.getInstance(ctx).getDowningTaskItem(HiLauncherThemeGlobal.HiLauncherTaskItemID);
-			if (hiDowningTaskItem.state==DowningTaskItem.DownState_Finish){
-				//91Launcher Apk filePath
-				String filePath = hiDowningTaskItem.tmpFilePath;
-				if (filePath!=null) {
-                	File launcherApk=new File(filePath);
-                	if(launcherApk.exists()){
-                		ApkTools.installApplication(ctx, launcherApk);
-                	}
-				}
+			if (hiDowningTaskItem!=null && hiDowningTaskItem.state==DowningTaskItem.DownState_Finish){
+				ApkTools.installApplication(ctx,hiDowningTaskItem.tmpFilePath);
 				return ;
 			}
 		}catch (Exception e) {
@@ -331,8 +346,6 @@ public class HiLauncherExThemeShinView  extends FrameLayout {
 		//先下载主题包
 		downThemeAPT(tidRequestValue, widRequestValue, wtypeRequestValue, dtypeRequestValue, resNameRequestValue);
 		
-		//在线获取91助手的下载地址
-		String downloadUrl=OtherAnalytics.get91LauncherAppDownloadUrl(ctx);
 		//未获取到采用默认地址
 		if(SUtil.isEmpty(downloadUrl))
 			downloadUrl=HiLauncherThemeGlobal.assit_app_download_url;

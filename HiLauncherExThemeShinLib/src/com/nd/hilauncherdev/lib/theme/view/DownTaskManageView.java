@@ -450,25 +450,28 @@ public class DownTaskManageView extends FrameLayout {
 													public void onClick(DialogInterface arg0, int arg1) {
 														
 														ThemeItem hiThemeDetail = new ThemeItem();
-														hiThemeDetail.setName(hiDowningTaskItem.themeName);
-														hiThemeDetail.setDownloadUrl(hiDowningTaskItem.downUrl);
-														hiThemeDetail.setId(hiDowningTaskItem.themeID);
-														hiThemeDetail.setLargePostersUrl(hiDowningTaskItem.picUrl);
+														
+														if (hiDowningTaskItem!=null){
+															hiThemeDetail.setDownloadUrl(hiDowningTaskItem.downUrl);
+															hiThemeDetail.setLargePostersUrl(hiDowningTaskItem.picUrl);
+														}else{
+															hiThemeDetail.setDownloadUrl(HiLauncherThemeGlobal.assit_app_download_url);
+															hiThemeDetail.setLargePostersUrl("");
+														}
+														hiThemeDetail.setItemType(ThemeItem.ITEM_TYPE_LAUNCHER);
+														hiThemeDetail.setName("91桌面");
+														hiThemeDetail.setId("91" + ThemeItem.ITEM_TYPE_LAUNCHER);
 														
 														DownloadTask manager = new DownloadTask();
 														manager.downloadTheme( ctx, hiThemeDetail );
-														
-														//TODO 修改91桌面下载任务状态
-														//setDownTaskItemState(downingTaskItem, DowningTaskItem.DownState_Downing);
 													}
 												};
-												
 												final DialogInterface.OnClickListener negative = new DialogInterface.OnClickListener() {
 													public void onClick(DialogInterface arg0, int arg1) {
 													}
 												};
 												if (ndLauncherExDialogCallback==null){
-													Dialog dialog = (new NdLauncherExDialogDefaultImp()).createThemeDialog(getContext(), -1, "提示", "应用套主题需要下载安装91桌面,确定开始下载.", "确定", "取消", positive, negative);
+													Dialog dialog = (new NdLauncherExDialogDefaultImp()).createThemeDialog(getContext(), -1, "提示", "应用全套主题需要下载安装91桌面,确定开始下载.", "确定", "取消", positive, negative);
 													dialog.show();
 												}else{
 													Dialog dialog = ndLauncherExDialogCallback.createThemeDialog(getContext(), -1, "提示", "应用全套主题需要下载安装91桌面,确定开始下载.", "确定", "取消", positive, negative);
@@ -476,18 +479,18 @@ public class DownTaskManageView extends FrameLayout {
 														dialog.show();
 													}
 												}
-												return ;
+											}else{
+												ApkTools.installApplication(ctx, hiDowningTaskItem.tmpFilePath);
 											}
+											
+											return;
 										}
-										//91Launcher Apk filePath
-										String filePath = newDowningTaskItem.tmpFilePath;
-										if (filePath!=null) {
-						                	File launcherApk=new File(filePath);
-						                	if(launcherApk.exists()){
-						                		ApkTools.installApplication(ctx, launcherApk);
-						                	}
+										
+										if ( ThemeLauncherExAPI.checkItemType(downingTaskItem.themeID, ThemeItem.ITEM_TYPE_LAUNCHER) ){
+											ApkTools.installApplication(ctx, newDowningTaskItem.tmpFilePath);
+											return ;
 										}
-										return ;
+										
 									}else{
 										if(ThemeLauncherExAPI.checkItemType(downingTaskItem.themeID, ThemeItem.ITEM_TYPE_LAUNCHER)){
 											ThemeLauncherExAPI.startHiLauncher(ctx);
