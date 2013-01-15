@@ -35,6 +35,19 @@ public class ThemeLauncherExAPI {
 	/**主题应用广播*/
 	public static final String ND_HILAUNCHER_THEME_APPLY_ACTION = "nd.pandahome.external.response.themelib.apt.apply";
 
+	
+	/**
+	 * 启动91桌面
+	 * @param context
+	 */
+	public static void startHiLauncher(Context context){
+		Intent it = new Intent();
+		it.setClassName(THEME_MANAGE_PACKAGE_NAME, THEME_MANAGE_CLASS_NAME);
+		it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		it.addFlags(32);
+		context.startActivity(it);
+	}
+	
 	/**
 	 * 91桌面主题应用接口
 	 * @param context
@@ -93,6 +106,30 @@ public class ThemeLauncherExAPI {
 		return it;
 	}
 	
+
+	/**
+	 * 发送皮肤应用广播给第三方插件
+	 * @param context
+	 * @param dTaskItem
+	 */
+	public static void sendApplySkin(Context context, DowningTaskItem dTaskItem){
+		
+		context.sendBroadcast(getIntentForApplySkin(dTaskItem.newThemeID));
+	}
+	
+	/**
+	 * 获取第三方插件皮肤应用Intent
+	 * @param filePath
+	 * @return
+	 */
+	public static Intent getIntentForApplySkin(String filePath){
+		Intent intent = new Intent(NdLauncherExThemeApi.ND_HILAUNCHER_THEME_SKIN_APPLY_ACTION);
+		intent.putExtra(NdLauncherExThemeApi.ND_HILAUNCHER_THEME_APP_ID_KEY, NdLauncherExThemeApi.ND_HILAUNCHER_THEME_APP_ID_VALUE);
+		intent.putExtra(NdLauncherExThemeApi.ND_HILAUNCHER_THEME_APP_SKIN_PATH_KEY, filePath);
+		intent.addFlags(32);
+		return intent;
+	}
+	
 	/**
 	 * 发送主题皮肤应用广播,用于通知关闭下载任务窗口
 	 * @param context
@@ -129,8 +166,9 @@ public class ThemeLauncherExAPI {
 	 * 显示主题及皮肤应用窗口
 	 * @param context
 	 * @param dTaskItem
+	 * @param bNotifyMode 是否是通知栏应用模式(false 表示是直接应用模式,true 表示是通知栏消息触发模式)
 	 */
-	public static void showThemeApplyActivity(Context context, DowningTaskItem dTaskItem){
+	public static void showThemeApplyActivity(Context context, DowningTaskItem dTaskItem, boolean bNotifyMode){
 		//修改为发送到通知栏顶端
 		if (dTaskItem==null)
 			return ;
@@ -144,19 +182,30 @@ public class ThemeLauncherExAPI {
 		}
 		
 		//通知栏模式应用 皮肤及主题
+		Intent it = null;
+		String notifyContent = null;
 		if ( ThemeLauncherExAPI.checkItemType(serverThemeID, ThemeItem.ITEM_TYPE_SKIN) ){
-			Intent intent = getIntentForApplySkin(newThemeID);
-			PendingIntent pIntent = PendingIntent.getActivity( context, notifyPosition, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-			DownloadNotification.downloadCompletedNotification(context, notifyPosition, themeName+"下载完成", "点击应用皮肤", pIntent);
-		}else{
-			if ( newThemeID==null || "".equals(newThemeID) ) {
-				Intent it = getIntentForInstallAndApplyAPT(filePath, serverThemeID);
-				PendingIntent pIntent = PendingIntent.getActivity( context, notifyPosition, it, PendingIntent.FLAG_UPDATE_CURRENT);
-				DownloadNotification.downloadCompletedNotification(context, notifyPosition, themeName+"下载完成", "点击应用主题", pIntent);
+			notifyContent = "点击应用皮肤";
+			it = getIntentForApplySkin(newThemeID);
+			if (bNotifyMode){
+				PendingIntent pIntent = PendingIntent.getBroadcast(context, notifyPosition, it, PendingIntent.FLAG_UPDATE_CURRENT);
+				DownloadNotification.downloadCompletedNotification(context, notifyPosition, themeName+"下载完成", notifyContent, pIntent);
 			}else{
-				Intent it = getIntentForApplyAPT(newThemeID);
+				context.sendBroadcast(it);
+			}
+		}else{
+			notifyContent = "点击应用主题";
+			if ( newThemeID==null || "".equals(newThemeID) ) {
+				it = getIntentForInstallAndApplyAPT(filePath, serverThemeID);
+			}else{
+				it = getIntentForApplyAPT(newThemeID);
+			}
+			
+			if (bNotifyMode){ 
 				PendingIntent pIntent = PendingIntent.getActivity( context, notifyPosition, it, PendingIntent.FLAG_UPDATE_CURRENT);
-				DownloadNotification.downloadCompletedNotification(context, notifyPosition, themeName+"下载完成", "点击应用主题", pIntent);
+				DownloadNotification.downloadCompletedNotification(context, notifyPosition, themeName+"下载完成", notifyContent, pIntent);
+			}else{
+				context.startActivity(it);
 			}
 		}
 		 
@@ -168,26 +217,4 @@ public class ThemeLauncherExAPI {
 		*/
 	}
 	
-	/**
-	 * 发送皮肤应用广播给第三方插件
-	 * @param context
-	 * @param dTaskItem
-	 */
-	public static void sendApplySkin(Context context, DowningTaskItem dTaskItem){
-		
-		context.sendBroadcast(getIntentForApplySkin(dTaskItem.newThemeID));
-	}
-	
-	/**
-	 * 获取第三方插件皮肤应用Intent
-	 * @param filePath
-	 * @return
-	 */
-	public static Intent getIntentForApplySkin(String filePath){
-		Intent intent = new Intent(NdLauncherExThemeApi.ND_HILAUNCHER_THEME_SKIN_APPLY_ACTION);
-		intent.putExtra(NdLauncherExThemeApi.ND_HILAUNCHER_THEME_APP_ID_KEY, NdLauncherExThemeApi.ND_HILAUNCHER_THEME_APP_ID_VALUE);
-		intent.putExtra(NdLauncherExThemeApi.ND_HILAUNCHER_THEME_APP_SKIN_PATH_KEY, filePath);
-		intent.addFlags(32);
-		return intent;
-	}
 }

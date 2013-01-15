@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nd.android.lib.theme.R;
+import com.nd.hilauncherdev.kitset.util.ApkTools;
 import com.nd.hilauncherdev.lib.theme.NdLauncherExDialogDefaultImp;
 import com.nd.hilauncherdev.lib.theme.NdLauncherExThemeApi.NdLauncherExDialogCallback;
 import com.nd.hilauncherdev.lib.theme.api.ThemeLauncherExAPI;
@@ -431,11 +432,28 @@ public class DownTaskManageView extends FrameLayout {
 							
 						//当任务下载完成时
 						case DowningTaskItem.DownState_Finish:
-							//TODO 分3中情况 91桌面时提示安装
+							//TODO 分3种情况 91桌面时提示安装
 							try{
 								DowningTaskItem newDowningTaskItem = ThemeLibLocalAccessor.getInstance(ctx).getDowningTaskItem(downingTaskItem.themeID);
-			            		ThemeLauncherExAPI.showThemeApplyActivity(ctx, newDowningTaskItem);
-			            		//提示下载完成
+								//如果是91桌面,判断是否安装后,提示是否启动
+								if (HiLauncherThemeGlobal.HiLauncherTaskItemID==downingTaskItem.themeID) {
+									if ( !ApkTools.isInstallAPK(ctx, HiLauncherThemeGlobal.THEME_MANAGE_PACKAGE_NAME) ){
+										//91Launcher Apk filePath
+										String filePath = newDowningTaskItem.tmpFilePath;
+										if (filePath!=null) {
+						                	File launcherApk=new File(filePath);
+						                	if(launcherApk.exists()){
+						                		ApkTools.installApplication(ctx, launcherApk);
+						                	}
+										}
+										return ;
+									}else{
+										ThemeLauncherExAPI.startHiLauncher(ctx);
+									}
+								}else{
+									//直接发送皮肤应用广播
+				            		ThemeLauncherExAPI.showThemeApplyActivity(ctx, newDowningTaskItem);
+								}
 							}catch (Exception e) {
 								e.printStackTrace();
 							}

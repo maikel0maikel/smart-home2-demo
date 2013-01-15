@@ -243,7 +243,9 @@ public class HiLauncherExThemeShinView  extends FrameLayout {
 									dialog.show();
 								}else{
 									Dialog dialog = ndLauncherExDialogCallback.createThemeDialog(getContext(), -1, "提示", "全套主题需要下载91桌面,确定开始下载.", "确定", "取消", positive, negative);
-									dialog.show();
+									if (dialog!=null){
+										dialog.show();
+									}
 								}
 							}else{
 								downThemeAPT(tidRequestValue, widRequestValue, wtypeRequestValue, dtypeRequestValue, resNameRequestValue);
@@ -310,7 +312,7 @@ public class HiLauncherExThemeShinView  extends FrameLayout {
 		
 		//判断是否已经下载完成，完成则直接安装
 		try{
-			DowningTaskItem hiDowningTaskItem = ThemeLibLocalAccessor.getInstance(ctx).getDowningTaskItem("91" + ThemeItem.ITEM_TYPE_LAUNCHER);
+			DowningTaskItem hiDowningTaskItem = ThemeLibLocalAccessor.getInstance(ctx).getDowningTaskItem(HiLauncherThemeGlobal.HiLauncherTaskItemID);
 			if (hiDowningTaskItem.state==DowningTaskItem.DownState_Finish){
 				//91Launcher Apk filePath
 				String filePath = hiDowningTaskItem.tmpFilePath;

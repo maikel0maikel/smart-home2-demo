@@ -14,6 +14,8 @@ import java.net.URLConnection;
 import java.util.Locale;
 import java.util.zip.GZIPInputStream;
 
+import com.nd.hilauncherdev.lib.theme.down.ThemeItem;
+
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Environment;
@@ -40,6 +42,9 @@ public class HiLauncherThemeGlobal {
 	
 	/**服务器地址*/
 	public static final String HOST = "http://192.168.254.69:803/TpbTheme";
+	
+	/**91桌面下载任务ID*/
+	public static final String HiLauncherTaskItemID = "91" + ThemeItem.ITEM_TYPE_LAUNCHER;
 	
 	public static final int CONNECTION_TIMEOUT = 10000;
     
