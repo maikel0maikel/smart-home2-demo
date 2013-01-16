@@ -1,7 +1,5 @@
 package com.nd.hilauncherdev.lib.theme.view;
 
-import java.io.File;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -9,9 +7,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +27,7 @@ import com.nd.hilauncherdev.lib.theme.HiLauncherExDownTaskManagerActivity;
 import com.nd.hilauncherdev.lib.theme.NdLauncherExDialogDefaultImp;
 import com.nd.hilauncherdev.lib.theme.NdLauncherExThemeApi;
 import com.nd.hilauncherdev.lib.theme.NdLauncherExThemeApi.NdLauncherExDialogCallback;
+import com.nd.hilauncherdev.lib.theme.api.ThemeLauncherExAPI;
 import com.nd.hilauncherdev.lib.theme.db.DowningTaskItem;
 import com.nd.hilauncherdev.lib.theme.db.ThemeLibLocalAccessor;
 import com.nd.hilauncherdev.lib.theme.down.DownloadService;
@@ -81,6 +78,9 @@ public class HiLauncherExThemeShinView  extends FrameLayout {
 	
 	/**插件皮肤名称*/
 	private static final String FIELD_NAME_RES_NAME = "name";	
+	
+	/**插件预览图*/
+	private static final String FIELD_NAME_IMAGE_NAME = "prevurl"; 
 	
 	/**在线获取91桌面的下载地址*/
 	private static String downloadUrl = "";
@@ -232,7 +232,9 @@ public class HiLauncherExThemeShinView  extends FrameLayout {
 						final String widRequestValue = mapRequest.get(FIELD_NAME_WID);
 						final String dtypeRequestValue = mapRequest.get(FIELD_NAME_DTYPE);
 						final String wtypeRequestValue = mapRequest.get(FIELD_NAME_WTYPE);
+						final String prevurlRequestValue = mapRequest.get(FIELD_NAME_IMAGE_NAME);
 						String tmpResNameRequestValue = mapRequest.get(FIELD_NAME_RES_NAME);
+						
 						try {
 							tmpResNameRequestValue = java.net.URLDecoder.decode(tmpResNameRequestValue,"UTF-8");							
 						} catch (Exception e) {
@@ -242,7 +244,7 @@ public class HiLauncherExThemeShinView  extends FrameLayout {
 						final String resNameRequestValue = tmpResNameRequestValue;
 						
 						if (downType_Skin.equals(dtypeRequestValue)) {
-							downThemeSkin(tidRequestValue, widRequestValue, wtypeRequestValue, dtypeRequestValue, resNameRequestValue);
+							downThemeSkin(tidRequestValue, widRequestValue, wtypeRequestValue, dtypeRequestValue, resNameRequestValue, prevurlRequestValue);
 						}
 
 						if (downType_Theme.equals(dtypeRequestValue)) {
@@ -252,7 +254,7 @@ public class HiLauncherExThemeShinView  extends FrameLayout {
 								//提示未安装桌面是否下载安装
 								final DialogInterface.OnClickListener positive = new DialogInterface.OnClickListener() {
 									public void onClick(DialogInterface arg0, int arg1) {
-										downLauncherTheme(tidRequestValue, widRequestValue, wtypeRequestValue, dtypeRequestValue, resNameRequestValue);
+										downLauncherTheme(tidRequestValue, widRequestValue, wtypeRequestValue, dtypeRequestValue, resNameRequestValue, prevurlRequestValue);
 									}
 								};
 								
@@ -270,7 +272,7 @@ public class HiLauncherExThemeShinView  extends FrameLayout {
 									}
 								}
 							}else{
-								downThemeAPT(tidRequestValue, widRequestValue, wtypeRequestValue, dtypeRequestValue, resNameRequestValue);
+								downThemeAPT(tidRequestValue, widRequestValue, wtypeRequestValue, dtypeRequestValue, resNameRequestValue, prevurlRequestValue);
 							}
 						}
 					}
@@ -309,15 +311,21 @@ public class HiLauncherExThemeShinView  extends FrameLayout {
 	 * @param dtypeRequestValue
 	 * @param resNameRequestValue
 	 */
-	private void downThemeAPT(String tidRequestValue, String widRequestValue, String wtypeRequestValue, String dtypeRequestValue, String resNameRequestValue){
+	private void downThemeAPT(String tidRequestValue, String widRequestValue, String wtypeRequestValue, String dtypeRequestValue, String resNameRequestValue, String prevurlRequestValue){
+		
+		String themeID = tidRequestValue + ("" + ThemeItem.ITEM_TYPE_THEME);
+		if ( hasDownloaded(themeID) ){
+			return;
+		}
+		
 		ThemeItem mThemeItem = new ThemeItem();
 		String buildDownloadUrl = buildDownloadParam(tidRequestValue, widRequestValue, wtypeRequestValue, dtypeRequestValue);
 		Log.e(TAG, "==" + buildDownloadUrl);
 		mThemeItem.setItemType(ThemeItem.ITEM_TYPE_THEME);
 		mThemeItem.setDownloadUrl(buildDownloadUrl);
-		mThemeItem.setLargePostersUrl("");
+		mThemeItem.setLargePostersUrl(""+prevurlRequestValue);
 		mThemeItem.setName(resNameRequestValue+" 主题");
-		mThemeItem.setId(tidRequestValue + ("" + mThemeItem.getItemType()));
+		mThemeItem.setId(themeID);
 		DownloadTask manager = new DownloadTask();
 		manager.downloadTheme(ctx, mThemeItem);
 	}
@@ -330,7 +338,7 @@ public class HiLauncherExThemeShinView  extends FrameLayout {
 	 * @param dtypeRequestValue
 	 * @param resNameRequestValue
 	 */
-	private void downLauncherTheme(String tidRequestValue, String widRequestValue, String wtypeRequestValue, String dtypeRequestValue, String resNameRequestValue){
+	private void downLauncherTheme(String tidRequestValue, String widRequestValue, String wtypeRequestValue, String dtypeRequestValue, String resNameRequestValue, String prevurlRequestValue){
 		
 		//判断是否已经下载完成，完成则直接安装
 		try{
@@ -344,7 +352,7 @@ public class HiLauncherExThemeShinView  extends FrameLayout {
 		}
 		
 		//先下载主题包
-		downThemeAPT(tidRequestValue, widRequestValue, wtypeRequestValue, dtypeRequestValue, resNameRequestValue);
+		downThemeAPT(tidRequestValue, widRequestValue, wtypeRequestValue, dtypeRequestValue, resNameRequestValue, prevurlRequestValue);
 		
 		//未获取到采用默认地址
 		if(SUtil.isEmpty(downloadUrl))
@@ -372,15 +380,21 @@ public class HiLauncherExThemeShinView  extends FrameLayout {
 	 * @param dtypeRequestValue
 	 * @param resNameRequestValue
 	 */
-	private void downThemeSkin(String tidRequestValue, String widRequestValue, String wtypeRequestValue, String dtypeRequestValue, String resNameRequestValue){
+	private void downThemeSkin(String tidRequestValue, String widRequestValue, String wtypeRequestValue, String dtypeRequestValue, String resNameRequestValue, String prevurlRequestValue){
+		
+		String themeID = tidRequestValue + ("" + ThemeItem.ITEM_TYPE_SKIN);
+		if ( hasDownloaded(themeID) ){
+			return;
+		}
+		
 		ThemeItem mThemeItem = new ThemeItem();
 		String buildDownloadUrl = buildDownloadParam(tidRequestValue, widRequestValue, wtypeRequestValue, dtypeRequestValue);
 		Log.e(TAG, "==" + buildDownloadUrl);
 		mThemeItem.setItemType(ThemeItem.ITEM_TYPE_SKIN);
 		mThemeItem.setDownloadUrl(buildDownloadUrl);
-		mThemeItem.setLargePostersUrl("");
+		mThemeItem.setLargePostersUrl(""+prevurlRequestValue);
 		mThemeItem.setName(resNameRequestValue+" 皮肤");
-		mThemeItem.setId(tidRequestValue + ("" + mThemeItem.getItemType()));
+		mThemeItem.setId(themeID);
 		DownloadTask manager = new DownloadTask();
 		manager.downloadTheme(ctx, mThemeItem);
 	}
@@ -401,5 +415,27 @@ public class HiLauncherExThemeShinView  extends FrameLayout {
 		String md5Source = (tid+"") + (wid+"") + (wtype+"") + (dtype+"") + imei + imsi + index + SUtil.getMD5Key(index);
 		sb.append("&ts=").append(index).append("&sign=").append(DigestUtils.md5Hex(md5Source)).append("&imei=").append(imei).append("&imsi=").append(imsi);
 		return sb.toString();
+	}
+	
+	/**
+	 * 检查本地是否下载过此主题
+	 * @return
+	 */
+	private boolean hasDownloaded(String themeID) {
+		
+		try{
+			DowningTaskItem newDowningTaskItem = ThemeLibLocalAccessor.getInstance(ctx).getDowningTaskItem(themeID);
+		
+			if (newDowningTaskItem!=null){ 
+				if (newDowningTaskItem.state==DowningTaskItem.DownState_Finish){
+		    		ThemeLauncherExAPI.showThemeApplyDialog(ctx, newDowningTaskItem, ndLauncherExDialogCallback);
+		    		return true;
+				}
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return false;
 	}
 }

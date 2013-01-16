@@ -1,12 +1,16 @@
 package com.nd.hilauncherdev.lib.theme.api;
 
+import android.app.Dialog;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 
+import com.nd.hilauncherdev.lib.theme.NdLauncherExDialogDefaultImp;
 import com.nd.hilauncherdev.lib.theme.NdLauncherExThemeApi;
+import com.nd.hilauncherdev.lib.theme.NdLauncherExThemeApi.NdLauncherExDialogCallback;
 import com.nd.hilauncherdev.lib.theme.db.DowningTaskItem;
 import com.nd.hilauncherdev.lib.theme.down.DownloadNotification;
 import com.nd.hilauncherdev.lib.theme.down.ThemeItem;
@@ -217,4 +221,47 @@ public class ThemeLauncherExAPI {
 		*/
 	}
 	
+	public static void showThemeApplyDialog(final Context context, DowningTaskItem dTaskItem, NdLauncherExDialogCallback ndLauncherExDialogCallback){
+		
+		if (dTaskItem==null)
+			return ;
+		final String filePath = dTaskItem.tmpFilePath;
+		final String serverThemeID = dTaskItem.themeID;
+		final String newThemeID = dTaskItem.newThemeID;
+		final String themeName = dTaskItem.themeName;
+		if (filePath == null) {
+			return ;
+		}
+		//提示未安装桌面是否下载安装
+		final DialogInterface.OnClickListener positive = new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface arg0, int arg1) {
+				Intent it = null;
+				if ( ThemeLauncherExAPI.checkItemType(serverThemeID, ThemeItem.ITEM_TYPE_SKIN) ){
+					it = getIntentForApplySkin(newThemeID);
+					context.sendBroadcast(it);
+				}else{
+					if ( newThemeID==null || "".equals(newThemeID) ) {
+						it = getIntentForInstallAndApplyAPT(filePath, serverThemeID);
+					}else{
+						it = getIntentForApplyAPT(newThemeID);
+					}
+					context.startActivity(it);
+				}
+			}
+		};
+		
+		final DialogInterface.OnClickListener negative = new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface arg0, int arg1) {
+			}
+		};
+		if (ndLauncherExDialogCallback==null){
+			Dialog dialog = (new NdLauncherExDialogDefaultImp()).createThemeDialog(context, -1, "提示", "应用 "+themeName, "确定", "取消", positive, negative);
+			dialog.show();
+		}else{
+			Dialog dialog = ndLauncherExDialogCallback.createThemeDialog(context, -1, "提示", "应用 "+themeName, "确定", "取消", positive, negative);
+			if (dialog!=null){
+				dialog.show();
+			}
+		}
+	}
 }

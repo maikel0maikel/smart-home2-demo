@@ -14,16 +14,15 @@ import java.net.URLConnection;
 import java.util.Locale;
 import java.util.zip.GZIPInputStream;
 
-import com.nd.hilauncherdev.lib.theme.down.ThemeItem;
-
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
+
+import com.nd.hilauncherdev.lib.theme.down.ThemeItem;
 
 
 
