@@ -7,13 +7,21 @@ import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Handler;
+import android.view.WindowManager;
 
+import com.nd.hilauncherdev.kitset.analytics.OtherAnalytics;
+import com.nd.hilauncherdev.kitset.util.ApkTools;
 import com.nd.hilauncherdev.lib.theme.NdLauncherExDialogDefaultImp;
 import com.nd.hilauncherdev.lib.theme.NdLauncherExThemeApi;
-import com.nd.hilauncherdev.lib.theme.NdLauncherExThemeApi.NdLauncherExDialogCallback;
 import com.nd.hilauncherdev.lib.theme.db.DowningTaskItem;
+import com.nd.hilauncherdev.lib.theme.db.ThemeLibLocalAccessor;
 import com.nd.hilauncherdev.lib.theme.down.DownloadNotification;
+import com.nd.hilauncherdev.lib.theme.down.DownloadTask;
 import com.nd.hilauncherdev.lib.theme.down.ThemeItem;
+import com.nd.hilauncherdev.lib.theme.service.CreateDialogService;
+import com.nd.hilauncherdev.lib.theme.util.HiLauncherThemeGlobal;
+import com.nd.hilauncherdev.lib.theme.util.SUtil;
 
 /**
  * 91桌面主题交互接口
@@ -192,7 +200,10 @@ public class ThemeLauncherExAPI {
 			notifyContent = "点击应用皮肤";
 			it = getIntentForApplySkin(newThemeID);
 			if (bNotifyMode){
-				PendingIntent pIntent = PendingIntent.getBroadcast(context, notifyPosition, it, PendingIntent.FLAG_UPDATE_CURRENT);
+				it = new Intent(context, CreateDialogService.class);
+				it.putExtra("dTaskItem", dTaskItem);
+				it.addFlags(32);
+				PendingIntent pIntent = PendingIntent.getService(context, notifyPosition, it, PendingIntent.FLAG_UPDATE_CURRENT);
 				DownloadNotification.downloadCompletedNotification(context, notifyPosition, themeName+"下载完成", notifyContent, pIntent);
 			}else{
 				context.sendBroadcast(it);
@@ -206,13 +217,18 @@ public class ThemeLauncherExAPI {
 			}
 			
 			if (bNotifyMode){ 
-				PendingIntent pIntent = PendingIntent.getActivity( context, notifyPosition, it, PendingIntent.FLAG_UPDATE_CURRENT);
+				it = new Intent(context, CreateDialogService.class);
+				it.putExtra("dTaskItem", dTaskItem);
+				it.addFlags(32);
+				PendingIntent pIntent = PendingIntent.getService( context, notifyPosition, it, PendingIntent.FLAG_UPDATE_CURRENT);
 				DownloadNotification.downloadCompletedNotification(context, notifyPosition, themeName+"下载完成", notifyContent, pIntent);
 			}else{
 				context.startActivity(it);
 			}
 		}
 		 
+		//TODO 下载完成是否发送响应的广播通知第三方
+		
 		/* 对话框模式应用  皮肤及主题
 		Intent intent = new Intent(context, HiLauncherExApplyThemeDialog.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -221,7 +237,7 @@ public class ThemeLauncherExAPI {
 		*/
 	}
 	
-	public static void showThemeApplyDialog(final Context context, DowningTaskItem dTaskItem, NdLauncherExDialogCallback ndLauncherExDialogCallback){
+	public static void showThemeApplyDialog(final Context context, DowningTaskItem dTaskItem){
 		
 		if (dTaskItem==null)
 			return ;
@@ -232,9 +248,15 @@ public class ThemeLauncherExAPI {
 		if (filePath == null) {
 			return ;
 		}
-		//提示未安装桌面是否下载安装
 		final DialogInterface.OnClickListener positive = new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface arg0, int arg1) {
+				
+				//判断桌面是否安装
+				if ( !ApkTools.isInstallAPK(context, HiLauncherThemeGlobal.THEME_MANAGE_PACKAGE_NAME) ){
+					ThemeLauncherExAPI.showHiLauncherDownDialog(context);
+					return;
+				}
+				
 				Intent it = null;
 				if ( ThemeLauncherExAPI.checkItemType(serverThemeID, ThemeItem.ITEM_TYPE_SKIN) ){
 					it = getIntentForApplySkin(newThemeID);
@@ -245,7 +267,12 @@ public class ThemeLauncherExAPI {
 					}else{
 						it = getIntentForApplyAPT(newThemeID);
 					}
-					context.startActivity(it);
+					try {
+						context.startActivity(it);	
+					} catch (Exception e) {
+						HiLauncherThemeGlobal.ddpost("主题应用失败");
+						e.printStackTrace();
+					}					
 				}
 			}
 		};
@@ -254,14 +281,100 @@ public class ThemeLauncherExAPI {
 			public void onClick(DialogInterface arg0, int arg1) {
 			}
 		};
-		if (ndLauncherExDialogCallback==null){
+		if (NdLauncherExThemeApi.themeExDialog==null){
 			Dialog dialog = (new NdLauncherExDialogDefaultImp()).createThemeDialog(context, -1, "提示", "应用 "+themeName, "确定", "取消", positive, negative);
+			dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
 			dialog.show();
 		}else{
-			Dialog dialog = ndLauncherExDialogCallback.createThemeDialog(context, -1, "提示", "应用 "+themeName, "确定", "取消", positive, negative);
+			Dialog dialog = NdLauncherExThemeApi.themeExDialog.createThemeDialog(context, -1, "提示", "应用 "+themeName, "确定", "取消", positive, negative);
 			if (dialog!=null){
+				dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
 				dialog.show();
 			}
 		}
 	}
+	
+	/**
+	 * 弹出提示下载91桌面的对话框
+	 * @param ctx
+	 */
+	public static void showHiLauncherDownDialog(final Context ctx){
+		
+		final DialogInterface.OnClickListener positive = new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface arg0, int arg1) {
+				try{
+					DowningTaskItem hiDowningTaskItem = ThemeLibLocalAccessor.getInstance(ctx).getDowningTaskItem(HiLauncherThemeGlobal.HiLauncherTaskItemID);
+					if (hiDowningTaskItem==null || hiDowningTaskItem.state!=DowningTaskItem.DownState_Finish){
+						//下载桌面
+						final ThemeItem hiThemeDetail = new ThemeItem();
+						hiThemeDetail.setItemType(ThemeItem.ITEM_TYPE_LAUNCHER);
+						hiThemeDetail.setName("91桌面");
+						hiThemeDetail.setId("91" + ThemeItem.ITEM_TYPE_LAUNCHER);
+						
+						if (hiDowningTaskItem!=null){
+							hiThemeDetail.setDownloadUrl(hiDowningTaskItem.downUrl);
+							hiThemeDetail.setLargePostersUrl(hiDowningTaskItem.picUrl);
+							DownloadTask manager = new DownloadTask();
+							manager.downloadTheme( ctx, hiThemeDetail );
+						}else{
+							final Handler mHandler=new Handler();
+							Thread t = new Thread() {
+					            @Override
+					            public void run() {
+					            	//网络获取下载地址 带统计功能
+					            	String downloadUrl = OtherAnalytics.get91LauncherAppDownloadUrl(ctx);
+					            	//未获取到采用默认地址
+									if(SUtil.isEmpty(downloadUrl))
+										downloadUrl=HiLauncherThemeGlobal.getHiLauncherDefaultDownUrl(ctx);
+									hiThemeDetail.setDownloadUrl(downloadUrl);
+									hiThemeDetail.setLargePostersUrl("");
+									try{
+										/*
+										Looper.prepare();
+										DownloadTask manager = new DownloadTask();
+										manager.downloadTheme( ctx, hiThemeDetail );
+										Looper.loop();
+										*/
+										mHandler.post(new Runnable() {
+											@Override
+											public void run() {
+												DownloadTask manager = new DownloadTask();
+												manager.downloadTheme( ctx, hiThemeDetail );
+											}
+										});
+									}catch (Exception e) {
+										e.printStackTrace();
+									}
+					            }
+					        };
+					        t.start();	
+						}
+					}else{
+						//安装桌面
+						ApkTools.installApplication(ctx, hiDowningTaskItem.tmpFilePath);   
+					}
+				}catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		};
+		
+		final DialogInterface.OnClickListener negative = new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface arg0, int arg1) {
+			}
+		};
+		
+		if (NdLauncherExThemeApi.themeExDialog==null){
+			Dialog dialog = (new NdLauncherExDialogDefaultImp()).createThemeDialog(ctx, -1, "提示", "应用全套主题需要下载安装91桌面,确定开始下载.", "确定", "取消", positive, negative);
+			dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+			dialog.show();
+		}else{
+			Dialog dialog = NdLauncherExThemeApi.themeExDialog.createThemeDialog(ctx, -1, "提示", "应用全套主题需要下载安装91桌面,确定开始下载.", "确定", "取消", positive, negative);
+			if (dialog!=null){
+				dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+				dialog.show();
+			}
+		}
+	}
+	
 }

@@ -93,6 +93,10 @@ public class OtherAnalyticsConstants {
 	 */
 	public final static int FUNC_ID_RES_CONTENT_91_ASSIT_APP_URL=8;
 	
+	/**
+	 * 功能ID：黄历天气皮肤插件界面打开
+	 */
+	public final static int FUNC_ID_CalendarTheme_OPEN=10;
 	
 	/**
 	 * 动作值：：获取桌面分享数据(这里与其功能ID一致)

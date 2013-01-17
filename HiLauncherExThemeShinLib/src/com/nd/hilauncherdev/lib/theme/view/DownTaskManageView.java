@@ -29,7 +29,7 @@ import android.widget.Toast;
 import com.nd.android.lib.theme.R;
 import com.nd.hilauncherdev.kitset.util.ApkTools;
 import com.nd.hilauncherdev.lib.theme.NdLauncherExDialogDefaultImp;
-import com.nd.hilauncherdev.lib.theme.NdLauncherExThemeApi.NdLauncherExDialogCallback;
+import com.nd.hilauncherdev.lib.theme.NdLauncherExThemeApi;
 import com.nd.hilauncherdev.lib.theme.api.ThemeLauncherExAPI;
 import com.nd.hilauncherdev.lib.theme.db.DowningTaskItem;
 import com.nd.hilauncherdev.lib.theme.db.ThemeLibLocalAccessor;
@@ -56,8 +56,6 @@ public class DownTaskManageView extends FrameLayout {
 	public DownExpandableAdapter mDownExpandableAdapter;
 	private RelativeLayout notaskLayout;
 	
-	public NdLauncherExDialogCallback ndLauncherExDialogCallback = null;
-	
 	/**下载进度接收器*/
 	private ThemeDownloadProgressReceiver mThemeDownloadProgressReceiver = new ThemeDownloadProgressReceiver();	
 	
@@ -66,10 +64,6 @@ public class DownTaskManageView extends FrameLayout {
 		ctx = context;
 		mInflater = LayoutInflater.from( ctx );
 	}	
-	
-	public void setNdLauncherExDialogCallback(NdLauncherExDialogCallback ndLauncherExDialogCallback){
-		this.ndLauncherExDialogCallback = ndLauncherExDialogCallback;
-	}
 	
 	/**
 	 * 接口动态修改item
@@ -435,73 +429,33 @@ public class DownTaskManageView extends FrameLayout {
 							//TODO 分3种情况 91桌面时提示安装
 							try{
 								DowningTaskItem newDowningTaskItem = ThemeLibLocalAccessor.getInstance(ctx).getDowningTaskItem(downingTaskItem.themeID);
-								//如果是91桌面或者主题,判断是否安装91桌面,提示下载或者启动
-								if (ThemeLauncherExAPI.checkItemType(downingTaskItem.themeID, ThemeItem.ITEM_TYPE_LAUNCHER) ||
-										ThemeLauncherExAPI.checkItemType(downingTaskItem.themeID, ThemeItem.ITEM_TYPE_THEME) ) {
-									
+								//点击91桌面时
+								if ( ThemeLauncherExAPI.checkItemType(downingTaskItem.themeID, ThemeItem.ITEM_TYPE_LAUNCHER) ){
 									if ( !ApkTools.isInstallAPK(ctx, HiLauncherThemeGlobal.THEME_MANAGE_PACKAGE_NAME) ){
-										//如果是主题判断桌面是否下载完成
-										if ( ThemeLauncherExAPI.checkItemType(downingTaskItem.themeID, ThemeItem.ITEM_TYPE_THEME) ){
-											final DowningTaskItem hiDowningTaskItem = ThemeLibLocalAccessor.getInstance(ctx).getDowningTaskItem(HiLauncherThemeGlobal.HiLauncherTaskItemID);
-											if (hiDowningTaskItem==null || hiDowningTaskItem.state!=DowningTaskItem.DownState_Finish){
-												//提示下载桌面
-												//提示未安装桌面是否下载安装
-												final DialogInterface.OnClickListener positive = new DialogInterface.OnClickListener() {
-													public void onClick(DialogInterface arg0, int arg1) {
-														
-														ThemeItem hiThemeDetail = new ThemeItem();
-														
-														if (hiDowningTaskItem!=null){
-															hiThemeDetail.setDownloadUrl(hiDowningTaskItem.downUrl);
-															hiThemeDetail.setLargePostersUrl(hiDowningTaskItem.picUrl);
-														}else{
-															hiThemeDetail.setDownloadUrl(HiLauncherThemeGlobal.assit_app_download_url);
-															hiThemeDetail.setLargePostersUrl("");
-														}
-														hiThemeDetail.setItemType(ThemeItem.ITEM_TYPE_LAUNCHER);
-														hiThemeDetail.setName("91桌面");
-														hiThemeDetail.setId("91" + ThemeItem.ITEM_TYPE_LAUNCHER);
-														
-														DownloadTask manager = new DownloadTask();
-														manager.downloadTheme( ctx, hiThemeDetail );
-													}
-												};
-												final DialogInterface.OnClickListener negative = new DialogInterface.OnClickListener() {
-													public void onClick(DialogInterface arg0, int arg1) {
-													}
-												};
-												if (ndLauncherExDialogCallback==null){
-													Dialog dialog = (new NdLauncherExDialogDefaultImp()).createThemeDialog(getContext(), -1, "提示", "应用全套主题需要下载安装91桌面,确定开始下载.", "确定", "取消", positive, negative);
-													dialog.show();
-												}else{
-													Dialog dialog = ndLauncherExDialogCallback.createThemeDialog(getContext(), -1, "提示", "应用全套主题需要下载安装91桌面,确定开始下载.", "确定", "取消", positive, negative);
-													if (dialog!=null){
-														dialog.show();
-													}
-												}
-											}else{
-												ApkTools.installApplication(ctx, hiDowningTaskItem.tmpFilePath);
-											}
-											
-											return;
-										}
-										
-										if ( ThemeLauncherExAPI.checkItemType(downingTaskItem.themeID, ThemeItem.ITEM_TYPE_LAUNCHER) ){
-											ApkTools.installApplication(ctx, newDowningTaskItem.tmpFilePath);
-											return ;
-										}
-										
+										ApkTools.installApplication(ctx, newDowningTaskItem.tmpFilePath);
 									}else{
-										if(ThemeLauncherExAPI.checkItemType(downingTaskItem.themeID, ThemeItem.ITEM_TYPE_LAUNCHER)){
-											ThemeLauncherExAPI.startHiLauncher(ctx);
-										}else{
-											//直接发送皮肤应用广播
-						            		ThemeLauncherExAPI.showThemeApplyActivity(ctx, newDowningTaskItem, false);
-										}
+										ThemeLauncherExAPI.startHiLauncher(ctx);
 									}
-								}else{
+									return ;
+								}
+								
+								//点击主题时
+								if ( ThemeLauncherExAPI.checkItemType(downingTaskItem.themeID, ThemeItem.ITEM_TYPE_THEME) ) {
+									if ( !ApkTools.isInstallAPK(ctx, HiLauncherThemeGlobal.THEME_MANAGE_PACKAGE_NAME) ){
+										ThemeLauncherExAPI.showHiLauncherDownDialog(ctx);
+										return;
+									}else{
+										//直接发送皮肤应用广播
+					            		ThemeLauncherExAPI.showThemeApplyActivity(ctx, newDowningTaskItem, false);
+									}
+									return ;
+								}
+								
+								//点击皮肤时	
+								if (ThemeLauncherExAPI.checkItemType(downingTaskItem.themeID, ThemeItem.ITEM_TYPE_SKIN)){
 									//直接发送皮肤应用广播
 				            		ThemeLauncherExAPI.showThemeApplyActivity(ctx, newDowningTaskItem, false);
+				            		return ;
 								}
 							}catch (Exception e) {
 								e.printStackTrace();
@@ -808,11 +762,11 @@ public class DownTaskManageView extends FrameLayout {
 		final String okStr = getResources().getString(R.string.ndtheme_alert_dialog_ok);
 		final String cancleStr = getResources().getString(R.string.ndtheme_common_button_cancel);
 		
-		if (ndLauncherExDialogCallback==null){
+		if (NdLauncherExThemeApi.themeExDialog==null){
 			return (new NdLauncherExDialogDefaultImp()).createThemeDialog(getContext(), android.R.drawable.ic_dialog_alert, titleStr,
 					messageStr, okStr, cancleStr, positive, negative);
 		}else{
-			return ndLauncherExDialogCallback.createThemeDialog(getContext(), android.R.drawable.ic_dialog_alert, titleStr,
+			return NdLauncherExThemeApi.themeExDialog.createThemeDialog(getContext(), android.R.drawable.ic_dialog_alert, titleStr,
 					messageStr, okStr, cancleStr, positive, negative);
 		}
 	}
@@ -844,5 +798,16 @@ public class DownTaskManageView extends FrameLayout {
 			//更新下载管理模块
 			updateDownTask(themeId, progress, state, tempFilePath, newId);
 		}
-	}	
+	}
+	
+	@Override
+	protected void onAttachedToWindow() {
+		
+		super.onAttachedToWindow();
+		
+		this.setFocusable(true);
+		this.setFocusableInTouchMode(true);
+		this.requestFocus();
+		this.requestFocusFromTouch();
+	};
 }

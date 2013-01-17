@@ -45,7 +45,8 @@ public class DownloadNotification {
 		notification.flags = Notification.FLAG_AUTO_CANCEL;
 		notification.icon = android.R.drawable.stat_sys_download_done;
 		notification.contentView = view;
-		notification.contentIntent = pIntent;//pIntentView;
+		notification.contentIntent = pIntent;
+		notification.defaults = Notification.DEFAULT_SOUND;
 		nManager.notify(position, notification);
 	}
 	
@@ -133,6 +134,7 @@ public class DownloadNotification {
 			notification.flags = Notification.FLAG_AUTO_CANCEL;
 			notification.icon = android.R.drawable.stat_sys_download;
 			notification.contentView = view;
+			//未下载完成所有不做动作响应
 			//notification.contentIntent = pIntent;
 			nManager.notify(position, notification);
 		} catch( Exception e ) {

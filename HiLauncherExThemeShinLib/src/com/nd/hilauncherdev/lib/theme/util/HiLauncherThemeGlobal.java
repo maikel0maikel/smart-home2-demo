@@ -37,7 +37,7 @@ public class HiLauncherThemeGlobal {
 	public static final String THEME_MANAGE_PACKAGE_NAME = "com.nd.android.pandahome2";
 	
 	/**91桌面默认下载地址*/
-	public static final String assit_app_download_url="http://pandahome.sj.91.com/soft.ashx/softurlV2?mt=4&redirect=1&fwv=40000&sjxh=123&fbl=123&imei=123&packagename=com.nd.android.pandahome2";
+	private static final String hilauncher_app_download_url="http://pandahome.sj.91.com/soft.ashx/softurlV2?mt=4&redirect=1&fwv=40000&sjxh=123&fbl=123&imei=123&packagename=com.nd.android.pandahome2";
 	
 	/**服务器地址*/
 	public static final String HOST = "http://192.168.254.69:803/TpbTheme";
@@ -388,5 +388,15 @@ public class HiLauncherThemeGlobal {
  		}
  		
  		return cachedImage;
+	}
+	
+	/**
+	 * 91桌面默认下载地址
+	 * @param ctx
+	 * @return
+	 */
+	public static String getHiLauncherDefaultDownUrl(Context ctx){
+		
+		return hilauncher_app_download_url;
 	}
 }

@@ -3,9 +3,7 @@ package com.nd.hilauncherdev.lib.theme.view;
 import java.util.ArrayList;
 import java.util.Map;
 
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
 import android.util.Log;
@@ -24,7 +22,6 @@ import com.nd.android.lib.theme.R;
 import com.nd.hilauncherdev.kitset.analytics.OtherAnalytics;
 import com.nd.hilauncherdev.kitset.util.ApkTools;
 import com.nd.hilauncherdev.lib.theme.HiLauncherExDownTaskManagerActivity;
-import com.nd.hilauncherdev.lib.theme.NdLauncherExDialogDefaultImp;
 import com.nd.hilauncherdev.lib.theme.NdLauncherExThemeApi;
 import com.nd.hilauncherdev.lib.theme.NdLauncherExThemeApi.NdLauncherExDialogCallback;
 import com.nd.hilauncherdev.lib.theme.api.ThemeLauncherExAPI;
@@ -56,8 +53,6 @@ public class HiLauncherExThemeShinView  extends FrameLayout {
 	private View webProgressBarFl;
 	private Button downtask;
 	private View neterrorLayout, refreshView;
-	
-	public NdLauncherExDialogCallback ndLauncherExDialogCallback = null;
 	
 	/**插件皮肤*/
 	private String downType_Skin = "1";
@@ -103,18 +98,14 @@ public class HiLauncherExThemeShinView  extends FrameLayout {
 		Thread t = new Thread() {
             @Override
             public void run() {
-            	downloadUrl = OtherAnalytics.get91LauncherAppDownloadUrl(ctx);
+            	try{
+            		OtherAnalytics.submitCalendarThemeOpen( ctx );
+            	}catch (Exception e) {
+					e.printStackTrace();
+				}
             }
         };
-        t.start();
-	}
-	
-	/**
-	 * 设置创建对话框回调
-	 * @param ndLauncherExDialogCallback
-	 */
-	public void setNdLauncherExDialogCallback(NdLauncherExDialogCallback ndLauncherExDialogCallback){
-		this.ndLauncherExDialogCallback = ndLauncherExDialogCallback;
+        t.start();	
 	}
 	
 	/**
@@ -248,32 +239,7 @@ public class HiLauncherExThemeShinView  extends FrameLayout {
 						}
 
 						if (downType_Theme.equals(dtypeRequestValue)) {
-							// 判断是否安装过桌面
-							if ( !ApkTools.isInstallAPK(ctx, HiLauncherThemeGlobal.THEME_MANAGE_PACKAGE_NAME) ){
-								
-								//提示未安装桌面是否下载安装
-								final DialogInterface.OnClickListener positive = new DialogInterface.OnClickListener() {
-									public void onClick(DialogInterface arg0, int arg1) {
-										downLauncherTheme(tidRequestValue, widRequestValue, wtypeRequestValue, dtypeRequestValue, resNameRequestValue, prevurlRequestValue);
-									}
-								};
-								
-								final DialogInterface.OnClickListener negative = new DialogInterface.OnClickListener() {
-									public void onClick(DialogInterface arg0, int arg1) {
-									}
-								};
-								if (ndLauncherExDialogCallback==null){
-									Dialog dialog = (new NdLauncherExDialogDefaultImp()).createThemeDialog(getContext(), -1, "提示", "应用全套主题需要下载安装91桌面,确定开始下载.", "确定", "取消", positive, negative);
-									dialog.show();
-								}else{
-									Dialog dialog = ndLauncherExDialogCallback.createThemeDialog(getContext(), -1, "提示", "应用全套主题需要下载安装91桌面,确定开始下载.", "确定", "取消", positive, negative);
-									if (dialog!=null){
-										dialog.show();
-									}
-								}
-							}else{
-								downThemeAPT(tidRequestValue, widRequestValue, wtypeRequestValue, dtypeRequestValue, resNameRequestValue, prevurlRequestValue);
-							}
+							downThemeAPT(tidRequestValue, widRequestValue, wtypeRequestValue, dtypeRequestValue, resNameRequestValue, prevurlRequestValue);
 						}
 					}
 				});
@@ -320,7 +286,6 @@ public class HiLauncherExThemeShinView  extends FrameLayout {
 		
 		ThemeItem mThemeItem = new ThemeItem();
 		String buildDownloadUrl = buildDownloadParam(tidRequestValue, widRequestValue, wtypeRequestValue, dtypeRequestValue);
-		Log.e(TAG, "==" + buildDownloadUrl);
 		mThemeItem.setItemType(ThemeItem.ITEM_TYPE_THEME);
 		mThemeItem.setDownloadUrl(buildDownloadUrl);
 		mThemeItem.setLargePostersUrl(""+prevurlRequestValue);
@@ -328,48 +293,6 @@ public class HiLauncherExThemeShinView  extends FrameLayout {
 		mThemeItem.setId(themeID);
 		DownloadTask manager = new DownloadTask();
 		manager.downloadTheme(ctx, mThemeItem);
-	}
-	
-	/**
-	 * 下载91桌面及主题
-	 * @param tidRequestValue
-	 * @param widRequestValue
-	 * @param wtypeRequestValue
-	 * @param dtypeRequestValue
-	 * @param resNameRequestValue
-	 */
-	private void downLauncherTheme(String tidRequestValue, String widRequestValue, String wtypeRequestValue, String dtypeRequestValue, String resNameRequestValue, String prevurlRequestValue){
-		
-		//判断是否已经下载完成，完成则直接安装
-		try{
-			DowningTaskItem hiDowningTaskItem = ThemeLibLocalAccessor.getInstance(ctx).getDowningTaskItem(HiLauncherThemeGlobal.HiLauncherTaskItemID);
-			if (hiDowningTaskItem!=null && hiDowningTaskItem.state==DowningTaskItem.DownState_Finish){
-				ApkTools.installApplication(ctx,hiDowningTaskItem.tmpFilePath);
-				return ;
-			}
-		}catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		//先下载主题包
-		downThemeAPT(tidRequestValue, widRequestValue, wtypeRequestValue, dtypeRequestValue, resNameRequestValue, prevurlRequestValue);
-		
-		//未获取到采用默认地址
-		if(SUtil.isEmpty(downloadUrl))
-			downloadUrl=HiLauncherThemeGlobal.assit_app_download_url;
-		downloadUrl = HiLauncherThemeGlobal.assit_app_download_url;
-		//添加桌面的下载任务
-		ThemeItem mThemeItem = new ThemeItem();
-		mThemeItem.setItemType(ThemeItem.ITEM_TYPE_LAUNCHER);
-		mThemeItem.setDownloadUrl(downloadUrl);
-		mThemeItem.setLargePostersUrl("");
-		mThemeItem.setName("91桌面");
-		mThemeItem.setId("91" + ThemeItem.ITEM_TYPE_LAUNCHER);
-		DownloadTask manager = new DownloadTask();
-		manager.downloadTheme(ctx, mThemeItem);
-		
-		//记录要自动应用的主题
-		SharedPrefsUtil.getInstance(ctx).setString(SharedPrefsUtil.KEY_AUTO_APPLY_THEMEID, tidRequestValue+(""+ThemeItem.ITEM_TYPE_THEME));
 	}
 	
 	/**
@@ -389,7 +312,6 @@ public class HiLauncherExThemeShinView  extends FrameLayout {
 		
 		ThemeItem mThemeItem = new ThemeItem();
 		String buildDownloadUrl = buildDownloadParam(tidRequestValue, widRequestValue, wtypeRequestValue, dtypeRequestValue);
-		Log.e(TAG, "==" + buildDownloadUrl);
 		mThemeItem.setItemType(ThemeItem.ITEM_TYPE_SKIN);
 		mThemeItem.setDownloadUrl(buildDownloadUrl);
 		mThemeItem.setLargePostersUrl(""+prevurlRequestValue);
@@ -428,7 +350,7 @@ public class HiLauncherExThemeShinView  extends FrameLayout {
 		
 			if (newDowningTaskItem!=null){ 
 				if (newDowningTaskItem.state==DowningTaskItem.DownState_Finish){
-		    		ThemeLauncherExAPI.showThemeApplyDialog(ctx, newDowningTaskItem, ndLauncherExDialogCallback);
+		    		ThemeLauncherExAPI.showThemeApplyDialog(ctx, newDowningTaskItem);
 		    		return true;
 				}
 			}
@@ -438,4 +360,15 @@ public class HiLauncherExThemeShinView  extends FrameLayout {
 		
 		return false;
 	}
+	
+	@Override
+	protected void onAttachedToWindow() {
+		
+		super.onAttachedToWindow();
+		
+		this.setFocusable(true);
+		this.setFocusableInTouchMode(true);
+		this.requestFocus();
+		this.requestFocusFromTouch();
+	};
 }

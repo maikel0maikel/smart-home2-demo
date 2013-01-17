@@ -246,19 +246,13 @@ public class DownloadService extends Service {
                 	final DowningTaskItem dTaskItem = itemMap.get( url );
                     itemMap.remove(url);
                     
-                    //如果91桌面未安装则主题都不弹出应用窗口
-                    if ( !ApkTools.isInstallAPK(mContext, HiLauncherThemeGlobal.THEME_MANAGE_PACKAGE_NAME) ){ 
-                    	if ( ThemeLauncherExAPI.checkItemType(serverThemeID, ThemeItem.ITEM_TYPE_THEME) ){
-                    		return ;
-                    	}
-                    }
-                    
                     if ( ThemeLauncherExAPI.checkItemType(serverThemeID, ThemeItem.ITEM_TYPE_LAUNCHER) ){
                     	ApkTools.installApplication(mContext, filePath);
                     	DownloadNotification.sendHiLauncerExFinishMessage(mContext, dTaskItem.startID, dTaskItem.themeName+"下载完成", "点击安装", filePath);
                     	return ;
                     }
                     
+                    //如果为皮肤则执行解压动作
                     if ( ThemeLauncherExAPI.checkItemType(serverThemeID, ThemeItem.ITEM_TYPE_SKIN) ){
                     	
                     	String tmpSkinPath = NdLauncherExThemeApi.ND_HILAUNCHER_THEME_APP_SKIN_PATH_VALUE;

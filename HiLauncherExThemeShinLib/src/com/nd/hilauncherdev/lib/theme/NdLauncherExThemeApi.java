@@ -32,6 +32,9 @@ public class NdLauncherExThemeApi {
         HiLauncherThemeGlobal.createDefaultDir();
 	}
 
+	/**对话框创建实例*/
+	public static NdLauncherExDialogCallback themeExDialog = null;
+	
     public interface NdLauncherExDialogCallback {
     	/**
     	 * 

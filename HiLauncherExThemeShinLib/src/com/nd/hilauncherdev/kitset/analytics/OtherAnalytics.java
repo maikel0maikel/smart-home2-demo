@@ -64,6 +64,17 @@ public class OtherAnalytics {
 	}
 	
 	/**
+	 * 统计黄历天气皮肤插件界面打开次数
+	 */
+	public static boolean submitCalendarThemeOpen(Context context)
+	{
+		String format=OtherAnalyticsConstants.FORMAT_JSON;
+		int fid=OtherAnalyticsConstants.FUNC_ID_CalendarTheme_OPEN;
+		boolean res=submitNormalAnalyticsEvent(format, fid,context,null);
+		return res;
+	}
+	
+	/**
 	 * TODO 修改的方法
 	 * 获取带统计的'91桌面'下载地址
 	 * @param context
@@ -72,10 +83,10 @@ public class OtherAnalytics {
 	public static String get91LauncherAppDownloadUrl(Context context){
 		
 		String format=OtherAnalyticsConstants.FORMAT_JSON;
-		int fid=OtherAnalyticsConstants.FUNC_ID_RES_CONTENT_91_ASSIT_APP_URL;
-		int act=OtherAnalyticsConstants.ACT_ID_GET_91_ASSIT_APP_URL;
+		int fid=OtherAnalyticsConstants.FUNC_ID_HAUNG_LI_WEATHER_INSTALL;
+		int act=OtherAnalyticsConstants.FUNC_ID_HAUNG_LI_WEATHER_INSTALL;
 		int extName=OtherAnalyticsConstants.EXT_NAME_APK;
-		return submitResDownloadUrlContentAnalyticsEvent(format, fid, act, context, null, extName);
+		return submitResDownloadUrlContentAnalyticsEvent(format, fid, act, context, "黄历皮肤插件", extName);
 	}
 	
 	/**

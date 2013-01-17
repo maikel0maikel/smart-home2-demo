@@ -25,7 +25,6 @@ public class LauncherInstallReceiver extends BroadcastReceiver {
         if (intent.getAction().equals("android.intent.action.PACKAGE_ADDED")) {
             String packageName = intent.getDataString(); 
             
-            Log.e("LauncherInstallReceiver", packageName);
             if (packageName!=null && packageName.length()>8){
             	packageName = packageName.substring(8);
             	//自动应用下载桌面时下载的主题
