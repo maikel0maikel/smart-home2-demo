@@ -195,9 +195,9 @@ public class DownloadService extends Service {
                             	//下载成功执行以下操作
                             	
 	                            //保存缩略图
-	                            if(DownloadTask.hashMap.containsKey( mUrl )){
-	                            	DownloadTask.hashMap.put(ret,DownloadTask.hashMap.get( mUrl ));
-	                            	DownloadTask.hashMap.remove( mUrl );
+	                            if(DownloadTaskManager.hashMap.containsKey( mUrl )){
+	                            	DownloadTaskManager.hashMap.put(ret,DownloadTaskManager.hashMap.get( mUrl ));
+	                            	DownloadTaskManager.hashMap.remove( mUrl );
 	                            }                        
 	                            // 2. 安装
 	                            InstallThread thread = new InstallThread(ret, dTaskItem.themeID, mUrl );

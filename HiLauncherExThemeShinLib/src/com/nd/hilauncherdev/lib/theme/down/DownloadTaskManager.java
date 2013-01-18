@@ -19,9 +19,9 @@ import com.nd.hilauncherdev.lib.theme.util.TelephoneUtil;
 /**
  * 用户主题下载的管理类
  */
-public final class DownloadTask {
+public final class DownloadTaskManager {
 
-	 private final static String TAG = "ThemeShopV2DownloadManager";
+	 private final static String TAG = "DownloadTaskManager";
 	
 	private Context ctx;
 	

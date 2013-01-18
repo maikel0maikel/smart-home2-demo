@@ -17,7 +17,7 @@ import com.nd.hilauncherdev.lib.theme.NdLauncherExThemeApi;
 import com.nd.hilauncherdev.lib.theme.db.DowningTaskItem;
 import com.nd.hilauncherdev.lib.theme.db.ThemeLibLocalAccessor;
 import com.nd.hilauncherdev.lib.theme.down.DownloadNotification;
-import com.nd.hilauncherdev.lib.theme.down.DownloadTask;
+import com.nd.hilauncherdev.lib.theme.down.DownloadTaskManager;
 import com.nd.hilauncherdev.lib.theme.down.ThemeItem;
 import com.nd.hilauncherdev.lib.theme.service.CreateDialogService;
 import com.nd.hilauncherdev.lib.theme.util.HiLauncherThemeGlobal;
@@ -175,6 +175,26 @@ public class ThemeLauncherExAPI {
 	
 	
 	/**
+	 * 通过服务端资源ID类型
+	 * @param serverResID
+	 * @return 插件类型, 分析失败返回-1
+	 */
+	public static int getItemType(String serverResID){
+		
+        //3为91桌面,2为主题,1为皮肤插件 
+        if ( serverResID!=null && serverResID.length()>0 ) {
+			String itemType = serverResID.substring(serverResID.length()-1);
+			try{
+				int result = Integer.parseInt(itemType);
+				return result;
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return -1;
+	}
+	
+	/**
 	 * 显示主题及皮肤应用窗口
 	 * @param context
 	 * @param dTaskItem
@@ -314,7 +334,7 @@ public class ThemeLauncherExAPI {
 						if (hiDowningTaskItem!=null){
 							hiThemeDetail.setDownloadUrl(hiDowningTaskItem.downUrl);
 							hiThemeDetail.setLargePostersUrl(hiDowningTaskItem.picUrl);
-							DownloadTask manager = new DownloadTask();
+							DownloadTaskManager manager = new DownloadTaskManager();
 							manager.downloadTheme( ctx, hiThemeDetail );
 						}else{
 							final Handler mHandler=new Handler();
@@ -338,7 +358,7 @@ public class ThemeLauncherExAPI {
 										mHandler.post(new Runnable() {
 											@Override
 											public void run() {
-												DownloadTask manager = new DownloadTask();
+												DownloadTaskManager manager = new DownloadTaskManager();
 												manager.downloadTheme( ctx, hiThemeDetail );
 											}
 										});

@@ -8,6 +8,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
+import com.nd.hilauncherdev.lib.theme.NdLauncherExThemeApi;
+import com.nd.hilauncherdev.lib.theme.api.ThemeLauncherExAPI;
+
 
 /**
  * 下载队列数据存储
@@ -57,7 +60,16 @@ public class ThemeLibLocalAccessor{
 		ThemeLibDB db = new ThemeLibDB(ctx);
 		if(this.getDowningTaskItem(item.themeID)== null){//insert
 			values.put("themeID", item.themeID);
-			db.insertOrThrow(T_DOWNINGTask, null, values);			
+			db.insertOrThrow(T_DOWNINGTask, null, values);	
+			//Begin 开始下载的统计信息
+			try{
+				if (NdLauncherExThemeApi.themeExDownAction!=null){
+					NdLauncherExThemeApi.themeExDownAction.firstDown(ctx, ThemeLauncherExAPI.getItemType(item.themeID), item.themeID);
+				}
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
+			//End 开始下载的统计信息
 		}else{//update
 		    db.update(T_DOWNINGTask, values, "themeID=?", new String[] {item.themeID});		
 		}		

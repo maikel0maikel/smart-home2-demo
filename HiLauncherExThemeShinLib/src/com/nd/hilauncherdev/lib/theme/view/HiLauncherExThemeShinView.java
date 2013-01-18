@@ -28,7 +28,7 @@ import com.nd.hilauncherdev.lib.theme.api.ThemeLauncherExAPI;
 import com.nd.hilauncherdev.lib.theme.db.DowningTaskItem;
 import com.nd.hilauncherdev.lib.theme.db.ThemeLibLocalAccessor;
 import com.nd.hilauncherdev.lib.theme.down.DownloadService;
-import com.nd.hilauncherdev.lib.theme.down.DownloadTask;
+import com.nd.hilauncherdev.lib.theme.down.DownloadTaskManager;
 import com.nd.hilauncherdev.lib.theme.down.ThemeItem;
 import com.nd.hilauncherdev.lib.theme.util.DigestUtils;
 import com.nd.hilauncherdev.lib.theme.util.HiLauncherThemeGlobal;
@@ -291,7 +291,7 @@ public class HiLauncherExThemeShinView  extends FrameLayout {
 		mThemeItem.setLargePostersUrl(""+prevurlRequestValue);
 		mThemeItem.setName(resNameRequestValue+" 主题");
 		mThemeItem.setId(themeID);
-		DownloadTask manager = new DownloadTask();
+		DownloadTaskManager manager = new DownloadTaskManager();
 		manager.downloadTheme(ctx, mThemeItem);
 	}
 	
@@ -317,7 +317,7 @@ public class HiLauncherExThemeShinView  extends FrameLayout {
 		mThemeItem.setLargePostersUrl(""+prevurlRequestValue);
 		mThemeItem.setName(resNameRequestValue+" 皮肤");
 		mThemeItem.setId(themeID);
-		DownloadTask manager = new DownloadTask();
+		DownloadTaskManager manager = new DownloadTaskManager();
 		manager.downloadTheme(ctx, mThemeItem);
 	}
 	

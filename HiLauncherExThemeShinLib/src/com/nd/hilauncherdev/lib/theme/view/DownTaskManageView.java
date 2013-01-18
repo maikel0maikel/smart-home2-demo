@@ -37,7 +37,7 @@ import com.nd.hilauncherdev.lib.theme.down.AsyncImageLoader;
 import com.nd.hilauncherdev.lib.theme.down.AsyncImageLoader.ImageCallback;
 import com.nd.hilauncherdev.lib.theme.down.DownloadNotification;
 import com.nd.hilauncherdev.lib.theme.down.DownloadService;
-import com.nd.hilauncherdev.lib.theme.down.DownloadTask;
+import com.nd.hilauncherdev.lib.theme.down.DownloadTaskManager;
 import com.nd.hilauncherdev.lib.theme.down.ThemeDownloadStateManager;
 import com.nd.hilauncherdev.lib.theme.down.ThemeItem;
 import com.nd.hilauncherdev.lib.theme.util.HiLauncherThemeGlobal;
@@ -467,7 +467,7 @@ public class DownTaskManageView extends FrameLayout {
 						//当任务暂停时
 						case DowningTaskItem.DownState_Pause:
 							
-							DownloadTask manager = new DownloadTask();
+							DownloadTaskManager manager = new DownloadTaskManager();
 							manager.downloadTheme( ctx, mThemeDetail );
 							
 							setDownTaskItemState(downingTaskItem, DowningTaskItem.DownState_Downing);	

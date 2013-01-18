@@ -16,7 +16,7 @@ public class ThemeItem implements Serializable{
 	/**全套主题*/
 	public static final int ITEM_TYPE_THEME = 2;
 	
-	/**全套主题*/
+	/**91桌面*/
 	public static final int ITEM_TYPE_LAUNCHER = 3;	
 	
 	/**下载类型   1:皮肤,2:全套主题*/

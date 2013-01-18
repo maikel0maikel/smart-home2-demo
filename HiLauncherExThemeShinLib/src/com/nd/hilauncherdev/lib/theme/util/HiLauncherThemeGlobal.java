@@ -40,7 +40,8 @@ public class HiLauncherThemeGlobal {
 	private static final String hilauncher_app_download_url="http://pandahome.sj.91.com/soft.ashx/softurlV2?mt=4&redirect=1&fwv=40000&sjxh=123&fbl=123&imei=123&packagename=com.nd.android.pandahome2";
 	
 	/**服务器地址*/
-	public static final String HOST = "http://192.168.254.69:803/TpbTheme";
+	//public static final String HOST = "http://192.168.254.69:803/TpbTheme";
+	public static final String HOST = "http://pandahome.sj.91.com/TpbTheme";
 	
 	/**91桌面下载任务ID*/
 	public static final String HiLauncherTaskItemID = "91" + ThemeItem.ITEM_TYPE_LAUNCHER;
