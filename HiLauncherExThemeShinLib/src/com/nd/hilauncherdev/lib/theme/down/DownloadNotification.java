@@ -9,6 +9,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.widget.RemoteViews;
 
 import com.nd.android.lib.theme.R;
@@ -117,6 +118,11 @@ public class DownloadNotification {
 			view.setTextViewText(R.id.percent, progress+"%");
 			view.setTextViewText(R.id.widget_name, title);
 			view.setProgressBar(R.id.progress, 100, progress, false);
+			
+			if (Build.VERSION.SDK_INT > 10) {
+				view.setTextColor(R.id.percent, context.getResources().getColor(R.color.ndtheme_white));
+				view.setTextColor(R.id.widget_name, context.getResources().getColor(R.color.ndtheme_white));
+			}
 			
 			Notification notification=new Notification();
 			notification.flags = Notification.FLAG_AUTO_CANCEL;
