@@ -349,12 +349,6 @@ public class ThemeLauncherExAPI {
 									hiThemeDetail.setDownloadUrl(downloadUrl);
 									hiThemeDetail.setLargePostersUrl("");
 									try{
-										/*
-										Looper.prepare();
-										DownloadTask manager = new DownloadTask();
-										manager.downloadTheme( ctx, hiThemeDetail );
-										Looper.loop();
-										*/
 										mHandler.post(new Runnable() {
 											@Override
 											public void run() {
@@ -385,11 +379,11 @@ public class ThemeLauncherExAPI {
 		};
 		
 		if (NdLauncherExThemeApi.themeExDialog==null){
-			Dialog dialog = (new NdLauncherExDialogDefaultImp()).createThemeDialog(ctx, -1, "提示", "应用全套主题需要下载安装91桌面,确定开始下载.", "确定", "取消", positive, negative);
+			Dialog dialog = (new NdLauncherExDialogDefaultImp()).createThemeDialog(ctx, -1, "提示", "该主题需要安装91桌面,是否现在安装.", "确定", "取消", positive, negative);
 			dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
 			dialog.show();
 		}else{
-			Dialog dialog = NdLauncherExThemeApi.themeExDialog.createThemeDialog(ctx, -1, "提示", "应用全套主题需要下载安装91桌面,确定开始下载.", "确定", "取消", positive, negative);
+			Dialog dialog = NdLauncherExThemeApi.themeExDialog.createThemeDialog(ctx, -1, "提示", "该主题需要安装91桌面,是否现在安装.", "确定", "取消", positive, negative);
 			if (dialog!=null){
 				dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
 				dialog.show();
