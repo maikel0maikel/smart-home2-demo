@@ -35,17 +35,11 @@ public class DownloadNotification {
 		
 		//清除之前的通知栏
 		nManager.cancel(position);
-		
-		RemoteViews view = new RemoteViews(context.getPackageName(),R.layout.nd_hilauncher_theme_download_complete_notify);		
-		view.setImageViewResource(R.id.notify_image, android.R.drawable.stat_sys_download_done);
-		view.setTextViewText(R.id.notify_title,title );	
-		view.setTextViewText( R.id.notify_content, content );		
 
 		Notification notification=new Notification();
 		notification.flags = Notification.FLAG_AUTO_CANCEL;
 		notification.icon = android.R.drawable.stat_sys_download_done;
-		notification.contentView = view;
-		notification.contentIntent = pIntent;
+		notification.setLatestEventInfo(context, title, content, pIntent);
 		notification.defaults = Notification.DEFAULT_SOUND;
 		nManager.notify(position, notification);
 	}
@@ -63,17 +57,11 @@ public class DownloadNotification {
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		PendingIntent pIntent = PendingIntent.getActivity( context, position, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 		pIntent=PendingIntent.getActivity(context, 0, intent, 0);
-		
-		RemoteViews view = new RemoteViews(context.getPackageName(),R.layout.nd_hilauncher_theme_download_complete_notify);		
-		view.setImageViewResource(R.id.notify_image, android.R.drawable.stat_sys_download_done);
-		view.setTextViewText(R.id.notify_title,title );	
-		view.setTextViewText( R.id.notify_content, content );		
 
 		Notification notification=new Notification();
 		notification.flags = Notification.FLAG_AUTO_CANCEL;
 		notification.icon = android.R.drawable.stat_sys_download_done;
-		notification.contentView = view;
-		notification.contentIntent = pIntent;
+		notification.setLatestEventInfo(context, title, content, pIntent);
 		nManager.notify(position, notification);
 	}
 	
