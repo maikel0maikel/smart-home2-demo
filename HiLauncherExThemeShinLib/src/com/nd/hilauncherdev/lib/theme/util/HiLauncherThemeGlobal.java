@@ -36,6 +36,10 @@ public class HiLauncherThemeGlobal {
 	/**91桌面包名*/
 	public static final String THEME_MANAGE_PACKAGE_NAME = "com.nd.android.pandahome2";
 	
+	/**91桌面版本*/
+	public static final String THEME_MANAGE_PACKAGE_VERSION_NAME = "3.5.1";
+	
+	
 	/**91桌面默认下载地址*/
 	private static final String hilauncher_app_download_url="http://pandahome.sj.91.com/soft.ashx/softurlV2?mt=4&redirect=1&fwv=40000&sjxh=123&fbl=123&imei=123&packagename=com.nd.android.pandahome2";
 	

@@ -8,6 +8,9 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 
+import com.nd.hilauncherdev.lib.theme.util.HiLauncherThemeGlobal;
+import com.nd.hilauncherdev.lib.theme.util.TelephoneUtil;
+
 /**
  * APK工具
  * <br>Author:ryan
@@ -65,5 +68,21 @@ public class ApkTools {
 		}
 		
 		return true;
+	}
+	
+	public static boolean isCanApplySkin(Context mContext, String pkgName){
+		
+		try {
+			String curVersion = mContext.getPackageManager().getPackageInfo(pkgName, 0).versionName;
+			if ( HiLauncherThemeGlobal.THEME_MANAGE_PACKAGE_VERSION_NAME.equals(curVersion) ){
+				return true;
+			}else{
+				return TelephoneUtil.isExistNewVersion(curVersion, HiLauncherThemeGlobal.THEME_MANAGE_PACKAGE_VERSION_NAME);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return false;
 	}
 }

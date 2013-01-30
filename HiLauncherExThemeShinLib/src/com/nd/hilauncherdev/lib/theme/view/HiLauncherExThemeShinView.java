@@ -113,9 +113,11 @@ public class HiLauncherExThemeShinView  extends FrameLayout {
 	 */
 	public void destroyView(){
 		try {
-			webContent.stopLoading();
-			webContent.freeMemory();
-			webContent.destroy();
+			if (webContent!=null){
+				webContent.stopLoading();
+				webContent.freeMemory();
+				webContent.destroy();
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

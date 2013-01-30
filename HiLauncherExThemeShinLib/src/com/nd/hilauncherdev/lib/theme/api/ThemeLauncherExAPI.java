@@ -276,6 +276,11 @@ public class ThemeLauncherExAPI {
 					ThemeLauncherExAPI.showHiLauncherDownDialog(context);
 					return;
 				}
+				//安装后需要判断是否是要求的版本
+				if ( !ApkTools.isCanApplySkin(context, HiLauncherThemeGlobal.THEME_MANAGE_PACKAGE_NAME) ){
+					ThemeLauncherExAPI.showHiLauncherDownDialog(context);
+					return;
+				}
 				
 				Intent it = null;
 				if ( ThemeLauncherExAPI.checkItemType(serverThemeID, ThemeItem.ITEM_TYPE_SKIN) ){
@@ -379,11 +384,11 @@ public class ThemeLauncherExAPI {
 		};
 		
 		if (NdLauncherExThemeApi.themeExDialog==null){
-			Dialog dialog = (new NdLauncherExDialogDefaultImp()).createThemeDialog(ctx, -1, "提示", "该主题需要安装91桌面,是否现在安装.", "确定", "取消", positive, negative);
+			Dialog dialog = (new NdLauncherExDialogDefaultImp()).createThemeDialog(ctx, -1, "提示", "该主题需要安装91桌面v3.5.1以上版本,是否现在安装.", "确定", "取消", positive, negative);
 			dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
 			dialog.show();
 		}else{
-			Dialog dialog = NdLauncherExThemeApi.themeExDialog.createThemeDialog(ctx, -1, "提示", "该主题需要安装91桌面,是否现在安装.", "确定", "取消", positive, negative);
+			Dialog dialog = NdLauncherExThemeApi.themeExDialog.createThemeDialog(ctx, -1, "提示", "该主题需要安装91桌面v3.5.1以上版本,是否现在安装.", "确定", "取消", positive, negative);
 			if (dialog!=null){
 				dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
 				dialog.show();

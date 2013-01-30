@@ -33,7 +33,7 @@
     <string name="ndtheme_manage_downtasks_downtask_finish_nums_txt">共有主题</string>
     <string name="ndtheme_manage_downtasks_nodowntask_txt">  当前没有正在进行的任务</string> 
     <string name="ndtheme_manage_downtasks_nodowntask_more_txt">更多主题>></string>
-    <string name="ndtheme_theme_detail_installing_txt">正在安装......</string>
+    <string name="ndtheme_theme_detail_installing_txt">正在解压......</string>
     <string name="ndtheme_manage_downtasks_down100">下载完成 正在解压主题,请稍后</string>
     <string name="ndtheme_apply_theme_title">提示</string>
     <string name="ndtheme_apply_theme_text">应用</string>
