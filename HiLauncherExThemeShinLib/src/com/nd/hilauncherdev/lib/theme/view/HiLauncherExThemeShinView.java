@@ -6,12 +6,10 @@ import java.util.Map;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
-import android.webkit.WebSettings.PluginState;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
@@ -20,10 +18,8 @@ import android.widget.ProgressBar;
 
 import com.nd.android.lib.theme.R;
 import com.nd.hilauncherdev.kitset.analytics.OtherAnalytics;
-import com.nd.hilauncherdev.kitset.util.ApkTools;
 import com.nd.hilauncherdev.lib.theme.HiLauncherExDownTaskManagerActivity;
 import com.nd.hilauncherdev.lib.theme.NdLauncherExThemeApi;
-import com.nd.hilauncherdev.lib.theme.NdLauncherExThemeApi.NdLauncherExDialogCallback;
 import com.nd.hilauncherdev.lib.theme.api.ThemeLauncherExAPI;
 import com.nd.hilauncherdev.lib.theme.db.DowningTaskItem;
 import com.nd.hilauncherdev.lib.theme.db.ThemeLibLocalAccessor;
@@ -34,7 +30,6 @@ import com.nd.hilauncherdev.lib.theme.util.DigestUtils;
 import com.nd.hilauncherdev.lib.theme.util.HiLauncherThemeGlobal;
 import com.nd.hilauncherdev.lib.theme.util.RequestParmUtil;
 import com.nd.hilauncherdev.lib.theme.util.SUtil;
-import com.nd.hilauncherdev.lib.theme.util.SharedPrefsUtil;
 import com.nd.hilauncherdev.lib.theme.util.TelephoneUtil;
 
 
@@ -182,7 +177,7 @@ public class HiLauncherExThemeShinView  extends FrameLayout {
 		settings.setJavaScriptEnabled(true);
 		settings.setLightTouchEnabled(true);
 		settings.setPluginsEnabled(true);
-		settings.setPluginState(PluginState.ON);
+		//settings.setPluginState(PluginState.ON);////只支持2.2以上的版本 
 
 		//Web加载进度更新
 		webContent.setWebChromeClient(new WebChromeClient() {

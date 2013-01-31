@@ -3,7 +3,6 @@ package com.nd.hilauncherdev.lib.theme.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Build;
 
 public class SharedPrefsUtil {
 
@@ -29,8 +28,7 @@ public class SharedPrefsUtil {
 	}
 	
 	private SharedPreferences getRightSharedPreferences() {
-		int sdkLevel = Build.VERSION.SDK_INT;
-		return ctx.getSharedPreferences(prefsFile, (sdkLevel > Build.VERSION_CODES.FROYO) ? 4 : Context.MODE_WORLD_READABLE);
+		return ctx.getSharedPreferences(prefsFile, Context.MODE_PRIVATE);
 	}
 
 	public void setString(String sKeyName, String sKeyValue) {
