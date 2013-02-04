@@ -211,16 +211,22 @@ public class HiLauncherExThemeShinView  extends FrameLayout {
 			@Override
 			public boolean shouldOverrideUrlLoading(WebView view, final String url) {
 
+				final Map<String, String> mapRequest = RequestParmUtil.URLRequest(url);
+				final String tidRequestValue = mapRequest.get(FIELD_NAME_TID);
+				final String widRequestValue = mapRequest.get(FIELD_NAME_WID);
+				final String dtypeRequestValue = mapRequest.get(FIELD_NAME_DTYPE);
+				final String wtypeRequestValue = mapRequest.get(FIELD_NAME_WTYPE);
+				final String prevurlRequestValue = mapRequest.get(FIELD_NAME_IMAGE_NAME);
+				
+				if( !downType_Skin.equals(dtypeRequestValue) && !downType_Theme.equals(dtypeRequestValue) ){
+					view.loadUrl(url); 
+					return true;
+				}
+				
 				handler.post(new Runnable() {
 
 					public void run() {
 
-						Map<String, String> mapRequest = RequestParmUtil.URLRequest(url);
-						final String tidRequestValue = mapRequest.get(FIELD_NAME_TID);
-						final String widRequestValue = mapRequest.get(FIELD_NAME_WID);
-						final String dtypeRequestValue = mapRequest.get(FIELD_NAME_DTYPE);
-						final String wtypeRequestValue = mapRequest.get(FIELD_NAME_WTYPE);
-						final String prevurlRequestValue = mapRequest.get(FIELD_NAME_IMAGE_NAME);
 						String tmpResNameRequestValue = mapRequest.get(FIELD_NAME_RES_NAME);
 						
 						try {
@@ -240,6 +246,7 @@ public class HiLauncherExThemeShinView  extends FrameLayout {
 						}
 					}
 				});
+				
 				return true;
 			}
 
