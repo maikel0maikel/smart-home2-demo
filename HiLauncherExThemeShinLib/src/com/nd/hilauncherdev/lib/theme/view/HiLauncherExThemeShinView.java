@@ -328,7 +328,7 @@ public class HiLauncherExThemeShinView  extends FrameLayout {
 	 */
 	private String buildDownloadParam(String tid, String wid, String wtype, String dtype) {
 		StringBuffer sb = new StringBuffer(HiLauncherThemeGlobal.HOST+"/Download.aspx?Mt=4&Tfv=40000&tid="+tid+"&Wid="+wid+"&Dtype="+dtype+"&Wtype="+wtype);
-		int index = SUtil.getRandom(9);
+		int index = 5;//SUtil.getRandom(9);
 		String imei = TelephoneUtil.getIMEI(ctx);
 		String imsi = TelephoneUtil.getIMSI(ctx);
 		String md5Source = (tid+"") + (wid+"") + (wtype+"") + (dtype+"") + imei + imsi + index + SUtil.getMD5Key(index);
