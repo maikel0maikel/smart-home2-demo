@@ -263,6 +263,7 @@ public class HiLauncherExThemeShinView  extends FrameLayout {
 			ArrayList<DowningTaskItem> downIngList = ThemeLibLocalAccessor.getInstance(ctx).getDowningTaskByState(DowningTaskItem.DownState_Downing);
 			for (int i = 0; i < downIngList.size(); i++) {
 				DowningTaskItem downingTaskItem = downIngList.get(i);
+				//如果进程没有退出,这个判断会无效
 				if ( !DownloadService.inDownList(downingTaskItem.downUrl) ){
 					downingTaskItem.state = DowningTaskItem.DownState_Pause;
 					ThemeLibLocalAccessor.getInstance(ctx).updateDowningTaskItem(downingTaskItem);

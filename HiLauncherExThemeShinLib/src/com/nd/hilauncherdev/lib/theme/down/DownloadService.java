@@ -160,6 +160,12 @@ public class DownloadService extends Service {
                     if (filename != null) {
                     	
                     	DowningTaskItem dTaskItem = itemMap.get( mUrl );
+                    	//防止异常情况下可能产生Null值
+                    	if (dTaskItem==null || dTaskItem.themeID==null){
+                    		mUrl = downList.poll();
+                    		continue;
+                    	}
+                    	
                     	ThemeDownloadStateManager.sendDownloadingMessage( mContext, dTaskItem.themeID );
                     	
                         String filePath = DOWN_DIR + filename;
