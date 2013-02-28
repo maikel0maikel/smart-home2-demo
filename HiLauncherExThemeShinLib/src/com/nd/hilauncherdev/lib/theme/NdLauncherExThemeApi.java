@@ -3,6 +3,7 @@ package com.nd.hilauncherdev.lib.theme;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface.OnClickListener;
+import android.util.Log;
 
 import com.nd.hilauncherdev.lib.theme.util.HiLauncherThemeGlobal;
 
@@ -11,32 +12,58 @@ import com.nd.hilauncherdev.lib.theme.util.HiLauncherThemeGlobal;
  *
  */
 public class NdLauncherExThemeApi {
-
+	
+	public static final String TAG = "NdLauncherExThemeApi";
+	
 	/**皮肤应用广播*/
 	public static final String ND_HILAUNCHER_THEME_SKIN_APPLY_ACTION = "nd.pandahome.external.request.skin.apply";
 	
-	/**接入应用ID key name*/
+	/**接入应用ID key*/
 	public static final String ND_HILAUNCHER_THEME_APP_ID_KEY = "skinAppID";
 	
-	/**接入应用ID value*/
-	public static String  ND_HILAUNCHER_THEME_APP_ID_VALUE = "1000";
-	
-	/**皮肤路径  key name*/
+	/**皮肤路径  key*/
 	public static final String ND_HILAUNCHER_THEME_APP_SKIN_PATH_KEY = "skinPath";
+
+	/**App信息*/
+	private static NdLauncherExAppSkinSetting ndAppSkinSetting = null;
 	
-	/**皮肤路径  value 末尾需要目录符号*/
-	public static String ND_HILAUNCHER_THEME_APP_SKIN_PATH_VALUE = HiLauncherThemeGlobal.PACKAPGES_HOME;
-	
-	public static void init(Context mContext){
+	public static void init(Context mContext, NdLauncherExAppSkinSetting mNdAppSkinSetting){
 		HiLauncherThemeGlobal.setContext(mContext.getApplicationContext());
         HiLauncherThemeGlobal.createDefaultDir();
+        ndAppSkinSetting = mNdAppSkinSetting; 
 	}
-
-	/**对话框创建实例*/
-	public static NdLauncherExDialogCallback themeExDialog = null;
 	
-	/**下载统计实例*/
-	public static NdLauncherExDownActionCallback themeExDownAction = null;
+	public static String getAppId(){
+		checkSetting();
+		return ndAppSkinSetting.getAppId();
+	}
+	
+	public static String getAppKey(){
+		checkSetting();
+		return ndAppSkinSetting.getAppKey();
+	}
+	
+	public static String getAppSkinPath(){
+		checkSetting();
+		return ndAppSkinSetting.getAppSkinPath();
+	}
+	
+	public static NdLauncherExDialogCallback getThemeExDialog(){
+		checkSetting();
+		return ndAppSkinSetting.getThemeExDialog();
+	}
+	
+	public static NdLauncherExDownActionCallback getThemeExDownAction(){
+		checkSetting();
+		return ndAppSkinSetting.getThemeExDownAction();
+	}
+	
+	private static void checkSetting(){
+		if ( ndAppSkinSetting==null  ) {
+			ndAppSkinSetting = new NdLauncherExAppSkinSetting();
+			Log.e(TAG, "未设置配置信息启用默认调试配置");
+		}
+	}
 	
     public interface NdLauncherExDialogCallback {
     	/**

@@ -261,7 +261,7 @@ public class DownloadService extends Service {
                     //如果为皮肤则执行解压动作
                     if ( ThemeLauncherExAPI.checkItemType(serverThemeID, ThemeItem.ITEM_TYPE_SKIN) ){
                     	
-                    	String tmpSkinPath = NdLauncherExThemeApi.ND_HILAUNCHER_THEME_APP_SKIN_PATH_VALUE;
+                    	String tmpSkinPath = NdLauncherExThemeApi.getAppSkinPath();
 
                     	if ( tmpSkinPath==null || "".equals(tmpSkinPath) ){
                     		tmpSkinPath = HiLauncherThemeGlobal.PACKAPGES_HOME;

@@ -23,70 +23,47 @@ import com.nd.hilauncherdev.lib.theme.util.TelephoneUtil;
  * 新增的数据统类，不依赖于数据统计的jar包
  * @author zhuchenghua
  * @date 2012-10-12
+ * 
+ * cfb根据皮肤插件时间情况修改相关参数
+ * @date 2013-2-28
  */
 public class OtherAnalytics {
 	
 	private static final String TAG = "OtherAnalytics";
 	
 	/**
-	 * 统计一键装机界面打开次数
-	 */
-	public static boolean submitAppNecessaryOpen(Context context)
-	{
-		String format=OtherAnalyticsConstants.FORMAT_JSON;
-		int fid=OtherAnalyticsConstants.FUNC_ID_APP_MARKET_APP_NECESSARY_OPEN;
-		boolean res=submitNormalAnalyticsEvent(format, fid,context,null);
-		return res;
-	}
-	
-	/**
-	 * 统计热门游戏界面打开次数
-	 */
-	public static boolean submitAppGameOpen(Context context)
-	{
-		String format=OtherAnalyticsConstants.FORMAT_JSON;
-		int fid=OtherAnalyticsConstants.FUNC_ID_APP_MARKET_APP_GAME_OPEN;
-		boolean res=submitNormalAnalyticsEvent(format, fid,context,null);
-		return res;
-	}
-	
-	/**
-	 * 获取桌面分享带统计功能的资源
+	 * 统计皮肤插件界面打开次数
 	 * @param context
+	 * @param lbl  已Tag形式传递AppID
 	 * @return
 	 */
-	public static String getLaucherShareResContent(Context context)
-	{
-		String format=OtherAnalyticsConstants.FORMAT_JSON;
-		int fid=OtherAnalyticsConstants.FUNC_ID_RES_CONTENT_LAUNCHER_SHARE;
-		int act=OtherAnalyticsConstants.ACT_ID_LAUNCHER_SHARE;
-		return submitResContentAnalyticsEvent(format, fid, act, context,null);
-	}
-	
-	/**
-	 * 统计黄历天气皮肤插件界面打开次数
-	 */
-	public static boolean submitCalendarThemeOpen(Context context)
+	public static boolean submitCalendarThemeOpen(Context context, String lbl)
 	{
 		String format=OtherAnalyticsConstants.FORMAT_JSON;
 		int fid=OtherAnalyticsConstants.FUNC_ID_CalendarTheme_OPEN;
-		boolean res=submitNormalAnalyticsEvent(format, fid,context,null);
+		boolean res=submitNormalAnalyticsEvent(format, fid,context, lbl);
 		return res;
 	}
 	
 	/**
-	 * TODO 修改的方法
 	 * 获取带统计的'91桌面'下载地址
 	 * @param context
+	 * @param fid  功能id
+	 * @param act  动作id
 	 * @return
 	 */
-	public static String get91LauncherAppDownloadUrl(Context context){
-		
+	public static String get91LauncherAppDownloadUrl(Context context, int fid, int act){
+		//兼容第一版本SDK需要传递lbl="黄历皮肤插件"
+		String lbl = null;
+		if ( fid==OtherAnalyticsConstants.FUNC_ID_HAUNG_LI_WEATHER_INSTALL ){
+			lbl = "黄历皮肤插件";
+		}else{
+			lbl = "皮肤插件";
+		}
+			
 		String format=OtherAnalyticsConstants.FORMAT_JSON;
-		int fid=OtherAnalyticsConstants.FUNC_ID_HAUNG_LI_WEATHER_INSTALL;
-		int act=OtherAnalyticsConstants.FUNC_ID_HAUNG_LI_WEATHER_INSTALL;
 		int extName=OtherAnalyticsConstants.EXT_NAME_APK;
-		return submitResDownloadUrlContentAnalyticsEvent(format, fid, act, context, "黄历皮肤插件", extName);
+		return submitResDownloadUrlContentAnalyticsEvent(format, fid, act, context, lbl, extName);
 	}
 	
 	/**
@@ -119,38 +96,6 @@ public class OtherAnalytics {
 			return true;
 		
 		return false;
-	}
-	
-	/**
-	 * 提交带返回资源的统计接口
-	 * @param format 返回数据的格式
-	 * @param fid 功能ID
-	 * @param act 动作值
-	 * @param context
-	 * @param lbl 同个功能id不同拓展的请传入此参数,汉字请urlencode编码
-	 * @return
-	 */
-	private static String submitResContentAnalyticsEvent(String format,int fid,int act,Context context,String lbl)
-	{
-		if(!TelephoneUtil.isNetworkAvailable(context))
-			return null;
-		
-		//获取接口地址
-		String url=OtherAnalyticsConstants.getResContentAnalyticsUrl(fid, act, format, context,OtherAnalyticsConstants.PID_91_HOME,lbl);
-		logDebug("OtherAnalytics submitResContentAnalyticsEvent url:"+url);
-		HttpCommon httpCommon=new HttpCommon(url);
-		String responseString=httpCommon.getResponseAsStringGET(null);
-		logDebug("OtherAnalytics submitResContentAnalyticsEvent response string:"+responseString);
-		//校验返回结果，分JSON和XML格式两种
-		Object[] result=null;
-		if(format.equals(OtherAnalyticsConstants.FORMAT_JSON)){
-			result= checkResponseJSONValidate(responseString);
-		}else if(format.equals(OtherAnalyticsConstants.FORMAT_XML))
-			result= checkResponseXMLValidate(responseString);
-		if(result!=null && ((Integer)result[0])==0)
-			return (String)result[1];
-		
-		return null;
 	}
 	
 	/**

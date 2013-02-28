@@ -7,6 +7,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.DialogInterface.OnClickListener;
 import android.os.Handler;
 import android.view.WindowManager;
 
@@ -136,7 +137,7 @@ public class ThemeLauncherExAPI {
 	 */
 	public static Intent getIntentForApplySkin(String filePath){
 		Intent intent = new Intent(NdLauncherExThemeApi.ND_HILAUNCHER_THEME_SKIN_APPLY_ACTION);
-		intent.putExtra(NdLauncherExThemeApi.ND_HILAUNCHER_THEME_APP_ID_KEY, NdLauncherExThemeApi.ND_HILAUNCHER_THEME_APP_ID_VALUE);
+		intent.putExtra(NdLauncherExThemeApi.ND_HILAUNCHER_THEME_APP_ID_KEY, NdLauncherExThemeApi.getAppId());
 		intent.putExtra(NdLauncherExThemeApi.ND_HILAUNCHER_THEME_APP_SKIN_PATH_KEY, filePath);
 		intent.addFlags(32);
 		return intent;
@@ -306,17 +307,8 @@ public class ThemeLauncherExAPI {
 			public void onClick(DialogInterface arg0, int arg1) {
 			}
 		};
-		if (NdLauncherExThemeApi.themeExDialog==null){
-			Dialog dialog = (new NdLauncherExDialogDefaultImp()).createThemeDialog(context, -1, "提示", "应用 "+themeName, "确定", "取消", positive, negative);
-			dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-			dialog.show();
-		}else{
-			Dialog dialog = NdLauncherExThemeApi.themeExDialog.createThemeDialog(context, -1, "提示", "应用 "+themeName, "确定", "取消", positive, negative);
-			if (dialog!=null){
-				dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-				dialog.show();
-			}
-		}
+		
+		showDialogShow(context, "应用 "+themeName, positive, negative);
 	}
 	
 	/**
@@ -347,7 +339,9 @@ public class ThemeLauncherExAPI {
 					            @Override
 					            public void run() {
 					            	//网络获取下载地址 带统计功能
-					            	String downloadUrl = OtherAnalytics.get91LauncherAppDownloadUrl(ctx);
+					            	String downloadUrl = OtherAnalytics.get91LauncherAppDownloadUrl( ctx, 
+					            			coverStringToInt(NdLauncherExThemeApi.getAppKey()), 
+					            			coverStringToInt(NdLauncherExThemeApi.getAppKey()) );
 					            	//未获取到采用默认地址
 									if(SUtil.isEmpty(downloadUrl))
 										downloadUrl=HiLauncherThemeGlobal.getHiLauncherDefaultDownUrl(ctx);
@@ -383,17 +377,29 @@ public class ThemeLauncherExAPI {
 			}
 		};
 		
-		if (NdLauncherExThemeApi.themeExDialog==null){
-			Dialog dialog = (new NdLauncherExDialogDefaultImp()).createThemeDialog(ctx, -1, "提示", "该主题需要安装91桌面v3.5.1以上版本,是否现在安装.", "确定", "取消", positive, negative);
+		showDialogShow(ctx, "该主题需要安装91桌面v3.5.1以上版本,是否现在安装.", positive, negative);
+	}
+	
+	private static void showDialogShow(Context ctx, CharSequence message,  OnClickListener ok, OnClickListener cancle){
+		Dialog dialog = null;
+		if (NdLauncherExThemeApi.getThemeExDialog()==null){
+			dialog = (new NdLauncherExDialogDefaultImp()).createThemeDialog(ctx, -1, "提示", message, "确定", "取消", ok, cancle);
+		}else{
+			dialog = NdLauncherExThemeApi.getThemeExDialog().createThemeDialog(ctx, -1, "提示", message, "确定", "取消", ok, cancle);
+		}
+		if (dialog!=null){
 			dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
 			dialog.show();
-		}else{
-			Dialog dialog = NdLauncherExThemeApi.themeExDialog.createThemeDialog(ctx, -1, "提示", "该主题需要安装91桌面v3.5.1以上版本,是否现在安装.", "确定", "取消", positive, negative);
-			if (dialog!=null){
-				dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-				dialog.show();
-			}
 		}
 	}
 	
+	private static int coverStringToInt(String oldStr){
+		int iResult = 0;
+		try {
+			iResult = Integer.parseInt(oldStr);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return iResult;
+	}
 }

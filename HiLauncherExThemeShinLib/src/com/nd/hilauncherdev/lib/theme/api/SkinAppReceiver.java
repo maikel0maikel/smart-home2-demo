@@ -15,8 +15,10 @@ public class SkinAppReceiver  extends BroadcastReceiver{
 			
 			String appID = intent.getStringExtra( NdLauncherExThemeApi.ND_HILAUNCHER_THEME_APP_ID_KEY );
 			
-			if (appID!=null && appID.equals(NdLauncherExThemeApi.ND_HILAUNCHER_THEME_APP_ID_VALUE) ){
+			if (appID!=null && appID.equals(NdLauncherExThemeApi.getAppId()) ){
 				//Do Something here
+				//获取本次皮肤应用的皮肤路径
+				String skinPath = intent.getStringExtra( NdLauncherExThemeApi.ND_HILAUNCHER_THEME_APP_SKIN_PATH_KEY );
 			}
 		}
 	}

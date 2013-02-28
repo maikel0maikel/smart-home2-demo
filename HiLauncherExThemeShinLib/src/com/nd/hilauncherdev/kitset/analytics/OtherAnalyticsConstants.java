@@ -54,59 +54,14 @@ public class OtherAnalyticsConstants {
 	public final static int ANDROID_MT=4;
 	
 	/**
-	 * 功能ID：桌面请求安装智能锁
-	 */
-	public final static int FUNC_ID_INTELLIGENT_LOCK_INSTALL_REQUEST=1;
-	
-	/**
-	 * 功能ID：桌面请求安装黄历天气
-	 */
-	public final static int FUNC_ID_HAUNG_LI_WEATHER_INSTALL_REQUEST=2;
-	
-	/**
 	 * 功能ID：黄历天气安装桌面
 	 */
 	public final static int FUNC_ID_HAUNG_LI_WEATHER_INSTALL=3;
 	
 	/**
-	 * 功能ID：智能锁安装桌面
-	 */
-	public final static int FUNC_ID_INTELLIGENT_LOCK_INSTALL=4;
-	
-	/**
-	 * 功能ID：一键装机打开
-	 */
-	public final static int FUNC_ID_APP_MARKET_APP_NECESSARY_OPEN=5;
-	
-	/**
-	 * 功能ID：热门游戏打开
-	 */
-	public final static int FUNC_ID_APP_MARKET_APP_GAME_OPEN=6;
-	
-	/**
-	 * 功能ID：获取桌面分享数据--带返回资源
-	 */
-	public final static int FUNC_ID_RES_CONTENT_LAUNCHER_SHARE=7;
-	
-	/**
-	 * 功能ID：获取91助手下载地址--带返回资源（下载地址）
-	 */
-	public final static int FUNC_ID_RES_CONTENT_91_ASSIT_APP_URL=8;
-	
-	/**
 	 * 功能ID：黄历天气皮肤插件界面打开
 	 */
 	public final static int FUNC_ID_CalendarTheme_OPEN=10;
-	
-	/**
-	 * 动作值：：获取桌面分享数据(这里与其功能ID一致)
-	 */
-	public final static int ACT_ID_LAUNCHER_SHARE=FUNC_ID_RES_CONTENT_LAUNCHER_SHARE;
-	
-	/**
-	 * 动作值：：获取91助手下载地址(这里与其功能ID一致)
-	 */
-	public final static int ACT_ID_GET_91_ASSIT_APP_URL=FUNC_ID_RES_CONTENT_91_ASSIT_APP_URL;
 	
 	/**
 	 * 返回数据格式:json

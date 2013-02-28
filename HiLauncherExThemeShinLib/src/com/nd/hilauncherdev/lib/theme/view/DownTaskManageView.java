@@ -762,11 +762,11 @@ public class DownTaskManageView extends FrameLayout {
 		final String okStr = getResources().getString(R.string.ndtheme_alert_dialog_ok);
 		final String cancleStr = getResources().getString(R.string.ndtheme_common_button_cancel);
 		
-		if (NdLauncherExThemeApi.themeExDialog==null){
+		if (NdLauncherExThemeApi.getThemeExDialog()==null){
 			return (new NdLauncherExDialogDefaultImp()).createThemeDialog(getContext(), android.R.drawable.ic_dialog_alert, titleStr,
 					messageStr, okStr, cancleStr, positive, negative);
 		}else{
-			return NdLauncherExThemeApi.themeExDialog.createThemeDialog(getContext(), android.R.drawable.ic_dialog_alert, titleStr,
+			return NdLauncherExThemeApi.getThemeExDialog().createThemeDialog(getContext(), android.R.drawable.ic_dialog_alert, titleStr,
 					messageStr, okStr, cancleStr, positive, negative);
 		}
 	}

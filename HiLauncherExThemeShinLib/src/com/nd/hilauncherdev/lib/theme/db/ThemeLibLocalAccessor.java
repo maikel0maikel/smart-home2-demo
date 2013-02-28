@@ -63,8 +63,8 @@ public class ThemeLibLocalAccessor{
 			db.insertOrThrow(T_DOWNINGTask, null, values);	
 			//Begin 开始下载的统计信息
 			try{
-				if (NdLauncherExThemeApi.themeExDownAction!=null){
-					NdLauncherExThemeApi.themeExDownAction.firstDown(ctx, ThemeLauncherExAPI.getItemType(item.themeID), item.themeID);
+				if (NdLauncherExThemeApi.getThemeExDownAction()!=null){
+					NdLauncherExThemeApi.getThemeExDownAction().firstDown(ctx, ThemeLauncherExAPI.getItemType(item.themeID), item.themeID);
 				}
 			}catch (Exception e) {
 				e.printStackTrace();

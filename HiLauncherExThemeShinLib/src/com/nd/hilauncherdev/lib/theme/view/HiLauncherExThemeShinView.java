@@ -94,7 +94,7 @@ public class HiLauncherExThemeShinView  extends FrameLayout {
             @Override
             public void run() {
             	try{
-            		OtherAnalytics.submitCalendarThemeOpen( ctx );
+            		OtherAnalytics.submitCalendarThemeOpen( ctx, NdLauncherExThemeApi.getAppId() );
             	}catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -165,7 +165,7 @@ public class HiLauncherExThemeShinView  extends FrameLayout {
 		if (neterrorLayout!=null){
 			neterrorLayout.setVisibility(View.GONE);
 		}
-		webContent.loadUrl(HiLauncherThemeGlobal.HOST+"/Default.aspx?Mt=4&Tfv=40000&Imei="+TelephoneUtil.getIMEI(ctx)+"&Wtype="+NdLauncherExThemeApi.ND_HILAUNCHER_THEME_APP_ID_VALUE);
+		webContent.loadUrl(HiLauncherThemeGlobal.HOST+"/Default.aspx?Mt=4&Tfv=40000&Imei="+TelephoneUtil.getIMEI(ctx)+"&Wtype="+NdLauncherExThemeApi.getAppId());
 	}
 	
 	private void initWebView(){
