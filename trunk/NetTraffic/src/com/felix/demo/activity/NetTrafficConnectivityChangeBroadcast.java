@@ -53,7 +53,7 @@ public class NetTrafficConnectivityChangeBroadcast extends BroadcastReceiver {
 					s = "正在开启";
 					break;
 			}
-			Toast.makeText(context, "wifi state=" + s, Toast.LENGTH_SHORT).show();
+			//Toast.makeText(context, "wifi state=" + s, Toast.LENGTH_SHORT).show();
 		}
 	
 		if (TextUtils.equals(action, ConnectivityManager.CONNECTIVITY_ACTION )) {
