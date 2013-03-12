@@ -10,8 +10,6 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
     <uses-permission android:name="android.permission.RESTART_PACKAGES"></uses-permission>
-    <uses-permission android:name="android.permission.BROADCAST_PACKAGE_REMOVED"></uses-permission>  
-    <uses-permission android:name="android.permission.FORCE_STOP_PACKAGES"></uses-permission>
         
     <uses-permission android:name="android.permission.CALL_PHONE"></uses-permission>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"></uses-permission> 
@@ -24,19 +22,17 @@
         android:icon="@drawable/ic_launcher"
         android:process="android.process.acore1" 
         android:label="@string/app_name" >
-<!-- 
-        <activity
-            android:name=".activity.NetTrafficBytesMain"
+         <activity
+            android:name="com.felix.demo.activity.NetTrafficBytesMain"
             android:label="流量监控" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
- -->            
          <activity
             android:name=".activity.NetTrafficRankingMain"
-            android:label="流量监控" >
+            android:label="流量排行" >
         </activity>   
         
         <activity
@@ -64,11 +60,11 @@
 				<action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
 			</intent-filter>
 		</receiver>				
-		<!-- 实时监控服务
+		<!-- 实时监控服务-->
 		<service android:name=".activity.NetTrafficBytesService"></service>
 		<service android:name=".activity.NetTrafficBytesFloatService" android:persistent="true"></service>
-		 -->
-		 
+		
+		<!-- 拨号助手
 		<activity android:name="com.felix.demo.phonehelper.receiver.activity.MainActivity" android:label="@string/app_name"> 
 			<intent-filter> 
 				<action android:name="android.intent.action.MAIN" /> 
@@ -81,8 +77,8 @@
 				<action android:name="android.intent.action.NEW_OUTGOING_CALL" />
 			</intent-filter> 
 		</receiver>
-		
 		<service android:name="com.nd.hilauncherdev.myphone.phonehelper.CallHelperService" android:process=":hilauncherex_phonehelper"></service>
+		 -->
     </application>
 
 </manifest>
