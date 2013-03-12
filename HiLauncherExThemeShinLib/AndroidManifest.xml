@@ -16,7 +16,7 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/ndtheme_app_name" >
         <activity
-            android:name="com.nd.hilauncherdev.lib.theme.HiLauncherExThemeShinLibActivity"
+            android:name="com.nd.hilauncherdev.lib.theme.HiShinLibDemoActivity"
             android:label="@string/ndtheme_app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

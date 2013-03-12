@@ -1,7 +1,5 @@
 package com.nd.hilauncherdev.lib.theme;
 
-import com.nd.hilauncherdev.lib.theme.NdLauncherExThemeApi.NdLauncherExDialogCallback;
-import com.nd.hilauncherdev.lib.theme.NdLauncherExThemeApi.NdLauncherExDownActionCallback;
 import com.nd.hilauncherdev.lib.theme.util.HiLauncherThemeGlobal;
 
 /**
