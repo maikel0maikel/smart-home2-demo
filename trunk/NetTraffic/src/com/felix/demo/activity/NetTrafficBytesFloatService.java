@@ -3,10 +3,10 @@ package com.felix.demo.activity;
 
 import java.text.DecimalFormat;
 
-import android.app.Activity;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
@@ -38,6 +38,9 @@ public class NetTrafficBytesFloatService extends Service {
 	private float StartX;
 	private float StartY;
 	int delaytime=1000;
+	
+	int ONGOING_NOTIFICATION = 9100;
+	
 	@Override
 	public void onCreate() {
 		Log.d("NetTrafficBytesFloatService", "onCreate");
@@ -52,6 +55,24 @@ public class NetTrafficBytesFloatService extends Service {
 		iv.setVisibility(View.GONE);
 		createView();
 		handler.postDelayed(task, delaytime);
+	}
+	
+	@Override
+	public int onStartCommand(Intent intent, int flags, int startId) {
+		
+		Log.d("NetTrafficBytesFloatService", "onStartCommand");
+		
+		//使用这招可以达到显示在安全中心，但是不在通知栏显示
+		Notification notification = new Notification(0, "小黑流量监控", System.currentTimeMillis());
+		//Notification notification = new Notification(R.drawable.ic_launcher, "小黑流量监控", System.currentTimeMillis());
+		Intent notificationIntent = new Intent(this, NetTrafficRankingMain.class);
+		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+		notification.setLatestEventInfo(this, "流量标题", "流量内容文本", pendingIntent);
+		startForeground(ONGOING_NOTIFICATION, notification);
+		//startForeground(0, notification);  使用id 0 可以达到隐藏的效果，但是安全中心没有
+		//startForeground(ONGOING_NOTIFICATION, new Notification()); 使用id 0 可以达到隐藏的效果，但是安全中心没有
+		
+		return super.onStartCommand(intent, flags, startId);
 	}
 
 	private void createView() {
@@ -160,17 +181,13 @@ public class NetTrafficBytesFloatService extends Service {
 	}
 
 	@Override
-	public void onStart(Intent intent, int startId) {
-		Log.d("NetTrafficBytesFloatService", "onStart");
-		setForeground(true);
-		super.onStart(intent, startId);
-	}
-
-	@Override
 	public void onDestroy() {
 		handler.removeCallbacks(task);
 		Log.d("NetTrafficBytesFloatService", "onDestroy");
 		wm.removeView(view);
+		
+		stopForeground(true);
+		
 		super.onDestroy();
 	}
 	
