@@ -67,7 +67,7 @@ public class NotifyListActivity extends Activity {
 	        
 			nManager.notify(0, notif);
 			
-			nManager.notify(2, notif);
+			nManager.notify(9100, notif);
 		}
 	};
 	

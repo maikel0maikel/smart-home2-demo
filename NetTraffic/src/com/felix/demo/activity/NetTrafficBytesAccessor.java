@@ -323,10 +323,16 @@ public class NetTrafficBytesAccessor {
 		float currentTotalRx  = TrafficStats.getTotalRxBytes()/1024f;
 		float currentTotalTx  = TrafficStats.getTotalTxBytes()/1024f;
 		
+		Log.d("NetTrafficConnectivityChangeBroadcast TrafficStats.getTotalRxBytes()", currentTotalRx+"");
+		Log.d("NetTrafficConnectivityChangeBroadcast TrafficStats.getTotalTxBytes()", currentTotalTx+"");
+		
 		//GPRS流量
 		float currentMobileRx = TrafficStats.getMobileRxBytes()/1024f;
 		float currentMobileTx = TrafficStats.getMobileTxBytes()/1024f;
 		float currentMobileAll= currentMobileRx+currentMobileTx;		
+		
+		Log.d("NetTrafficConnectivityChangeBroadcast TrafficStats.getMobileRxBytes()", currentMobileRx+"");
+		Log.d("NetTrafficConnectivityChangeBroadcast TrafficStats.getMobileTxBytes()", currentMobileTx+"");
 		
 		//Wifi流量
 		float currentWifiRx   = currentTotalRx - currentMobileRx;

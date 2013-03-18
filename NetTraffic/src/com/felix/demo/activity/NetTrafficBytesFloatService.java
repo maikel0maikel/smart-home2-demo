@@ -63,8 +63,8 @@ public class NetTrafficBytesFloatService extends Service {
 		Log.d("NetTrafficBytesFloatService", "onStartCommand");
 		
 		//使用这招可以达到显示在安全中心，但是不在通知栏显示
-		Notification notification = new Notification(0, "小黑流量监控", System.currentTimeMillis());
-		//Notification notification = new Notification(R.drawable.ic_launcher, "小黑流量监控", System.currentTimeMillis());
+		//Notification notification = new Notification(0, "小黑流量监控", System.currentTimeMillis());
+		Notification notification = new Notification(R.drawable.ic_launcher, "小黑流量监控", System.currentTimeMillis());
 		Intent notificationIntent = new Intent(this, NetTrafficRankingMain.class);
 		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 		notification.setLatestEventInfo(this, "流量标题", "流量内容文本", pendingIntent);

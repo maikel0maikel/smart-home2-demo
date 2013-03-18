@@ -40,6 +40,16 @@ public class NetTrafficBootAndShutdownBroadcast extends BroadcastReceiver {
 			context.startService(intentService);
 			 
 		} else if (Intent.ACTION_SHUTDOWN.equals(intent.getAction())) {
+			
+			// 重启,流量排行批次需要增加1
+						NetTrafficRankingAccessor.getInstance(context).setBootCompletedRanking(true);
+			// 重启,流量监控批次需要增加1
+			NetTrafficBytesAccessor.getInstance(context).
+				setPrefsKey(NetTrafficBytesAccessor.bootCompletedBytesGprsKey, true);
+			NetTrafficBytesAccessor.getInstance(context).
+				setPrefsKey(NetTrafficBytesAccessor.bootCompletedBytesWifiKey, true);
+			
+			
 			//关机时再次保存最新的流量排行
 			NetTrafficRankingAccessor.getInstance(context).insertALLAppNetTrafficToDB();
 			
