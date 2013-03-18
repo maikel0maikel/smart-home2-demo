@@ -22,7 +22,7 @@ public class NetTrafficBytesService extends Service {
 		super.onCreate();
 
 		timer = new Timer();
-		timer.scheduleAtFixedRate(new TimerTask() {
+		timer.schedule(new TimerTask() {
 
 			@Override
 			public void run() {
@@ -30,7 +30,7 @@ public class NetTrafficBytesService extends Service {
 				NetTrafficBytesAccessor.logRealTimeTrafficBytes(getBaseContext());
 				
 			}
-		}, 0, 1000 * 5);
+		}, 0, 1000 * 2);
 
 		Log.d("NetTrafficBytesService", "NetTrafficBytesService created.");
 	}

@@ -29,7 +29,7 @@ public class NetTrafficRankingAccessor{
 
     private static final String TAG = "NetTrafficRankingAccessor";
 	private static final String DATABASE_NAME = "data.db";	
-	private static final String PREFS_NAME = "NetTrafficPrefs";
+	private static final String PREFS_NAME = "NetTrafficPrefs2";
 	private static final String bootCompletedRankingKey = "isBootCompletedRanking"; //流量排行  是否重启如果是重启则需要增加1  
 	
 	private static final String T_NETTRAFFIC_RANKING = "NetTrafficRanking";
@@ -321,7 +321,10 @@ public class NetTrafficRankingAccessor{
     		if ( isNetTrafficRankingEmpty() ){
     			RANKING_DATE_ID = 0;
     		}else{
+    			
     			int maxID = getMaxDataID();
+    			System.out.println( "NetTrafficRankingAccessor getDataID="+maxID );
+    			
     			RANKING_DATE_ID = getBootCompletedRanking()?maxID+1:maxID;
     			
     			if ( getBootCompletedRanking() ){ 

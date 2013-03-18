@@ -9,9 +9,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.net.TrafficStats;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -138,10 +140,21 @@ public class NetTrafficBytesMain  extends Activity {
         btncheck_notify.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-            	
+            	/*
             	Intent intent = new Intent();
             	intent.setClass(NetTrafficBytesMain.this, NotifyListActivity.class);
         		startActivity(intent);
+        		*/
+        		float currentTotalRx  = TrafficStats.getTotalRxBytes()/1024f;
+        		float currentTotalTx  = TrafficStats.getTotalTxBytes()/1024f;
+        		Log.d("NetTrafficConnectivityChangeBroadcast TrafficStats.getTotalRxBytes()", currentTotalRx+"");
+        		Log.d("NetTrafficConnectivityChangeBroadcast TrafficStats.getTotalTxBytes()", currentTotalTx+"");
+        		
+        		//GPRS流量
+        		float currentMobileRx = TrafficStats.getMobileRxBytes()/1024f;
+        		float currentMobileTx = TrafficStats.getMobileTxBytes()/1024f;
+        		Log.d("NetTrafficConnectivityChangeBroadcast TrafficStats.getMobileRxBytes()", currentMobileRx+"");
+        		Log.d("NetTrafficConnectivityChangeBroadcast TrafficStats.getMobileTxBytes()", currentMobileTx+"");
             }
         });
         

@@ -20,7 +20,6 @@
     
     <application
         android:icon="@drawable/ic_launcher"
-        android:process="android.process.acore1" 
         android:label="@string/app_name" >
          <activity
             android:name="com.felix.demo.activity.NetTrafficBytesMain"
@@ -63,7 +62,6 @@
 		<!-- 实时监控服务-->
 		<service android:name=".activity.NetTrafficBytesService"></service>
 		<service android:name=".activity.NetTrafficBytesFloatService" android:persistent="true"></service>
-		
 		<!-- 拨号助手
 		<activity android:name="com.felix.demo.phonehelper.receiver.activity.MainActivity" android:label="@string/app_name"> 
 			<intent-filter> 
