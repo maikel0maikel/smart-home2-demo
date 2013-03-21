@@ -9,17 +9,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.net.TrafficStats;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.felix.demo.R;
-import com.felix.demo.notify.NotifyListActivity;
+import com.nd.hilauncherdev.myphone.nettraffic.activity.NetTrafficRankingGprsWifiMain;
+import com.nd.hilauncherdev.myphone.nettraffic.db.NetTrafficRankingGprsWifiAccessor;
+import com.nd.hilauncherdev.myphone.nettraffic.service.NetTrafficBytesFloatService;
+import com.nd.hilauncherdev.myphone.nettraffic.service.NetTrafficBytesService;
+import com.nd.hilauncherdev.myphone.nettraffic.util.CrashTool;
 
 public class NetTrafficBytesMain  extends Activity { 
 	
@@ -57,15 +59,18 @@ public class NetTrafficBytesMain  extends Activity {
 		//判断网络是否可用
 		if ( CrashTool.isNetworkAvailable(this) ){
 			//启动服务
+			/*
 			Intent intentService = new Intent(this, NetTrafficBytesService.class);
 			intentService.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			this.startService(intentService);
+			*/
 		}
 		
 		//根据配置文件看是否启动悬浮窗口
 		if ( getFloatFlag(this) ){
 			Intent service = new Intent();
-    		service.setClass(NetTrafficBytesMain.this, NetTrafficBytesFloatService.class);		
+			service.setClass(NetTrafficBytesMain.this, NetTrafficBytesService.class);
+    		//service.setClass(NetTrafficBytesMain.this, NetTrafficBytesFloatService.class);		
     		startService(service);
 		}
 		
@@ -144,7 +149,7 @@ public class NetTrafficBytesMain  extends Activity {
             	Intent intent = new Intent();
             	intent.setClass(NetTrafficBytesMain.this, NotifyListActivity.class);
         		startActivity(intent);
-        		*/
+        		
         		float currentTotalRx  = TrafficStats.getTotalRxBytes()/1024f;
         		float currentTotalTx  = TrafficStats.getTotalTxBytes()/1024f;
         		Log.d("NetTrafficConnectivityChangeBroadcast TrafficStats.getTotalRxBytes()", currentTotalRx+"");
@@ -155,6 +160,9 @@ public class NetTrafficBytesMain  extends Activity {
         		float currentMobileTx = TrafficStats.getMobileTxBytes()/1024f;
         		Log.d("NetTrafficConnectivityChangeBroadcast TrafficStats.getMobileRxBytes()", currentMobileRx+"");
         		Log.d("NetTrafficConnectivityChangeBroadcast TrafficStats.getMobileTxBytes()", currentMobileTx+"");
+        		*/
+        		NetTrafficRankingGprsWifiAccessor.getInstance(getBaseContext()).
+        			insertALLAppNetTrafficToDB(CrashTool.getNetType(getBaseContext()), CrashTool.getStringDate());
             }
         });
         
@@ -164,7 +172,7 @@ public class NetTrafficBytesMain  extends Activity {
 		@Override
 		public void onClick(View v) {
 		
-			Intent intent = new Intent(NetTrafficBytesMain.this, NetTrafficRankingMain.class);
+			Intent intent = new Intent(NetTrafficBytesMain.this, NetTrafficRankingGprsWifiMain.class);
 			NetTrafficBytesMain.this.startActivity(intent);				
 		}
 	};
