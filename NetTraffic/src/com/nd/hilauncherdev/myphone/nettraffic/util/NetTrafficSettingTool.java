@@ -13,7 +13,13 @@ import android.content.SharedPreferences.Editor;
  */
 public class NetTrafficSettingTool {
 	
-	private static final String PREFS_NAME_NETTRAFFIC = "NetTrafficPrefs";	//网络流量监控
+	private static final String PREFS_NAME_NETTRAFFIC = "NetTrafficPrefsV3.5.5";	//网络流量监控
+	
+	/**流量排行  是否重启如果是重启则需要增加1 */
+	public static final String bootCompletedRankingKey = "isBootCompletedRanking";
+	public static final String bootCompletedBytesGprsKey = "isBootCompletedGprsBytes"; //流量监控 是否重启如果是重启则需要增加1  
+	public static final String bootCompletedBytesWifiKey = "isBootCompletedWifiBytes"; //流量监控 是否重启如果是重启则需要增加1
+	
 	public static final String TrafficOpen = "bTrafficOpen";				//是否开启流量监控
 	public static final String TrafficMaxMonth = "iTrafficMaxMonth"; 		//每月流量套餐
 	public static final String TrafficDayMonth = "iTrafficDayMonth";		//每月结算日
@@ -46,4 +52,16 @@ public class NetTrafficSettingTool {
     	editor.putBoolean("float", floatFlag);
     	editor.commit();
     }
+    
+	public static void setPrefsBoolean(Context ctx, String sKeyName, boolean bKeyValue) {
+		final SharedPreferences prefs = ctx.getSharedPreferences(PREFS_NAME_NETTRAFFIC, Activity.MODE_PRIVATE);
+		Editor editor = prefs.edit();
+		editor.putBoolean(sKeyName, bKeyValue);
+		editor.commit();
+	}
+
+	public static boolean getPrefsBoolean(Context ctx, String sKeyName, boolean defValue) {
+		final SharedPreferences prefs = ctx.getSharedPreferences(PREFS_NAME_NETTRAFFIC, Activity.MODE_PRIVATE);
+		return prefs.getBoolean(sKeyName, defValue);
+	}
 }
