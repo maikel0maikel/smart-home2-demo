@@ -9,6 +9,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
+import com.nd.hilauncherdev.myphone.nettraffic.db.NetTrafficRankingItem;
+
 import android.Manifest;
 import android.content.ContentValues;
 import android.content.Context;

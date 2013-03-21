@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import com.nd.hilauncherdev.myphone.nettraffic.db.NetTrafficBytesItem;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;

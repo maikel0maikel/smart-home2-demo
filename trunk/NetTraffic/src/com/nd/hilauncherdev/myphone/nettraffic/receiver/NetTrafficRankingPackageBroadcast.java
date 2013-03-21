@@ -1,6 +1,8 @@
-package com.felix.demo.activity;
+package com.nd.hilauncherdev.myphone.nettraffic.receiver;
 
 
+
+import com.felix.demo.activity.NetTrafficRankingAccessor;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

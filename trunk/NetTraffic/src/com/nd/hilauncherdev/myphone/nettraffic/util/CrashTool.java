@@ -1,6 +1,11 @@
-package com.felix.demo.activity;
+package com.nd.hilauncherdev.myphone.nettraffic.util;
 
 
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import com.nd.hilauncherdev.myphone.nettraffic.db.NetTrafficBytesItem;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -104,4 +109,27 @@ public class CrashTool {
 		}
 		netStateToast.show();
 	}
+	
+    public static int getNetType(Context ctx){
+    	
+    	int iResult = NetTrafficBytesItem.DEV_WIFI;
+    	ConnectivityManager manager = (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo wifi = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+		NetworkInfo mobile = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+		
+		if (mobile.getState()==NetworkInfo.State.CONNECTED && wifi.getState()!=NetworkInfo.State.CONNECTED) {
+			iResult = NetTrafficBytesItem.DEV_GPRS;
+		}else{
+			iResult = NetTrafficBytesItem.DEV_WIFI;
+		}
+		
+		return iResult;
+    }
+    
+    public static String getStringDate() {
+        Date currentTime = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+        String dateString = formatter.format(currentTime);
+        return dateString;
+    }
 }

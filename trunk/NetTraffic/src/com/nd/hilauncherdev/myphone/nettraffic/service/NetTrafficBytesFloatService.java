@@ -1,4 +1,4 @@
-package com.felix.demo.activity;
+package com.nd.hilauncherdev.myphone.nettraffic.service;
 
 
 import java.text.DecimalFormat;
@@ -21,6 +21,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.felix.demo.R;
+import com.felix.demo.activity.NetTrafficBytesAccessor;
+import com.felix.demo.activity.NetTrafficBytesMain;
+import com.nd.hilauncherdev.myphone.nettraffic.activity.NetTrafficRankingMain;
 
 public class NetTrafficBytesFloatService extends Service {
 
@@ -37,7 +40,7 @@ public class NetTrafficBytesFloatService extends Service {
 	ImageView iv;
 	private float StartX;
 	private float StartY;
-	int delaytime=1000;
+	int delaytime=5000;
 	
 	int ONGOING_NOTIFICATION = 9100;
 	

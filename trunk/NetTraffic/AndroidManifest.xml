@@ -18,9 +18,15 @@
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"></uses-permission>
     <uses-permission android:name="android.permission.READ_CONTACTS"></uses-permission>
     
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission> 
+        
     <application
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" >
+         <activity
+            android:name="com.nd.hilauncherdev.myphone.nettraffic.activity.NetTrafficRankingGprsWifiMain"
+            android:label="流量读取" >
+        </activity>
          <activity
             android:name="com.felix.demo.activity.NetTrafficBytesMain"
             android:label="流量监控" >
@@ -29,6 +35,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+       
          <activity
             android:name=".activity.NetTrafficRankingMain"
             android:label="流量排行" >
@@ -40,28 +47,28 @@
         </activity> 
          
        <!-- 流量排行 -->    
-         <receiver android:name=".activity.NetTrafficBootAndShutdownBroadcast"
+        <receiver android:name="com.nd.hilauncherdev.myphone.nettraffic.receiver.NetTrafficBootAndShutdownBroadcast"
 			android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
 			<intent-filter>
 				<action android:name="android.intent.action.BOOT_COMPLETED"></action>
 				<action android:name="android.intent.action.ACTION_SHUTDOWN"></action>
 			</intent-filter>
 		</receiver>
-		<receiver android:name=".activity.NetTrafficRankingPackageBroadcast">
+		<receiver android:name="com.nd.hilauncherdev.myphone.nettraffic.receiver.NetTrafficRankingPackageBroadcast">
 			<intent-filter>
 				<action android:name="android.intent.action.PACKAGE_REMOVED" />
 				<data android:scheme="package" />
 			</intent-filter>
 		</receiver>
-		<receiver android:name=".activity.NetTrafficConnectivityChangeBroadcast">
+		<receiver android:name="com.nd.hilauncherdev.myphone.nettraffic.receiver.NetTrafficConnectivityChangeBroadcast">
 			<intent-filter>
 				<action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
 				<action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
 			</intent-filter>
 		</receiver>				
 		<!-- 实时监控服务-->
-		<service android:name=".activity.NetTrafficBytesService"></service>
-		<service android:name=".activity.NetTrafficBytesFloatService" android:persistent="true"></service>
+		<service android:name="com.nd.hilauncherdev.myphone.nettraffic.service.NetTrafficBytesService"></service>
+		<service android:name="com.nd.hilauncherdev.myphone.nettraffic.service.NetTrafficBytesFloatService"></service>
 		<!-- 拨号助手
 		<activity android:name="com.felix.demo.phonehelper.receiver.activity.MainActivity" android:label="@string/app_name"> 
 			<intent-filter> 

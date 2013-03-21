@@ -1,4 +1,4 @@
-package com.felix.demo.activity;
+package com.nd.hilauncherdev.myphone.nettraffic.activity;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -24,6 +24,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.felix.demo.R;
+import com.felix.demo.activity.NetTrafficRankingAccessor;
+import com.nd.hilauncherdev.myphone.nettraffic.db.NetTrafficRankingItem;
+import com.nd.hilauncherdev.myphone.nettraffic.service.NetTrafficBytesService;
+import com.nd.hilauncherdev.myphone.nettraffic.util.CrashTool;
 
 public class NetTrafficRankingMain extends Activity {
 
