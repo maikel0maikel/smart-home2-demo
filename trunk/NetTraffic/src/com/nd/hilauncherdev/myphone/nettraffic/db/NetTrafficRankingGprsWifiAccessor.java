@@ -1,4 +1,4 @@
-package com.nd.hilauncherdev.myphone.nettraffic.db;
+ package com.nd.hilauncherdev.myphone.nettraffic.db;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -10,15 +10,15 @@ import java.util.Iterator;
 import java.util.List;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 
 import com.nd.hilauncherdev.myphone.nettraffic.receiver.NetTrafficConnectivityChangeBroadcast;
+import com.nd.hilauncherdev.myphone.nettraffic.util.NetTrafficSettingTool;
 import com.nd.hilauncherdev.myphone.nettraffic.util.NetTrafficStatsProxy;
 
 /**
@@ -27,12 +27,7 @@ import com.nd.hilauncherdev.myphone.nettraffic.util.NetTrafficStatsProxy;
  */
 public class NetTrafficRankingGprsWifiAccessor {
 
-    private static final String TAG = "NetTrafficRankingGprsWifiAccessor";
-    
-	private static final String PREFS_NAME = "NetTrafficPrefs3";
-	
-	/**流量排行  是否重启如果是重启则需要增加1 */
-	private static final String bootCompletedRankingKey = "isBootCompletedRanking";
+    public static final String TAG = "NetTrafficRankingGprsWifiAccessor";
 	
 	private static final String T_NETTRAFFIC_RANKING_DETAIL = "NetTrafficRankingDetail"; 
 	
@@ -235,7 +230,7 @@ public class NetTrafficRankingGprsWifiAccessor {
 	 * 获取最大的数据批次数据表示
 	 * @return
 	 */
-	public int getMaxDataID(){
+	private int getMaxDataID(){
 		
 		int maxID = 0;
 		NetTrafficDB db = null;
@@ -308,6 +303,7 @@ public class NetTrafficRankingGprsWifiAccessor {
 	 * 获取本次网络类型
 	 * @param iDev
 	 */
+	@SuppressLint("UseSparseArrays")
 	public void insertALLAppNetTrafficToDB(int iDev, String strDate){
 				
 		NetTrafficDB db = null;
@@ -324,21 +320,23 @@ public class NetTrafficRankingGprsWifiAccessor {
 			long rx = 0;
 			for (final ApplicationInfo apinfo : installed) {
 				
-				/*
-				if ((apinfo.flags & ApplicationInfo.FLAG_SYSTEM) > 0) { // 系统程序
-					continue;
-				} 
-				*/ 
 				//过滤只处理有Internet连接权限的app
 				if (PackageManager.PERMISSION_GRANTED != 
 						pkgmanager.checkPermission(Manifest.permission.INTERNET, apinfo.packageName)) {
 					continue;
 				}
-
+				
+				/*
+				if ((apinfo.flags & ApplicationInfo.FLAG_SYSTEM) > 0) { // 系统程序
+					continue;
+				} 
+				*/ 
 				//过滤不统计流量的软件包名
+				/*
 				if ( isIgnoreProcess(apinfo.packageName) ) {
 					continue;
 				}
+				*/
 				
 				//总流量为0的不统计，无流量时函数返回-1,所以两个相加为-2
 				tx = NetTrafficStatsProxy.getUidTxBytes(apinfo.uid);
@@ -496,34 +494,21 @@ public class NetTrafficRankingGprsWifiAccessor {
 	
     private int getDataID(){
     	
-    	//RANKING_DATE_ID 初始化后，只有在重启手机或者重启应用是才需要重新初始化
     	if (RANKING_DATE_ID==-1){
     			
 			int maxID = getMaxDataID();
-			
-			boolean bBoot = getBootCompletedRanking();
+			boolean bBoot = NetTrafficSettingTool.getPrefsBoolean(ctx, NetTrafficSettingTool.bootCompletedRankingKey, false);
+			NetTrafficConnectivityChangeBroadcast.logToFile(TAG, "更新 maxID = "+maxID+";bBoot="+bBoot);
 			RANKING_DATE_ID = maxID;
 			if ( bBoot ){ 
 				RANKING_DATE_ID = maxID+1;
-				setBootCompletedRanking(false);
+				//需要保存起来防止下次重复。 因为如果系统刚启动起来没有登记记录则不改修改记录批次标示
+				NetTrafficConnectivityChangeBroadcast.logToFile(TAG, "更新 maxID = maxID+1");
+				NetTrafficSettingTool.setPrefsBoolean(ctx, NetTrafficSettingTool.bootCompletedRankingKey, false);
 			}
     	}
     	
     	return RANKING_DATE_ID;
-    }
-    
-    private boolean getBootCompletedRanking(){
-    	
-    	final SharedPreferences prefs = ctx.getSharedPreferences(PREFS_NAME, 0);
-    	return prefs.getBoolean(bootCompletedRankingKey, false);
-    }
-    
-    private void setBootCompletedRanking(boolean bootComplete){
-    	
-    	final SharedPreferences prefs = ctx.getSharedPreferences(PREFS_NAME, 0);
-    	Editor editor = prefs.edit();
-    	editor.putBoolean(bootCompletedRankingKey, bootComplete);
-    	editor.commit();
     }
     
     public void applicationRemoved(String pkgName,int uid){

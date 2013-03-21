@@ -22,6 +22,7 @@ import com.nd.hilauncherdev.kitset.util.ThreadUtil;
 import com.nd.hilauncherdev.myphone.nettraffic.db.NetTrafficBytesItem;
 import com.nd.hilauncherdev.myphone.nettraffic.db.NetTrafficRankingGprsWifiAccessor;
 import com.nd.hilauncherdev.myphone.nettraffic.util.CrashTool;
+import com.nd.hilauncherdev.myphone.nettraffic.util.NetTrafficSettingTool;
 
 /**
  * 监听网络变化
@@ -96,10 +97,8 @@ public class NetTrafficConnectivityChangeBroadcast extends BroadcastReceiver {
 			
 			//判断wifi是否可用
 			if ( !CrashTool.isWifiNetwork(context) ) {
-				NetTrafficBytesAccessor.getInstance(context).
-					setPrefsKey(NetTrafficBytesAccessor.bootCompletedBytesWifiKey, true);
+				NetTrafficSettingTool.setPrefsBoolean(context, NetTrafficSettingTool.bootCompletedBytesWifiKey, true);
 				NetTrafficBytesAccessor.WIFI_DATA_ID = -1;
-				
 				logToFile(TAG, " isNetworkAvailable =="+" 不是 WIFI网络");
 			}
 			

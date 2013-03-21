@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import com.nd.hilauncherdev.myphone.nettraffic.db.NetTrafficBytesItem;
+import com.nd.hilauncherdev.myphone.nettraffic.util.NetTrafficSettingTool;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -24,9 +25,6 @@ public class NetTrafficBytesAccessor {
 
     private static final String TAG = "NetTrafficBytesAccessor";
 	private static final String DATABASE_NAME = "data.db";	
-	private static final String PREFS_NAME = "NetTrafficPrefs";
-	public static final String bootCompletedBytesGprsKey = "isBootCompletedGprsBytes"; //流量监控 是否重启如果是重启则需要增加1  
-	public static final String bootCompletedBytesWifiKey = "isBootCompletedWifiBytes"; //流量监控 是否重启如果是重启则需要增加1
 	
 	private static final String T_NETTRAFFIC_BYTES = "NetTrafficBytes";
 	
@@ -179,12 +177,13 @@ public class NetTrafficBytesAccessor {
 			
 			if (GPRS_DATA_ID==-1){
 	    		
-    			int maxID = getMaxDataID(dev, date);
-    			GPRS_DATA_ID = getPrefsKey(bootCompletedBytesGprsKey)?maxID+1:maxID;
-    			
-    			if ( getPrefsKey(bootCompletedBytesGprsKey) ){ 
-    				setPrefsKey(bootCompletedBytesGprsKey, false);
-    			}
+				int maxID = getMaxDataID(dev, date);
+				boolean bBoot = NetTrafficSettingTool.getPrefsBoolean(ctx, NetTrafficSettingTool.bootCompletedBytesGprsKey, false);
+				GPRS_DATA_ID = maxID;
+				if ( bBoot ){ 
+					GPRS_DATA_ID = maxID+1;
+					NetTrafficSettingTool.setPrefsBoolean(ctx, NetTrafficSettingTool.bootCompletedBytesGprsKey, false);
+				}
 	    	}
 			
 			return GPRS_DATA_ID;
@@ -194,13 +193,14 @@ public class NetTrafficBytesAccessor {
 		if ( NetTrafficBytesItem.DEV_WIFI==dev ) {
 			
 			if (WIFI_DATA_ID==-1){
-	    		
-    			int maxID = getMaxDataID(dev, date);
-    			WIFI_DATA_ID = getPrefsKey(bootCompletedBytesWifiKey)?maxID+1:maxID;
     			
-    			if ( getPrefsKey(bootCompletedBytesWifiKey) ){ 
-    				setPrefsKey(bootCompletedBytesWifiKey, false);
-    			}
+    			int maxID = getMaxDataID(dev, date);
+				boolean bBoot = NetTrafficSettingTool.getPrefsBoolean(ctx, NetTrafficSettingTool.bootCompletedBytesWifiKey, false);
+				WIFI_DATA_ID = maxID;
+				if ( bBoot ){ 
+					WIFI_DATA_ID = maxID+1;
+					NetTrafficSettingTool.setPrefsBoolean(ctx, NetTrafficSettingTool.bootCompletedBytesWifiKey, false);
+				}
 	    	}
 			
 			return WIFI_DATA_ID;
@@ -420,20 +420,6 @@ public class NetTrafficBytesAccessor {
         return dateString;
     }
 
-    public boolean getPrefsKey(String keyName){
-    	
-    	final SharedPreferences prefs = ctx.getSharedPreferences(PREFS_NAME, 0);
-    	return prefs.getBoolean(keyName, false);
-    }
-    
-    public void setPrefsKey(String keyName, boolean bootComplete){
-    	
-    	final SharedPreferences prefs = ctx.getSharedPreferences(PREFS_NAME, 0);
-    	Editor editor = prefs.edit();
-    	editor.putBoolean(keyName, bootComplete);
-    	editor.commit();
-    }
-    
     public static void logRealTimeTrafficBytes(Context context){
     	
 		if ( NetTrafficBytesAccessor.getInstance(context).insertNetTrafficBytesToDB() ){
