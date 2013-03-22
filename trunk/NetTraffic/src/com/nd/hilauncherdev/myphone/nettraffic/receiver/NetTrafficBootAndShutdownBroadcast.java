@@ -13,10 +13,6 @@ public class NetTrafficBootAndShutdownBroadcast extends BroadcastReceiver {
 	@Override
 	public void onReceive(final Context context, final Intent intent) {
 		
-		NetTrafficSettingTool.setPrefsBoolean(context, NetTrafficSettingTool.bootCompletedRankingKey, true);
-		NetTrafficSettingTool.setPrefsBoolean(context, NetTrafficSettingTool.bootCompletedBytesGprsKey, true);
-		NetTrafficSettingTool.setPrefsBoolean(context, NetTrafficSettingTool.bootCompletedBytesWifiKey, true);
-		
 		if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
 			
 			NetTrafficConnectivityChangeBroadcast.logToFile(NetTrafficRankingGprsWifiAccessor.TAG, "ACTION_BOOT_COMPLETED 开机启动了");
@@ -30,12 +26,17 @@ public class NetTrafficBootAndShutdownBroadcast extends BroadcastReceiver {
 			context.startService(intentService);
 			 */
 		} else if (Intent.ACTION_SHUTDOWN.equals(intent.getAction())) {
+			
+			NetTrafficSettingTool.SHUTDOWN_FLAG = true;
+			
 			NetTrafficConnectivityChangeBroadcast.logToFile(NetTrafficRankingGprsWifiAccessor.TAG, "ACTION_BOOT_COMPLETED 关机了");
 			//关机时再次保存最新的流量排行
 			//NetTrafficRankingAccessor.getInstance(context).insertALLAppNetTrafficToDB();
 			//NetTrafficBytesAccessor.logRealTimeTrafficBytes(context);
-			
-			
 		}
+		
+		NetTrafficSettingTool.setPrefsBoolean(context, NetTrafficSettingTool.bootCompletedRankingKey, true);
+		NetTrafficSettingTool.setPrefsBoolean(context, NetTrafficSettingTool.bootCompletedBytesGprsKey, true);
+		NetTrafficSettingTool.setPrefsBoolean(context, NetTrafficSettingTool.bootCompletedBytesWifiKey, true);
 	}
 }

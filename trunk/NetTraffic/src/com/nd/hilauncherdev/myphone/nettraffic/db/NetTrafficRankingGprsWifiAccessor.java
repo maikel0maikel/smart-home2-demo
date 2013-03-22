@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -18,6 +19,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 
 import com.nd.hilauncherdev.myphone.nettraffic.receiver.NetTrafficConnectivityChangeBroadcast;
+import com.nd.hilauncherdev.myphone.nettraffic.util.NetTrafficInitTool;
 import com.nd.hilauncherdev.myphone.nettraffic.util.NetTrafficSettingTool;
 import com.nd.hilauncherdev.myphone.nettraffic.util.NetTrafficStatsProxy;
 
@@ -227,34 +229,6 @@ public class NetTrafficRankingGprsWifiAccessor {
 	}
 	
 	/**
-	 * 获取最大的数据批次数据表示
-	 * @return
-	 */
-	private int getMaxDataID(){
-		
-		int maxID = 0;
-		NetTrafficDB db = null;
-		Cursor c = null;
-		try {
-			db = new NetTrafficDB(ctx);
-			c = db.query("select max(data_id) from "+T_NETTRAFFIC_RANKING_DETAIL, null);        
-	        if (c.moveToFirst()) {            
-	        	maxID= c.getInt(0);
-	        }
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally{
-			if(c!=null){
-				c.close();
-			}
-			if(db!=null){
-				db.close();
-			}
-		}
-		return maxID;
-	}
-	
-	/**
 	 * 获取所有的流量行记录
 	 * @param dev
 	 * @return
@@ -308,13 +282,16 @@ public class NetTrafficRankingGprsWifiAccessor {
 				
 		NetTrafficDB db = null;
 		try {
-
+			
 			db = new NetTrafficDB(ctx);
+			
+			final ConcurrentHashMap<Integer, NetTrafficRankingItem> allAppMap = NetTrafficInitTool.getCacheAppMap(ctx);
 			
 			final PackageManager pkgmanager = ctx.getPackageManager();
 			final List<ApplicationInfo> installed = pkgmanager.getInstalledApplications(0);
 			final HashMap<Integer, NetTrafficRankingItem> appMap = new HashMap<Integer, NetTrafficRankingItem>();
 			NetTrafficRankingItem app = null;
+			NetTrafficRankingItem globalApp = null;
 			NetTrafficRankingItem ret = null;
 			long tx = 0;
 			long rx = 0;
@@ -338,7 +315,6 @@ public class NetTrafficRankingGprsWifiAccessor {
 				}
 				*/
 				
-				//总流量为0的不统计，无流量时函数返回-1,所以两个相加为-2
 				tx = NetTrafficStatsProxy.getUidTxBytes(apinfo.uid);
 				rx = NetTrafficStatsProxy.getUidRxBytes(apinfo.uid);
 				
@@ -361,16 +337,74 @@ public class NetTrafficRankingGprsWifiAccessor {
 					app.names = pkgmanager.getApplicationLabel(apinfo).toString();
 					app.pkg = apinfo.packageName;
 					app.rx = NetTrafficStatsProxy.getUidRxBytes(apinfo.uid)/1024f;
+					app.tx = NetTrafficStatsProxy.getUidTxBytes(apinfo.uid)/1024f;
+					
+					globalApp = allAppMap.get(app.uid);
+					if ( iDev==NetTrafficBytesItem.DEV_GPRS ){
+						if ( globalApp!=null ){
+							if ( globalApp.rx<=app.rx ){
+								float appRx = app.rx-globalApp.rx+globalApp.sumGprsRx; 
+								globalApp.rx = app.rx;
+								globalApp.sumGprsRx = appRx;
+								app.rx = appRx;
+							}else{
+								app.rx = globalApp.sumGprsRx;
+							}
+							if ( globalApp.tx<=app.tx ){
+								float appTx = app.tx-globalApp.tx+globalApp.sumGprsTx; 
+								globalApp.tx = app.tx;
+								globalApp.sumGprsTx = appTx;
+								app.tx = appTx;
+							}else{
+								app.tx = globalApp.sumGprsTx;
+							}
+						}else{
+							globalApp = new NetTrafficRankingItem();
+							globalApp.rx = app.rx;
+							globalApp.tx = app.tx;
+							globalApp.sumGprsRx = app.rx;
+							globalApp.sumGprsTx = app.tx;
+							allAppMap.put(app.uid, globalApp);
+						}
+					}else{
+						if ( globalApp!=null ){
+							if ( globalApp.rx<=app.rx ){
+								float appRx = app.rx-globalApp.rx+globalApp.sumWifiRx; 
+								globalApp.rx = app.rx;
+								globalApp.sumWifiRx = appRx;
+								app.rx = appRx;
+							}else{
+								app.rx = globalApp.sumWifiRx;
+							}
+							if ( globalApp.tx<=app.tx ){
+								float appTx = app.tx-globalApp.tx+globalApp.sumWifiTx; 
+								globalApp.tx = app.tx;
+								globalApp.sumWifiTx = appTx;
+								app.tx = appTx;
+							}else{
+								app.tx = globalApp.sumWifiTx;
+							}
+						}else{
+							globalApp = new NetTrafficRankingItem();
+							globalApp.rx = app.rx;
+							globalApp.tx = app.tx;
+							globalApp.sumWifiRx = app.rx;
+							globalApp.sumWifiTx = app.tx;
+							allAppMap.put(app.uid, globalApp);
+						}
+					}
+					
 					if (app.rx<0){
 						app.rx = 0;
 					}
-					app.tx = NetTrafficStatsProxy.getUidTxBytes(apinfo.uid)/1024f;
 					if (app.tx<0){
 						app.tx = 0;
 					}
+					if (app.rx+app.tx==0){
+						continue;
+					}
 					app.date = strDate;
 					app.data_id = getDataID();
-					
 					appMap.put(apinfo.uid, app);
 				}else{
 					app.names = app.names+","+pkgmanager.getApplicationLabel(apinfo).toString();
@@ -385,7 +419,6 @@ public class NetTrafficRankingGprsWifiAccessor {
 					continue;
 				
 				ContentValues values = new ContentValues();		
-				//values.put("id", item.id); //系统自增
 				values.put("dev", app.dev);
 				values.put("pkg", app.pkg);
 				values.put("rx", app.rx);
@@ -399,9 +432,7 @@ public class NetTrafficRankingGprsWifiAccessor {
 				ret = null;
 				Cursor c = null;
 				try {
-					//NetTrafficConnectivityChangeBroadcast.logToFile(TAG, "开始db.query");
 			        c = db.query("select * from "+T_NETTRAFFIC_RANKING_DETAIL+" where pkg=? and data_id=? and dev=?", new String[] {app.pkg, app.data_id+"", app.dev+""});   
-			        //NetTrafficConnectivityChangeBroadcast.logToFile(TAG, "结束db.query");
 			        if(c.moveToFirst()) {            
 			            ret = buildNetTrafficRankingItem(c);
 			        }
@@ -409,9 +440,7 @@ public class NetTrafficRankingGprsWifiAccessor {
 					e.printStackTrace();
 				} finally{
 					if(c!=null){
-						//NetTrafficConnectivityChangeBroadcast.logToFile(TAG, "开始c.close()");
 						c.close();
-						//NetTrafficConnectivityChangeBroadcast.logToFile(TAG, "结束c.close()");
 					}
 				}
 				
@@ -419,34 +448,32 @@ public class NetTrafficRankingGprsWifiAccessor {
 				boolean updateFlagTx = true;
 				boolean bResult = false;
 				if(ret==null){			
-					//NetTrafficConnectivityChangeBroadcast.logToFile(TAG, "开始db.insertOrThrow");
 					bResult = db.insertOrThrow(T_NETTRAFFIC_RANKING_DETAIL, null, values)>0;			
-					//NetTrafficConnectivityChangeBroadcast.logToFile(TAG, "结束db.insertOrThrow");
 				}else{
 					if(ret.rx>app.rx){
-						values.put("rx", app.rx+ret.rx);
+						/*
+						app.rx = app.rx + ret.rx;
+						values.put("rx", app.rx);
+						*/
 					}else{
-						//小于1k则不更新
 						if(app.rx-ret.rx<1){
 							updateFlagRx = false;
 						}
 					}
 					if(ret.tx>app.tx){
-						values.put("tx", app.tx+ret.tx);
+						/*
+						app.tx = app.tx+ret.tx;
+						values.put("tx", app.tx);
+						*/
 					}else{
-						//小于1k则不更新
 						if(app.tx-ret.tx<1){
 							updateFlagTx = false;
 						}
 					}
 					if (updateFlagRx||updateFlagTx) {
-						//NetTrafficConnectivityChangeBroadcast.logToFile(TAG, "开始db.update");
 						bResult = db.update(T_NETTRAFFIC_RANKING_DETAIL, values, "pkg=? and data_id=? and dev=? and rx<?", new String[] {app.pkg, app.data_id+"", app.dev+"", app.rx+""})>0;
-						//NetTrafficConnectivityChangeBroadcast.logToFile(TAG, "结束db.update");
-						
 						NetTrafficConnectivityChangeBroadcast.logToFile(TAG, "更新"+app.names +" 结果"+bResult);
 					}else{
-						//NetTrafficConnectivityChangeBroadcast.logToFile(TAG, "无更新"+app.names);
 					}
 				}	
 			}
@@ -495,22 +522,55 @@ public class NetTrafficRankingGprsWifiAccessor {
     private int getDataID(){
     	
     	if (RANKING_DATE_ID==-1){
-    			
-			int maxID = getMaxDataID();
-			boolean bBoot = NetTrafficSettingTool.getPrefsBoolean(ctx, NetTrafficSettingTool.bootCompletedRankingKey, false);
-			NetTrafficConnectivityChangeBroadcast.logToFile(TAG, "更新 maxID = "+maxID+";bBoot="+bBoot);
-			RANKING_DATE_ID = maxID;
-			if ( bBoot ){ 
-				RANKING_DATE_ID = maxID+1;
-				//需要保存起来防止下次重复。 因为如果系统刚启动起来没有登记记录则不改修改记录批次标示
-				NetTrafficConnectivityChangeBroadcast.logToFile(TAG, "更新 maxID = maxID+1");
+    		
+    		boolean bBoot = NetTrafficSettingTool.getPrefsBoolean(ctx, NetTrafficSettingTool.bootCompletedRankingKey, false);
+    		int maxID = 0;
+    		if ( NetTrafficSettingTool.SHUTDOWN_FLAG || !bBoot ) {
+				RANKING_DATE_ID = (int)NetTrafficSettingTool.getPrefsLong(ctx, NetTrafficSettingTool.iRankingMaxIdKey, -1);
+				if (RANKING_DATE_ID==-1){
+					RANKING_DATE_ID = getMaxDataIDFormDB();
+				}
+				NetTrafficConnectivityChangeBroadcast.logToFile(TAG, "SHUTDOWN_FLAG 更新  maxID = "+RANKING_DATE_ID+";bBoot="+bBoot);
+    		}else{
+				maxID = getMaxDataIDFormDB();
+				RANKING_DATE_ID = maxID+1;				
+				NetTrafficConnectivityChangeBroadcast.logToFile(TAG, "更新 maxID = maxID+ 1= "+maxID+";bBoot="+bBoot);
 				NetTrafficSettingTool.setPrefsBoolean(ctx, NetTrafficSettingTool.bootCompletedRankingKey, false);
-			}
+				NetTrafficSettingTool.setPrefsLong(ctx, NetTrafficSettingTool.iRankingMaxIdKey, RANKING_DATE_ID);
+    		}
     	}
     	
     	return RANKING_DATE_ID;
     }
-    
+
+	/**
+	 * 获取最大的数据批次数据表示
+	 * @return
+	 */
+	private int getMaxDataIDFormDB(){
+		
+		int maxID = 0;
+		NetTrafficDB db = null;
+		Cursor c = null;
+		try {
+			db = new NetTrafficDB(ctx);
+			c = db.query("select max(data_id) from "+T_NETTRAFFIC_RANKING_DETAIL, null);        
+	        if (c.moveToFirst()) {            
+	        	maxID= c.getInt(0);
+	        }
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally{
+			if(c!=null){
+				c.close();
+			}
+			if(db!=null){
+				db.close();
+			}
+		}
+		return maxID;
+	}
+	
     public void applicationRemoved(String pkgName,int uid){
     	deleteNetTrafficRankingItem(pkgName);
     }
