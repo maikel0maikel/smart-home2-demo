@@ -36,6 +36,18 @@ public class NetTrafficRankingItem {
 	/**软件名称*/
 	public String names;
 	
+	//用于独立统计Wifi及Gprs累计信息
+	/**累计接收Wifi*/
+	public float sumWifiRx = 0;
+	
+	/**累计发送Wifi*/
+	public float sumWifiTx = 0;
+	
+	/**累计接收Gprs*/
+	public float sumGprsRx = 0;
+	
+	/**累计发送Gprs*/
+	public float sumGprsTx = 0;
 	
 	//排行列表展示使用
 	/**流量总字节数 */

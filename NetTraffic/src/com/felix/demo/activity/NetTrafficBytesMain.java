@@ -22,6 +22,7 @@ import com.nd.hilauncherdev.myphone.nettraffic.db.NetTrafficRankingGprsWifiAcces
 import com.nd.hilauncherdev.myphone.nettraffic.service.NetTrafficBytesFloatService;
 import com.nd.hilauncherdev.myphone.nettraffic.service.NetTrafficBytesService;
 import com.nd.hilauncherdev.myphone.nettraffic.util.CrashTool;
+import com.nd.hilauncherdev.myphone.nettraffic.util.NetTrafficInitTool;
 
 public class NetTrafficBytesMain  extends Activity { 
 	
@@ -86,6 +87,9 @@ public class NetTrafficBytesMain  extends Activity {
 		}, 0, 1000 * 3);
 		
 		refrashView();	
+		
+		//实际应用放到service中去.
+		NetTrafficInitTool.getCacheAppMap(this);
 	}
 
 	@Override
