@@ -128,6 +128,7 @@ public class CrashTool {
     
     public static String getStringDate() {
         Date currentTime = new Date();
+        //SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmm");
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
         String dateString = formatter.format(currentTime);
         return dateString;
