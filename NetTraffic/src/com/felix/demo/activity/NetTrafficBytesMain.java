@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -17,7 +18,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.felix.demo.R;
+import com.nd.hilauncherdev.kitset.util.ThreadUtil;
 import com.nd.hilauncherdev.myphone.nettraffic.activity.NetTrafficRankingGprsWifiMain;
+import com.nd.hilauncherdev.myphone.nettraffic.db.NetTrafficBytesItem;
 import com.nd.hilauncherdev.myphone.nettraffic.db.NetTrafficRankingGprsWifiAccessor;
 import com.nd.hilauncherdev.myphone.nettraffic.service.NetTrafficBytesFloatService;
 import com.nd.hilauncherdev.myphone.nettraffic.service.NetTrafficBytesService;
@@ -89,7 +92,12 @@ public class NetTrafficBytesMain  extends Activity {
 		refrashView();	
 		
 		//实际应用放到service中去.
-		NetTrafficInitTool.getCacheAppMap(this);
+		ThreadUtil.executeNetTraffic(new Runnable() {
+			@Override
+			public void run() {
+				NetTrafficInitTool.getCacheAppMap(NetTrafficBytesMain.this);
+			}
+		});
 	}
 
 	@Override

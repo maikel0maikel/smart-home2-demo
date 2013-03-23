@@ -88,20 +88,20 @@ public class NetTrafficRankingGprsWifiAccessor {
 	
 	/**
 	 * 查询单个软件的最后一次流量排行
-	 * @param pkgName
+	 * @param uid
 	 * @param data_id
 	 * @param dev
 	 * @return
 	 * @throws Exception
 	 */
-	public NetTrafficRankingItem getNetTrafficRankingItem(String pkgName, int data_id, int dev){
+	public NetTrafficRankingItem getNetTrafficRankingItem(int uid, int data_id, int dev){
 		
 		NetTrafficRankingItem ret = null;
 		NetTrafficDB db = null;
 		Cursor c = null;
 		try {
 			db = new NetTrafficDB(ctx);
-	        c = db.query("select * from "+T_NETTRAFFIC_RANKING_DETAIL+" where pkg=? and data_id=? and dev=?", new String[] {pkgName, data_id+"", dev+""});        
+	        c = db.query("select * from "+T_NETTRAFFIC_RANKING_DETAIL+" where uid=? and data_id=? and dev=?", new String[] {uid+"", data_id+"", dev+""});        
 	        if(c.moveToFirst()) {            
 	            ret = buildNetTrafficRankingItem(c);
 	        }
@@ -142,7 +142,7 @@ public class NetTrafficRankingGprsWifiAccessor {
 		NetTrafficDB db = null;
 		try {
 			db = new NetTrafficDB(ctx);
-			if(this.getNetTrafficRankingItem(item.pkg, item.data_id, item.dev)== null){			
+			if(this.getNetTrafficRankingItem(item.uid, item.data_id, item.dev)== null){			
 				bResult = db.insertOrThrow(T_NETTRAFFIC_RANKING_DETAIL, null, values)>0;			
 			}else{
 				bResult = db.update(T_NETTRAFFIC_RANKING_DETAIL, values, "pkg=? and data_id=? and dev=?", new String[] {item.pkg, item.data_id+"", item.dev+""})>0;		
@@ -161,16 +161,16 @@ public class NetTrafficRankingGprsWifiAccessor {
 	
 	/**
 	 * 删除某个软件的流量排行
-	 * @param pkg
+	 * @param uid
 	 * @return
 	 */
-	public boolean deleteNetTrafficRankingItem(String pkg){
+	public boolean deleteNetTrafficRankingItem(int uid){
 		
 		boolean bResult = true; 
 		NetTrafficDB db = null;
 		try {
 			db = new NetTrafficDB(ctx);
-			bResult = db.delete(T_NETTRAFFIC_RANKING_DETAIL, "pkg=?", new String[]{pkg});
+			bResult = db.delete(T_NETTRAFFIC_RANKING_DETAIL, "uid=?", new String[]{uid+""});
 		} catch (Exception e) {
 			bResult = false;
 			e.printStackTrace();
@@ -343,18 +343,18 @@ public class NetTrafficRankingGprsWifiAccessor {
 					if ( iDev==NetTrafficBytesItem.DEV_GPRS ){
 						if ( globalApp!=null ){
 							if ( globalApp.rx<=app.rx ){
-								float appRx = app.rx-globalApp.rx+globalApp.sumGprsRx; 
+								float appAddRx = app.rx-globalApp.rx; 
 								globalApp.rx = app.rx;
-								globalApp.sumGprsRx = appRx;
-								app.rx = appRx;
+								app.rx = appAddRx;
+								globalApp.sumGprsRx += appAddRx;
 							}else{
 								app.rx = globalApp.sumGprsRx;
 							}
 							if ( globalApp.tx<=app.tx ){
-								float appTx = app.tx-globalApp.tx+globalApp.sumGprsTx; 
+								float appAddTx = app.tx-globalApp.tx; 
 								globalApp.tx = app.tx;
-								globalApp.sumGprsTx = appTx;
-								app.tx = appTx;
+								app.tx = appAddTx;
+								globalApp.sumGprsTx += appAddTx;
 							}else{
 								app.tx = globalApp.sumGprsTx;
 							}
@@ -369,18 +369,18 @@ public class NetTrafficRankingGprsWifiAccessor {
 					}else{
 						if ( globalApp!=null ){
 							if ( globalApp.rx<=app.rx ){
-								float appRx = app.rx-globalApp.rx+globalApp.sumWifiRx; 
+								float appAddRx = app.rx-globalApp.rx; 
 								globalApp.rx = app.rx;
-								globalApp.sumWifiRx = appRx;
-								app.rx = appRx;
+								app.rx = appAddRx;
+								globalApp.sumWifiRx += appAddRx;
 							}else{
 								app.rx = globalApp.sumWifiRx;
 							}
 							if ( globalApp.tx<=app.tx ){
-								float appTx = app.tx-globalApp.tx+globalApp.sumWifiTx; 
+								float appAddTx = app.tx-globalApp.tx; 
 								globalApp.tx = app.tx;
-								globalApp.sumWifiTx = appTx;
-								app.tx = appTx;
+								app.tx = appAddTx;
+								globalApp.sumWifiTx += appAddTx;
 							}else{
 								app.tx = globalApp.sumWifiTx;
 							}
@@ -432,7 +432,7 @@ public class NetTrafficRankingGprsWifiAccessor {
 				ret = null;
 				Cursor c = null;
 				try {
-			        c = db.query("select * from "+T_NETTRAFFIC_RANKING_DETAIL+" where pkg=? and data_id=? and dev=?", new String[] {app.pkg, app.data_id+"", app.dev+""});   
+			        c = db.query("select * from "+T_NETTRAFFIC_RANKING_DETAIL+" where uid=? and data_id=? and dev=? and date=?", new String[] {app.uid+"", app.data_id+"", app.dev+"", app.date});   
 			        if(c.moveToFirst()) {            
 			            ret = buildNetTrafficRankingItem(c);
 			        }
@@ -444,37 +444,18 @@ public class NetTrafficRankingGprsWifiAccessor {
 					}
 				}
 				
-				boolean updateFlagRx = true;
-				boolean updateFlagTx = true;
 				boolean bResult = false;
 				if(ret==null){			
 					bResult = db.insertOrThrow(T_NETTRAFFIC_RANKING_DETAIL, null, values)>0;			
 				}else{
-					if(ret.rx>app.rx){
-						/*
-						app.rx = app.rx + ret.rx;
-						values.put("rx", app.rx);
-						*/
-					}else{
-						if(app.rx-ret.rx<1){
-							updateFlagRx = false;
-						}
-					}
-					if(ret.tx>app.tx){
-						/*
-						app.tx = app.tx+ret.tx;
-						values.put("tx", app.tx);
-						*/
-					}else{
-						if(app.tx-ret.tx<1){
-							updateFlagTx = false;
-						}
-					}
-					if (updateFlagRx||updateFlagTx) {
-						bResult = db.update(T_NETTRAFFIC_RANKING_DETAIL, values, "pkg=? and data_id=? and dev=? and rx<?", new String[] {app.pkg, app.data_id+"", app.dev+"", app.rx+""})>0;
-						NetTrafficConnectivityChangeBroadcast.logToFile(TAG, "更新"+app.names +" 结果"+bResult);
-					}else{
-					}
+					app.rx += ret.rx;
+					values.put("rx", app.rx);
+					
+					app.tx += ret.tx;
+					values.put("tx", app.tx);
+					
+					bResult = db.update(T_NETTRAFFIC_RANKING_DETAIL, values, "uid=? and data_id=? and dev=? and date=?", new String[] {app.uid+"", app.data_id+"", app.dev+"", app.date})>0;
+					NetTrafficConnectivityChangeBroadcast.logToFile(TAG, "更新"+app.names +" 结果"+bResult);
 				}	
 			}
 		} catch (Exception e) {
@@ -572,7 +553,7 @@ public class NetTrafficRankingGprsWifiAccessor {
 	}
 	
     public void applicationRemoved(String pkgName,int uid){
-    	deleteNetTrafficRankingItem(pkgName);
+    	deleteNetTrafficRankingItem(uid);
     }
     
 }
