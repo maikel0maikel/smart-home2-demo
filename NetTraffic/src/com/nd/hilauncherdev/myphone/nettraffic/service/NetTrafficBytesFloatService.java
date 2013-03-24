@@ -2,7 +2,9 @@ package com.nd.hilauncherdev.myphone.nettraffic.service;
 
 
 import java.text.DecimalFormat;
+import java.util.Calendar;
 
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -24,6 +26,7 @@ import com.felix.demo.R;
 import com.felix.demo.activity.NetTrafficBytesAccessor;
 import com.felix.demo.activity.NetTrafficBytesMain;
 import com.nd.hilauncherdev.myphone.nettraffic.activity.NetTrafficRankingMain;
+import com.nd.hilauncherdev.myphone.nettraffic.receiver.NetTrafficConnectivityChangeBroadcast;
 
 public class NetTrafficBytesFloatService extends Service {
 
@@ -44,6 +47,10 @@ public class NetTrafficBytesFloatService extends Service {
 	
 	int ONGOING_NOTIFICATION = 9100;
 	
+	AlarmManager alarmManager;
+	PendingIntent pendingIntent;
+	private static final long DAY_MIN = 24 * 60 * 60 * 1000; // 一天时间
+	
 	@Override
 	public void onCreate() {
 		Log.d("NetTrafficBytesFloatService", "onCreate");
@@ -58,6 +65,13 @@ public class NetTrafficBytesFloatService extends Service {
 		iv.setVisibility(View.GONE);
 		createView();
 		handler.postDelayed(task, delaytime);
+		
+		//启动每天12点定时器
+		Intent intent = new Intent(this,NetTrafficConnectivityChangeBroadcast.class);  
+		intent.setAction("netTrafficAlarm");
+        pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);  
+        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);  
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, getAlarmStartTime(), DAY_MIN, pendingIntent);    
 	}
 	
 	@Override
@@ -191,6 +205,10 @@ public class NetTrafficBytesFloatService extends Service {
 		
 		stopForeground(true);
 		
+		if (alarmManager!=null && pendingIntent!=null){
+			alarmManager.cancel(pendingIntent);
+		}
+		
 		super.onDestroy();
 	}
 	
@@ -205,5 +223,18 @@ public class NetTrafficBytesFloatService extends Service {
 		DecimalFormat format = new DecimalFormat("0.00");
 		value = format.format(floatnum);
 		return value;
+	}
+	
+	/**
+	 * 获取定时器启动时间(每天的23点58分记录记录一下当天的流量)
+	 * @return
+	 */
+	private long getAlarmStartTime(){
+		
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(Calendar.HOUR_OF_DAY, 23);
+		calendar.set(Calendar.MINUTE, 55);
+		
+		return calendar.getTimeInMillis();
 	}
 }
