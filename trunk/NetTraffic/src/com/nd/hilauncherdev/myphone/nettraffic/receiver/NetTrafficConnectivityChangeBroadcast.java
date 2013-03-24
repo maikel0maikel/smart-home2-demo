@@ -40,6 +40,9 @@ public class NetTrafficConnectivityChangeBroadcast extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 		String action = intent.getAction();
 		
+		if (TextUtils.equals(action, "netTrafficAlarm")) {
+			logToFile(TAG, "每日12点定时记录=="+action);
+		}
 		
 		logToFile(TAG, "网络变化了=="+action);
 		
