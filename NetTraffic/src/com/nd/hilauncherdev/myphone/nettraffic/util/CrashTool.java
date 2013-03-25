@@ -14,7 +14,6 @@ import android.telephony.TelephonyManager;
 import android.widget.Toast;
 
 public class CrashTool {
-	//http://www.oschina.net/code/explore/android-2.2-froyo/com/android/dumprendertree/LoadTestsAutoTest.java
 	
 	/**
 	 * 网络是否可用
@@ -24,22 +23,6 @@ public class CrashTool {
 	 */
 	public static boolean isNetworkAvailable(Context context) {
 		ConnectivityManager mgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-		/*
-		NetworkInfo activeInfo=mgr.getActiveNetworkInfo();
-		NetworkInfo mobInfo=mgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-		boolean netStatus = false;
-
-		boolean isConnected=false;
-		
-		if (activeInfo != null) {
-
-			netStatus = activeInfo.isAvailable();
-
-			isConnected=activeInfo.isConnected();
-			
-			return netStatus;			
-		}
-		*/
 		
 		NetworkInfo[] info = mgr.getAllNetworkInfo();
 	    if (info != null) {
@@ -130,6 +113,13 @@ public class CrashTool {
         Date currentTime = new Date();
         //SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmm");
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+        String dateString = formatter.format(currentTime);
+        return dateString;
+    }
+    
+    public static String getStringMonth() {
+        Date currentTime = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMM");
         String dateString = formatter.format(currentTime);
         return dateString;
     }

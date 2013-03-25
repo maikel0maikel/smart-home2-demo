@@ -19,6 +19,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 
 import com.nd.hilauncherdev.myphone.nettraffic.receiver.NetTrafficConnectivityChangeBroadcast;
+import com.nd.hilauncherdev.myphone.nettraffic.util.CrashTool;
 import com.nd.hilauncherdev.myphone.nettraffic.util.NetTrafficInitTool;
 import com.nd.hilauncherdev.myphone.nettraffic.util.NetTrafficSettingTool;
 import com.nd.hilauncherdev.myphone.nettraffic.util.NetTrafficStatsProxy;
@@ -92,7 +93,6 @@ public class NetTrafficRankingGprsWifiAccessor {
 	 * @param data_id
 	 * @param dev
 	 * @return
-	 * @throws Exception
 	 */
 	public NetTrafficRankingItem getNetTrafficRankingItem(int uid, int data_id, int dev){
 		
@@ -123,7 +123,6 @@ public class NetTrafficRankingGprsWifiAccessor {
 	 * 增加或修改某个软件的排行流量
 	 * @param item
 	 * @return
-	 * @throws Exception
 	 */
 	private boolean updateNetTrafficRankingItem(NetTrafficRankingItem item){
 		
@@ -233,7 +232,7 @@ public class NetTrafficRankingGprsWifiAccessor {
 	 * @param dev
 	 * @return
 	 */
-	public ArrayList<NetTrafficRankingItem> getAllNetTrafficRanking(int dev) {
+	public ArrayList<NetTrafficRankingItem> getAllNetTrafficRanking(int dev, String beginTime, String endTime) {
 
 		ArrayList<NetTrafficRankingItem> ret = new ArrayList<NetTrafficRankingItem>();
 		
@@ -249,11 +248,12 @@ public class NetTrafficRankingGprsWifiAccessor {
 					+ "       (Sum(rx) + Sum(tx)) all_tal "
 					+ "FROM   "+T_NETTRAFFIC_RANKING_DETAIL+" "
 					+ "WHERE dev=? "
+					+ "AND date>=? AND date<=? "
 					+ "GROUP  BY pkg,names "
 					+ "HAVING all_tal > 0.1 "
 					+ "ORDER  BY all_tal DESC ";
 			db = new NetTrafficDB(ctx);
-			c = db.query(sql, new String[]{dev+""});
+			c = db.query(sql, new String[]{dev+"", beginTime, endTime});
 			c.moveToFirst();
 			while (!c.isAfterLast()) {
 				NetTrafficRankingItem item = buildNetTrafficRankingItemForSum(c);
@@ -550,6 +550,34 @@ public class NetTrafficRankingGprsWifiAccessor {
 			}
 		}
 		return maxID;
+	}
+	
+	public String getMaxMinStringDate(boolean isMax){
+		
+		String resultDate = CrashTool.getStringDate();
+		NetTrafficDB db = null;
+		Cursor c = null;
+		try {
+			db = new NetTrafficDB(ctx);
+			if (isMax){
+				c = db.query("select max(date) from "+T_NETTRAFFIC_RANKING_DETAIL, null);
+			}else{
+				c = db.query("select min(date) from "+T_NETTRAFFIC_RANKING_DETAIL, null);
+			}
+	        if (c.moveToFirst()) {            
+	        	resultDate= c.getString(0);
+	        }
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally{
+			if(c!=null){
+				c.close();
+			}
+			if(db!=null){
+				db.close();
+			}
+		}
+		return resultDate;
 	}
 	
     public void applicationRemoved(String pkgName,int uid){

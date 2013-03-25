@@ -17,8 +17,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.felix.demo.activity.NetTrafficBytesAccessor;
 import com.nd.hilauncherdev.kitset.util.ThreadUtil;
+import com.nd.hilauncherdev.myphone.nettraffic.db.NetTrafficBytesAccessor;
 import com.nd.hilauncherdev.myphone.nettraffic.db.NetTrafficBytesItem;
 import com.nd.hilauncherdev.myphone.nettraffic.db.NetTrafficRankingGprsWifiAccessor;
 import com.nd.hilauncherdev.myphone.nettraffic.util.CrashTool;
@@ -66,7 +66,7 @@ public class NetTrafficConnectivityChangeBroadcast extends BroadcastReceiver {
 					s = "正在关闭";
 					//保存信息
 					logToFile(TAG, "正在关闭  保存信息 登记Wifi流量"); 
-					NetTrafficBytesAccessor.logRealTimeTrafficBytes(context);
+					NetTrafficBytesAccessor.getInstance(context).insertNetTrafficBytesToDB(CrashTool.getStringDate());
 					
 					break;
 				case WifiManager.WIFI_STATE_ENABLING:
