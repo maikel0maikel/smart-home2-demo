@@ -223,14 +223,11 @@ public class NetTrafficBytesFloatService extends Service {
 		NetTrafficBytesAccessor.getInstance(getBaseContext()).insertNetTrafficBytesToDB(CrashTool.getStringDate());
 		
 		// 数据显示到布局上
-		if (NetTrafficBytesAccessor.netTrafficBytesResult != null
-				&& NetTrafficBytesAccessor.netTrafficWifiResult != null) {
-			tvGprsUse.setText( NetTrafficUnitTool.netTrafficUnitHandler(NetTrafficBytesAccessor.netTrafficBytesResult.dateBytesAll)+" M/"+
-					NetTrafficUnitTool.netTrafficUnitHandler(NetTrafficBytesAccessor.netTrafficBytesResult.monthBytesAll)+"M" );
-	
-			tvWifiUser.setText( NetTrafficUnitTool.netTrafficUnitHandler(NetTrafficBytesAccessor.netTrafficWifiResult.dateBytesAll)+"M/"+
-					NetTrafficUnitTool.netTrafficUnitHandler(NetTrafficBytesAccessor.netTrafficWifiResult.monthBytesAll)+"M" );			
-		}		
+		tvGprsUse.setText( NetTrafficUnitTool.netTrafficUnitHandler(NetTrafficBytesAccessor.netTrafficGprsResult.dateBytesAll)+" / "+
+				NetTrafficUnitTool.netTrafficUnitHandler(NetTrafficBytesAccessor.netTrafficGprsResult.monthBytesAll) );
+
+		tvWifiUser.setText( NetTrafficUnitTool.netTrafficUnitHandler(NetTrafficBytesAccessor.netTrafficWifiResult.dateBytesAll)+" / "+
+				NetTrafficUnitTool.netTrafficUnitHandler(NetTrafficBytesAccessor.netTrafficWifiResult.monthBytesAll) );			
 	}
 
 	private void updateViewPosition() {
