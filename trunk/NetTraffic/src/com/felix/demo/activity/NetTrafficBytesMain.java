@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -20,10 +19,10 @@ import android.widget.TextView;
 import com.felix.demo.R;
 import com.nd.hilauncherdev.kitset.util.ThreadUtil;
 import com.nd.hilauncherdev.myphone.nettraffic.activity.NetTrafficRankingGprsWifiMain;
+import com.nd.hilauncherdev.myphone.nettraffic.db.NetTrafficBytesAccessor;
 import com.nd.hilauncherdev.myphone.nettraffic.db.NetTrafficBytesItem;
 import com.nd.hilauncherdev.myphone.nettraffic.db.NetTrafficRankingGprsWifiAccessor;
 import com.nd.hilauncherdev.myphone.nettraffic.service.NetTrafficBytesFloatService;
-import com.nd.hilauncherdev.myphone.nettraffic.service.NetTrafficBytesService;
 import com.nd.hilauncherdev.myphone.nettraffic.util.CrashTool;
 import com.nd.hilauncherdev.myphone.nettraffic.util.NetTrafficInitTool;
 
@@ -39,7 +38,10 @@ public class NetTrafficBytesMain  extends Activity {
 	
 	private TextView netTrafficBytesWifiMonth;
 	
-	private Button startRanking;
+	private Button startRankingWifiToday;
+	private Button startRankingWifiAll;
+	private Button startRankingGprsToday;
+	private Button startRankingGprsAll;
 	
 	private Button btnstart;
 	private Button btnstop;	
@@ -60,26 +62,15 @@ public class NetTrafficBytesMain  extends Activity {
 		
 		initView();
 		
-		//判断网络是否可用
-		if ( CrashTool.isNetworkAvailable(this) ){
-			//启动服务
-			/*
-			Intent intentService = new Intent(this, NetTrafficBytesService.class);
-			intentService.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			this.startService(intentService);
-			*/
-		}
-		
 		//根据配置文件看是否启动悬浮窗口
 		if ( getFloatFlag(this) ){
 			Intent service = new Intent();
-			service.setClass(NetTrafficBytesMain.this, NetTrafficBytesService.class);
-    		//service.setClass(NetTrafficBytesMain.this, NetTrafficBytesFloatService.class);		
+    		service.setClass(NetTrafficBytesMain.this, NetTrafficBytesFloatService.class);		
     		startService(service);
 		}
 		
 		updateViewTimer = new Timer();
-		updateViewTimer.scheduleAtFixedRate(new TimerTask() {
+		updateViewTimer.schedule(new TimerTask() {
 
 			@Override
 			public void run() {				
@@ -123,9 +114,15 @@ public class NetTrafficBytesMain  extends Activity {
 		netTrafficBytesWifiDay = (TextView)findViewById(R.id.net_traffic_bytes_wifi_day);
 		netTrafficBytesWifiMonth = (TextView)findViewById(R.id.net_traffic_bytes_wifi_month);		
 		
-		startRanking = (Button)findViewById(R.id.startRanking);	
+		startRankingWifiToday = (Button)findViewById(R.id.startRankingWifiToday);
+		startRankingWifiAll = (Button)findViewById(R.id.startRankingWifiAll);
+		startRankingGprsToday = (Button)findViewById(R.id.startRankingGprsToday);
+		startRankingGprsAll = (Button)findViewById(R.id.startRankingGprsAll);
 		
-		startRanking.setOnClickListener(listener);//设置监听
+		startRankingWifiToday.setOnClickListener(listener);//设置监听
+		startRankingWifiAll.setOnClickListener(listener);//设置监听
+		startRankingGprsToday.setOnClickListener(listener);//设置监听
+		startRankingGprsAll.setOnClickListener(listener);//设置监听
 		
 		btnstart = (Button) findViewById(R.id.btnstart);
         btnstart.setOnClickListener(new Button.OnClickListener() {
@@ -149,7 +146,7 @@ public class NetTrafficBytesMain  extends Activity {
             	
             	Intent serviceStop = new Intent();
         		serviceStop.setClass(NetTrafficBytesMain.this, NetTrafficBytesFloatService.class);
-        		stopService(serviceStop);
+        		startService(serviceStop);
             }
         });
         
@@ -157,24 +154,7 @@ public class NetTrafficBytesMain  extends Activity {
         btncheck_notify.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-            	/*
-            	Intent intent = new Intent();
-            	intent.setClass(NetTrafficBytesMain.this, NotifyListActivity.class);
-        		startActivity(intent);
-        		
-        		float currentTotalRx  = TrafficStats.getTotalRxBytes()/1024f;
-        		float currentTotalTx  = TrafficStats.getTotalTxBytes()/1024f;
-        		Log.d("NetTrafficConnectivityChangeBroadcast TrafficStats.getTotalRxBytes()", currentTotalRx+"");
-        		Log.d("NetTrafficConnectivityChangeBroadcast TrafficStats.getTotalTxBytes()", currentTotalTx+"");
-        		
-        		//GPRS流量
-        		float currentMobileRx = TrafficStats.getMobileRxBytes()/1024f;
-        		float currentMobileTx = TrafficStats.getMobileTxBytes()/1024f;
-        		Log.d("NetTrafficConnectivityChangeBroadcast TrafficStats.getMobileRxBytes()", currentMobileRx+"");
-        		Log.d("NetTrafficConnectivityChangeBroadcast TrafficStats.getMobileTxBytes()", currentMobileTx+"");
-        		*/
-        		NetTrafficRankingGprsWifiAccessor.getInstance(getBaseContext()).
-        			insertALLAppNetTrafficToDB(CrashTool.getNetType(getBaseContext()), CrashTool.getStringDate());
+            
             }
         });
         
@@ -183,8 +163,30 @@ public class NetTrafficBytesMain  extends Activity {
 	Button.OnClickListener listener = new Button.OnClickListener() {// 创建监听对象
 		@Override
 		public void onClick(View v) {
-		
 			Intent intent = new Intent(NetTrafficBytesMain.this, NetTrafficRankingGprsWifiMain.class);
+			switch (v.getId()) {
+				case R.id.startRankingWifiToday:
+					intent.putExtra("devTaype", NetTrafficBytesItem.DEV_WIFI);
+					intent.putExtra("isAll", false);
+					break;
+	
+				case R.id.startRankingWifiAll:
+					intent.putExtra("devTaype", NetTrafficBytesItem.DEV_WIFI);
+					intent.putExtra("isAll", true);
+					break;
+	
+				case R.id.startRankingGprsToday:
+					intent.putExtra("devTaype", NetTrafficBytesItem.DEV_GPRS);
+					intent.putExtra("isAll", false);
+					break;
+	
+				case R.id.startRankingGprsAll:
+					intent.putExtra("devTaype", NetTrafficBytesItem.DEV_GPRS);
+					intent.putExtra("isAll", true);
+					break;				
+				default:
+					break;
+			}
 			NetTrafficBytesMain.this.startActivity(intent);				
 		}
 	};
@@ -199,11 +201,6 @@ public class NetTrafficBytesMain  extends Activity {
 	}
 	
 	private void refrashView(){
-		
-		if (NetTrafficBytesAccessor.netTrafficBytesResult==null || NetTrafficBytesAccessor.netTrafficWifiResult==null){
-			
-			NetTrafficBytesAccessor.initTrafficBytes(this);			
-		}
 		
 		// 数据显示到布局上
 		if (NetTrafficBytesAccessor.netTrafficBytesResult != null

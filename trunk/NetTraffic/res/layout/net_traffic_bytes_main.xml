@@ -13,11 +13,25 @@
 	        <TextView android:id="@+id/net_traffic_bytes_wifi_month" android:layout_width="wrap_content" android:layout_height="fill_parent" android:text="@string/net_traffic_bytes_wifi_month"></TextView>
 	        
 	        <Button
-	            android:id="@+id/startRanking"
+	            android:id="@+id/startRankingWifiToday"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:text="流量排行" />
-
+	            android:text="wifi今日流量排行" />
+	        <Button
+	            android:id="@+id/startRankingWifiAll"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="wifi总流量排行" />
+	        <Button
+	            android:id="@+id/startRankingGprsToday"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="gprs今日流量排行" />
+	        <Button
+	            android:id="@+id/startRankingGprsAll"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="gprs总流流量排行" />	        	        
 	        <Button
 	            android:id="@+id/btnstart"
 	            android:layout_width="160dip"
@@ -44,7 +58,7 @@
 	            android:layout_height="wrap_content"
 	            android:layout_gravity="center"
 	            android:gravity="center"
-	            android:text="广告检测"
+	            android:text="自动校验"
 	            android:textSize="20dp"
 	            android:textStyle="bold" />	        
 </LinearLayout>	  

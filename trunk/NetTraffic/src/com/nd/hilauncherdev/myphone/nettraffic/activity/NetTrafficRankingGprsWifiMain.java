@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import com.felix.demo.R;
 import com.nd.hilauncherdev.kitset.util.ThreadUtil;
+import com.nd.hilauncherdev.myphone.nettraffic.db.NetTrafficBytesItem;
 import com.nd.hilauncherdev.myphone.nettraffic.db.NetTrafficRankingGprsWifiAccessor;
 import com.nd.hilauncherdev.myphone.nettraffic.db.NetTrafficRankingItem;
 import com.nd.hilauncherdev.myphone.nettraffic.util.CrashTool;
@@ -38,7 +39,10 @@ public class NetTrafficRankingGprsWifiMain extends Activity {
 	private final int UPDATE_GAP = 15000;// 更新进度间隔时间为1秒
 	private long lastUpdatedTime = 0;
 	
-	LayoutInflater inflater;
+	private LayoutInflater inflater;
+	
+	private int devTaype;
+	private boolean isAll = false;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +50,11 @@ public class NetTrafficRankingGprsWifiMain extends Activity {
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.net_traffic_list);
-		
 		inflater = getLayoutInflater();
 		this.listview = (ListView) this.findViewById(R.id.net_traffic_list_top);
+		
+		devTaype = getIntent().getIntExtra("devTaype", NetTrafficBytesItem.DEV_WIFI);
+		isAll = getIntent().getBooleanExtra("isAll", false);
 	}
 	
 	@Override
@@ -109,7 +115,15 @@ public class NetTrafficRankingGprsWifiMain extends Activity {
 
 		ArrayList<NetTrafficRankingItem> netTrafficRankingList = new ArrayList<NetTrafficRankingItem>();
 		try {
-			netTrafficRankingList = NetTrafficRankingGprsWifiAccessor.getInstance(getBaseContext()).getAllNetTrafficRanking(CrashTool.getNetType(getBaseContext()));
+			String beginTime = CrashTool.getStringDate();
+			String endTime = CrashTool.getStringDate();
+			if (isAll){
+				beginTime = NetTrafficRankingGprsWifiAccessor.getInstance(getBaseContext()).getMaxMinStringDate(false);
+				endTime = NetTrafficRankingGprsWifiAccessor.getInstance(getBaseContext()).getMaxMinStringDate(true); 
+			}
+			netTrafficRankingList = NetTrafficRankingGprsWifiAccessor.getInstance(getBaseContext())
+					.getAllNetTrafficRanking(devTaype, beginTime, endTime);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
