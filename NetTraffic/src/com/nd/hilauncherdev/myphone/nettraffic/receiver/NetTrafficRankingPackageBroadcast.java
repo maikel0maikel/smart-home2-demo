@@ -6,8 +6,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.felix.demo.activity.NetTrafficRankingAccessor;
+import com.nd.hilauncherdev.kitset.util.ThreadUtil;
 import com.nd.hilauncherdev.myphone.nettraffic.db.NetTrafficRankingGprsWifiAccessor;
+import com.nd.hilauncherdev.myphone.nettraffic.util.CrashTool;
 
 
 public class NetTrafficRankingPackageBroadcast extends BroadcastReceiver {
@@ -19,11 +20,16 @@ public class NetTrafficRankingPackageBroadcast extends BroadcastReceiver {
 			final boolean replacing = intent.getBooleanExtra(Intent.EXTRA_REPLACING, false);
 			if (!replacing) {
 				final int uid = intent.getIntExtra(Intent.EXTRA_UID, -123);
-				String pkgName = intent.getDataString();
+				final String pkgName = intent.getDataString();
+				final Context ctx = context;
 				if ( pkgName!=null ){
 					//放到线程执行
-					NetTrafficRankingAccessor.getInstance(context).applicationRemoved(pkgName.replaceAll("package:", ""), uid);
-					NetTrafficRankingGprsWifiAccessor.getInstance(context).applicationRemoved(pkgName.replaceAll("package:", ""), uid);
+					ThreadUtil.executeNetTraffic(new Runnable() {
+						@Override
+						public void run() {
+							NetTrafficRankingGprsWifiAccessor.getInstance(ctx).applicationRemoved(pkgName.replaceAll("package:", ""), uid);
+						}
+					});
 				}
 			}
 		}

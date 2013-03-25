@@ -8,7 +8,7 @@ import android.database.Cursor;
 import android.net.TrafficStats;
 import android.util.Log;
 
-import com.felix.demo.activity.NetTrafficBytesResult;
+import com.nd.hilauncherdev.myphone.nettraffic.util.NetTrafficInitTool;
 import com.nd.hilauncherdev.myphone.nettraffic.util.NetTrafficSettingTool;
 
 /**
@@ -21,14 +21,12 @@ public class NetTrafficBytesAccessor {
 	
 	private static final String T_NETTRAFFIC_BYTES = "NetTrafficBytes";
 	
-	//最新的实时天流量和月流量
-	public static NetTrafficBytesResult netTrafficBytesResult;	
-	public static NetTrafficBytesResult netTrafficWifiResult;
+	/**实时  今天流量*/
+	public static NetTrafficBytesResult netTrafficGprsResult = new NetTrafficBytesResult();
+	/**实时 本月流量*/
+	public static NetTrafficBytesResult netTrafficWifiResult = new NetTrafficBytesResult();
 	
-	private static float last_gprs_Bytes = -1f;			//最后一次读取的gprs流量值
-	private static float last_wifi_Bytes = -1f;			//最后一次读取的wifi总流量值	
-	
-	private static int GPRS_DATA_ID = -1;
+	public static int GPRS_DATA_ID = -1;
 	public static int WIFI_DATA_ID = -1;
 	
 	
@@ -72,7 +70,6 @@ public class NetTrafficBytesAccessor {
         ret.tx = c.getFloat(1);
         ret.tal = c.getFloat(2);
         ret.date = c.getString(3);
-        
 		return ret; 
 	}
 	
@@ -106,7 +103,7 @@ public class NetTrafficBytesAccessor {
 		}
         return ret;	
 	}
-	
+
 	/**
 	 * 增加或修改某种流量的监控流量
 	 * @param item
@@ -116,7 +113,6 @@ public class NetTrafficBytesAccessor {
 		
 		boolean bResult = true; 
 		ContentValues values = new ContentValues();		
-		//values.put("id", item.id); //系统自增
 		values.put("dev", item.dev);
 		values.put("rx", item.rx);
 		values.put("tx", item.tx);
@@ -143,29 +139,6 @@ public class NetTrafficBytesAccessor {
 		return bResult;
 	}
 	
-	
-	/**
-	 * 清空流量监控表
-	 * @return
-	 */
-	public boolean clearNetTrafficBytes() {
-		
-		boolean bResult = true; 
-		NetTrafficByteDB db = null;
-		try {
-			db = new NetTrafficByteDB(ctx);
-			bResult = db.delete(T_NETTRAFFIC_BYTES, null, null);
-		} catch (Exception e) {
-			bResult = false;
-			e.printStackTrace();
-		} finally{
-			if(db!=null){
-				db.close();
-			}
-		}
-		return bResult;
-	}
-
 	/**
 	 * 获取某类某天最大的数据批次数据   按此方式获取max_id可以统计出一天开关了多少次Wifi 
 	 * @param dev
@@ -245,7 +218,6 @@ public class NetTrafficBytesAccessor {
 	 */
 	public ArrayList<NetTrafficBytesItem> getAllNetTrafficBytes(int dev, String beginDate, String endDate){
 
-		// rx、tx在数据库中已 KB单位存放	2G/3G流量按KB形式显示所有不处理	
 		String sql = ""
 				+ "SELECT Sum(rx)               rx_tal, "
 				+ "       Sum(tx)               tx_tal, "
@@ -283,42 +255,6 @@ public class NetTrafficBytesAccessor {
 		return ret;
 	}
 	
-	/**
-	 * 同一批次的除今天外的要扣掉,如果一样需要扣除以前的流量
-	 * @param dev
-	 * @param date
-	 * @param data_id
-	 * @return
-	 */
-	public NetTrafficBytesItem getBytesSumForOtherDayAndSameDataID(int dev,String date,int data_id){
-		
-		NetTrafficBytesItem ret = new NetTrafficBytesItem();
-
-		NetTrafficByteDB db = null;
-		db = new NetTrafficByteDB(ctx);
-		// rx、tx在数据库中已 KB单位存放	2G/3G流量按KB形式显示所有不处理	
-		String sql = ""
-				+ "SELECT Sum(rx)               rx_tal, "
-				+ "       Sum(tx)               tx_tal, "
-				+ "       ( Sum(rx) + Sum(tx) ) all_tal "
-				+ "FROM   "+T_NETTRAFFIC_BYTES+" "
-				+ "WHERE  dev = ? "
-				+ "       AND date <> ? "
-				+ "       AND data_id = ? ";
-		
-		Cursor c = db.query(sql, new String[] {dev+"", date+"", data_id+""});
-		c.moveToFirst();
-        
-        if (c.moveToFirst()) {    
-        	ret.rx = c.getFloat(0);
-            ret.tx = c.getFloat(1);
-            ret.tal = c.getFloat(2);
-        }
-
-		c.close();
-		db.close();
-		return ret;
-	}
 
 	/**
 	 * 当天、当月的流量
@@ -330,129 +266,249 @@ public class NetTrafficBytesAccessor {
 	 */
 	public NetTrafficBytesResult getDayAndMonth(int dev,String date, String month){
 		
-		NetTrafficBytesResult result = new NetTrafficBytesResult();
-		
-		NetTrafficByteDB db = null;
-		db = new NetTrafficByteDB(ctx);
-		//获取某天的流量
 		String sqlDate = ""
 				+ "SELECT ( Sum(rx) + Sum(tx) ) all_tal "
 				+ "FROM   "+T_NETTRAFFIC_BYTES+" "
 				+ "WHERE  dev = ? "
 				+ "       AND date = ? ";
-        Cursor cDate = db.query(sqlDate, new String[] {dev+"", date+""});         
-        if (cDate.moveToFirst()) {    
-        	result.date 		= date;
-        	result.dateBytesAll = cDate.getFloat(0);
-        }
-        cDate.close();
-                
-        //获取某月的流量  
 		String sqlMonth = ""
 				+ "SELECT ( Sum(rx) + Sum(tx) ) all_tal "
 				+ "FROM   "+T_NETTRAFFIC_BYTES+" "
 				+ "WHERE  dev = ? "
 				+ "       AND date like ? ";
-        Cursor cMonth = db.query(sqlMonth, new String[] {dev+"", month+"%"});        
-        if (cMonth.moveToFirst()) {    
-        	result.month 		= month;
-        	result.monthBytesAll = cMonth.getFloat(0);
-        }
-        cMonth.close();
-        
-        db.close();
+				
+		NetTrafficBytesResult result = new NetTrafficBytesResult();
+		result.dev = dev;
+		NetTrafficByteDB db = null;
+		Cursor cDate = null;
+		Cursor cMonth = null;
+		try {
+			db = new NetTrafficByteDB(ctx);
+			cDate = db.query(sqlDate, new String[] {dev+"", date+""});    
+			if (cDate.moveToFirst()) {    
+	        	result.date 		= date;
+	        	result.dateBytesAll = cDate.getFloat(0);
+	        }
+			
+			cMonth = db.query(sqlMonth, new String[] {dev+"", month+"%"});        
+	        if (cMonth.moveToFirst()) {    
+	        	result.month 		= month;
+	        	result.monthBytesAll = cMonth.getFloat(0);
+	        }
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally{
+			if(cDate!=null){
+				cDate.close();
+			}
+			if(cMonth!=null){
+				cMonth.close();
+			}
+			if(db!=null){
+				db.close();
+			}
+		}
 		
 		return result;
 	}
 	
-	//记录当前的流量
-	//返回值: 流量无变化返回false 流量有变化返回true	
+	/**
+	 * 记录当前的流量
+	 * @param strDate
+	 * @return 返回值: 流量无变化返回false 流量有变化返回true	
+	 */
 	public boolean insertNetTrafficBytesToDB(String strDate){
+
+		NetTrafficInitTool.getCacheAppMap(ctx);
 		
 		boolean netTrafficChange = false;
 		
 		float currentTotalRx  = TrafficStats.getTotalRxBytes()/1024f;
 		float currentTotalTx  = TrafficStats.getTotalTxBytes()/1024f;
 		
-		Log.d("NetTrafficConnectivityChangeBroadcast TrafficStats.getTotalRxBytes()", currentTotalRx+"");
-		Log.d("NetTrafficConnectivityChangeBroadcast TrafficStats.getTotalTxBytes()", currentTotalTx+"");
-		
-		//GPRS流量
 		float currentMobileRx = TrafficStats.getMobileRxBytes()/1024f;
 		float currentMobileTx = TrafficStats.getMobileTxBytes()/1024f;
-		float currentMobileAll= currentMobileRx+currentMobileTx;		
 		
-		Log.d("NetTrafficConnectivityChangeBroadcast TrafficStats.getMobileRxBytes()", currentMobileRx+"");
-		Log.d("NetTrafficConnectivityChangeBroadcast TrafficStats.getMobileTxBytes()", currentMobileTx+"");
-		
-		//Wifi流量
 		float currentWifiRx   = currentTotalRx - currentMobileRx;
 		float currentWifiTx   = currentTotalTx - currentMobileTx;
-		float currentWifiAll  = currentWifiRx+currentWifiTx;
 		
-		//GPRS流量发生变化   登记GPRS流量		
-		if ( currentMobileAll != last_gprs_Bytes && currentMobileRx<0.01 ) {
-			
-			NetTrafficBytesItem itemGprs = new NetTrafficBytesItem();		
-			itemGprs.dev 	 = NetTrafficBytesItem.DEV_GPRS;
-			itemGprs.rx  	 = currentMobileRx;
-			itemGprs.tx  	 = currentMobileTx;
-		    itemGprs.date	 = strDate;
-		    itemGprs.data_id = getDataID(itemGprs.dev, strDate); //数据流量批次标示
-		    
-		    try {		    	
-		    	//判断同一批次的除今天外的要扣掉,如果一样需要扣除以前的流量
-		    	NetTrafficBytesItem otherDayAndSameDataIDItem = getBytesSumForOtherDayAndSameDataID(itemGprs.dev,itemGprs.date,itemGprs.data_id);
-		    	float tmpItemValue = itemGprs.rx - otherDayAndSameDataIDItem.rx;
-		    	if ( tmpItemValue>=0 )  itemGprs.rx = tmpItemValue;
-		    	
-		    	tmpItemValue = itemGprs.tx - otherDayAndSameDataIDItem.tx;
-		    	if ( tmpItemValue>=0 )  itemGprs.tx = tmpItemValue;
-		    	
-		    	updateNetTrafficBytesItem(itemGprs);
-		    } catch (Exception e) {
-				e.printStackTrace();
-			}
-		    
-		    Log.d(TAG, "登记GPRS流量"); 
-		    
-		    netTrafficChange = true;
-		    
-		    last_gprs_Bytes  = currentMobileAll;
+		if ( currentMobileRx != NetTrafficInitTool.last_gprs_rx_Bytes && currentMobileRx>0.01 ) {
+			netTrafficChange = insertNetTrafficGprsBytesToDB(strDate, currentMobileRx, currentMobileTx);
+			Log.d(TAG, "登记GPRS流量"+" netTrafficChange="+netTrafficChange); 
 		}
 		
-		//Wifi流量发生变化   登记Wifi流量    		
-		if ( currentWifiAll != last_wifi_Bytes && currentWifiRx<0.01 ) {
-			
-			NetTrafficBytesItem itemWifi = new NetTrafficBytesItem();		
-			itemWifi.dev 	 = NetTrafficBytesItem.DEV_WIFI;
-			itemWifi.rx  	 = currentWifiRx;
-			itemWifi.tx  	 = currentWifiTx;
-		    itemWifi.date	 = strDate;
-		    itemWifi.data_id = getDataID(itemWifi.dev, strDate); //数据流量批次标示
-		    
-		    try {
-		    	//判断同一批次的除今天外的要扣掉,如果一样需要扣除以前的流量
-		    	NetTrafficBytesItem otherDayAndSameDataIDItem = getBytesSumForOtherDayAndSameDataID(itemWifi.dev,itemWifi.date,itemWifi.data_id);
-		    	float tmpItemValue = itemWifi.rx - otherDayAndSameDataIDItem.rx;
-		    	if ( tmpItemValue>=0 )  itemWifi.rx = tmpItemValue;
-		    			
-		    	tmpItemValue = itemWifi.tx - otherDayAndSameDataIDItem.tx;	
-		    	if ( tmpItemValue>=0 )  itemWifi.tx = tmpItemValue;
-		    	
-		    	updateNetTrafficBytesItem(itemWifi);
-		    } catch (Exception e) {
-				e.printStackTrace();
-			}
-			
-		    Log.d(TAG, "登记Wifi流量");
-		    
-		    netTrafficChange = true;
-		    
-			last_wifi_Bytes  = currentWifiAll;
+		if ( currentWifiRx != NetTrafficInitTool.last_wifi_rx_Bytes && currentWifiRx>0.01 ) {
+			netTrafficChange = insertNetTrafficWifiBytesToDB(strDate, currentWifiRx, currentWifiTx);
+		    Log.d(TAG, "登记Wifi流量"+" netTrafficChange="+netTrafficChange);
 		}
 		
 		return netTrafficChange;
 	}
 
+	/**
+	 * GPRS流量登记
+	 * @param strDate
+	 * @param currentMobileRx
+	 * @param currentMobileTx
+	 * @return
+	 */
+	private boolean insertNetTrafficGprsBytesToDB(String strDate, float currentMobileRx, float currentMobileTx){
+
+		boolean netTrafficChange = false;
+		
+		NetTrafficBytesItem itemGprs = new NetTrafficBytesItem();
+		itemGprs.dev 	 = NetTrafficBytesItem.DEV_GPRS;
+		itemGprs.date	 = strDate;
+		itemGprs.data_id = getDataID(itemGprs.dev, strDate);
+		
+		if ( NetTrafficInitTool.last_gprs_rx_Bytes<=currentMobileRx ){
+			float addRx = currentMobileRx-NetTrafficInitTool.last_gprs_rx_Bytes; 
+			NetTrafficInitTool.last_gprs_rx_Bytes = currentMobileRx;
+			itemGprs.rx = addRx;
+		}else{
+			itemGprs.rx = 0;
+			NetTrafficInitTool.last_gprs_rx_Bytes = currentMobileRx;
+		}
+		
+		if ( NetTrafficInitTool.last_gprs_tx_Bytes<=currentMobileTx ){
+			float addTx = currentMobileTx-NetTrafficInitTool.last_gprs_tx_Bytes; 
+			NetTrafficInitTool.last_gprs_tx_Bytes = currentMobileTx;
+			itemGprs.tx = addTx;
+		}else{
+			itemGprs.tx = 0;
+			NetTrafficInitTool.last_gprs_tx_Bytes = currentMobileTx;
+		}
+		
+		if (itemGprs.rx+itemGprs.tx<0.01){
+			return netTrafficChange;
+		}
+		
+		ContentValues values = new ContentValues();		
+		//values.put("id", item.id); //系统自增
+		values.put("dev", itemGprs.dev);
+		values.put("rx", itemGprs.rx);
+		values.put("tx", itemGprs.tx);
+		values.put("date", itemGprs.date);
+		values.put("data_id", itemGprs.data_id);
+		
+		NetTrafficBytesItem ret = null;
+		NetTrafficByteDB db = null;
+		Cursor c = null;
+		try {
+			db = new NetTrafficByteDB(ctx);
+	        c = db.query("select * from "+T_NETTRAFFIC_BYTES+" where dev=? and data_id=? and date=?", 
+	        		new String[] {itemGprs.dev+"", itemGprs.data_id+"", itemGprs.date+""});        
+	        if(c.moveToFirst()) {            
+	            ret = buildNetTrafficBytesItem(c);
+	        }
+	        
+		    if (ret==null){
+		    	netTrafficChange = db.insertOrThrow(T_NETTRAFFIC_BYTES, null, values)>0;	
+		    }else{
+		    	itemGprs.rx += ret.rx;
+				values.put("rx", itemGprs.rx);
+				itemGprs.tx += ret.tx;
+				values.put("tx", itemGprs.tx);
+				netTrafficChange = db.update(T_NETTRAFFIC_BYTES, values, "dev=? and data_id=? and date=?", new String[] {itemGprs.dev+"", itemGprs.data_id+"", itemGprs.date+""})>0;
+		    }
+		    if ( netTrafficChange ) {
+		    	refreshNetTrafficBytesResult(netTrafficGprsResult, itemGprs.rx+itemGprs.tx);
+		    }
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally{
+			if(c!=null){
+				c.close();
+			}
+			if(db!=null){
+				db.close();
+			}
+		}
+		return netTrafficChange;
+	}
+	
+	/**
+	 * Wifi流量登记
+	 * @param strDate
+	 * @param currentWifiRx
+	 * @param currentWifiTx
+	 * @return
+	 */
+	private boolean insertNetTrafficWifiBytesToDB(String strDate, float currentWifiRx, float currentWifiTx){
+
+		boolean netTrafficChange = false;
+		
+		NetTrafficBytesItem itemWifi = new NetTrafficBytesItem();	
+		itemWifi.dev 	 = NetTrafficBytesItem.DEV_WIFI;
+		itemWifi.date	 = strDate;
+	    itemWifi.data_id = getDataID(itemWifi.dev, strDate);
+		
+		if ( NetTrafficInitTool.last_wifi_rx_Bytes<=currentWifiRx ){
+			float addRx = currentWifiRx-NetTrafficInitTool.last_wifi_rx_Bytes; 
+			NetTrafficInitTool.last_wifi_rx_Bytes = currentWifiRx;
+			itemWifi.rx = addRx;
+		}else{
+			itemWifi.rx = 0;
+			NetTrafficInitTool.last_wifi_rx_Bytes = currentWifiRx;
+		}
+		
+		if ( NetTrafficInitTool.last_wifi_tx_Bytes<=currentWifiTx ){
+			float addTx = currentWifiTx-NetTrafficInitTool.last_wifi_tx_Bytes; 
+			NetTrafficInitTool.last_wifi_tx_Bytes = currentWifiTx;
+			itemWifi.tx = addTx;
+		}else{
+			itemWifi.tx = 0;
+			NetTrafficInitTool.last_wifi_tx_Bytes = currentWifiTx;
+		}
+		
+		ContentValues values = new ContentValues();		
+		//values.put("id", item.id); //系统自增
+		values.put("dev", itemWifi.dev);
+		values.put("rx", itemWifi.rx);
+		values.put("tx", itemWifi.tx);
+		values.put("date", itemWifi.date);
+		values.put("data_id", itemWifi.data_id);
+		
+		NetTrafficBytesItem ret = null;
+		NetTrafficByteDB db = null;
+		Cursor c = null;
+		try {
+			db = new NetTrafficByteDB(ctx);
+	        c = db.query("select * from "+T_NETTRAFFIC_BYTES+" where dev=? and data_id=? and date=?", 
+	        		new String[] {itemWifi.dev+"", itemWifi.data_id+"", itemWifi.date+""});        
+	        if(c.moveToFirst()) {            
+	            ret = buildNetTrafficBytesItem(c);
+	        }
+	        
+		    if (ret==null){
+		    	netTrafficChange = db.insertOrThrow(T_NETTRAFFIC_BYTES, null, values)>0;	
+		    }else{
+		    	itemWifi.rx += ret.rx;
+				values.put("rx", itemWifi.rx);
+				itemWifi.tx += ret.tx;
+				values.put("tx", itemWifi.tx);
+				netTrafficChange = db.update(T_NETTRAFFIC_BYTES, values, "dev=? and data_id=? and date=?", new String[] {itemWifi.dev+"", itemWifi.data_id+"", itemWifi.date+""})>0;
+		    }
+		    if ( netTrafficChange ) {
+		    	refreshNetTrafficBytesResult(netTrafficWifiResult, itemWifi.rx+itemWifi.tx);
+		    }
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally{
+			if(c!=null){
+				c.close();
+			}
+			if(db!=null){
+				db.close();
+			}
+		}
+		return netTrafficChange;
+	}
+	
+	private void refreshNetTrafficBytesResult(NetTrafficBytesResult netTrafficBytesResult, float addValue){
+		if (netTrafficBytesResult!=null){
+			netTrafficBytesResult.dateBytesAll += addValue;
+			netTrafficBytesResult.monthBytesAll += addValue;
+		}
+	}
 }

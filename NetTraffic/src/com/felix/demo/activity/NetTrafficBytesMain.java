@@ -203,18 +203,15 @@ public class NetTrafficBytesMain  extends Activity {
 	private void refrashView(){
 		
 		// 数据显示到布局上
-		if (NetTrafficBytesAccessor.netTrafficBytesResult != null
-				&& NetTrafficBytesAccessor.netTrafficWifiResult != null) {
-
 			netTrafficBytesGprsDay
 					.setText(getString(
 							R.string.net_traffic_bytes_gprs_day,
-							unitHandler(NetTrafficBytesAccessor.netTrafficBytesResult.dateBytesAll)));
+							unitHandler(NetTrafficBytesAccessor.netTrafficGprsResult.dateBytesAll)));
 
 			netTrafficBytesGprsMonth
 					.setText(getString(
 							R.string.net_traffic_bytes_gprs_month,
-							unitHandler(NetTrafficBytesAccessor.netTrafficBytesResult.monthBytesAll)));
+							unitHandler(NetTrafficBytesAccessor.netTrafficGprsResult.monthBytesAll)));
 
 			netTrafficBytesWifiDay
 					.setText(getString(
@@ -225,7 +222,6 @@ public class NetTrafficBytesMain  extends Activity {
 					.setText(getString(
 							R.string.net_traffic_bytes_wifi_month,
 							unitHandler(NetTrafficBytesAccessor.netTrafficWifiResult.monthBytesAll)));
-		}
 	}
 
 
