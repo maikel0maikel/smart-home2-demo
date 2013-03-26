@@ -334,12 +334,12 @@ public class NetTrafficBytesAccessor {
 		float currentWifiRx   = currentTotalRx - currentMobileRx;
 		float currentWifiTx   = currentTotalTx - currentMobileTx;
 		
-		if ( currentMobileRx != NetTrafficInitTool.last_gprs_rx_Bytes && currentMobileRx>0.01 ) {
+		if ( currentMobileRx != NetTrafficInitTool.last_gprs_rx_Bytes && currentMobileRx>0.1 ) {
 			netTrafficChange = insertNetTrafficGprsBytesToDB(strDate, currentMobileRx, currentMobileTx);
 			Log.d(TAG, "登记GPRS流量"+" netTrafficChange="+netTrafficChange); 
 		}
 		
-		if ( currentWifiRx != NetTrafficInitTool.last_wifi_rx_Bytes && currentWifiRx>0.01 ) {
+		if ( currentWifiRx != NetTrafficInitTool.last_wifi_rx_Bytes && currentWifiRx>0.1 ) {
 			netTrafficChange = insertNetTrafficWifiBytesToDB(strDate, currentWifiRx, currentWifiTx);
 		    Log.d(TAG, "登记Wifi流量"+" netTrafficChange="+netTrafficChange);
 		}
