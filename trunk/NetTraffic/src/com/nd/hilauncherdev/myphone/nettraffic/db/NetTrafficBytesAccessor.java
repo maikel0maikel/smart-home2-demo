@@ -279,6 +279,10 @@ public class NetTrafficBytesAccessor {
 				
 		NetTrafficBytesResult result = new NetTrafficBytesResult();
 		result.dev = dev;
+		result.date = date;
+		result.month = month;
+		result.dateBytesAll = 0;
+		result.monthBytesAll = 0;
 		NetTrafficByteDB db = null;
 		Cursor cDate = null;
 		Cursor cMonth = null;
@@ -286,13 +290,11 @@ public class NetTrafficBytesAccessor {
 			db = new NetTrafficByteDB(ctx);
 			cDate = db.query(sqlDate, new String[] {dev+"", date+""});    
 			if (cDate.moveToFirst()) {    
-	        	result.date 		= date;
 	        	result.dateBytesAll = cDate.getFloat(0);
 	        }
 			
 			cMonth = db.query(sqlMonth, new String[] {dev+"", month+"%"});        
 	        if (cMonth.moveToFirst()) {    
-	        	result.month 		= month;
 	        	result.monthBytesAll = cMonth.getFloat(0);
 	        }
 		} catch (Exception e) {
@@ -383,6 +385,8 @@ public class NetTrafficBytesAccessor {
 			return netTrafficChange;
 		}
 		
+		refreshNetTrafficBytesResult(netTrafficGprsResult, itemGprs.rx+itemGprs.tx);
+		
 		ContentValues values = new ContentValues();		
 		//values.put("id", item.id); //系统自增
 		values.put("dev", itemGprs.dev);
@@ -410,9 +414,6 @@ public class NetTrafficBytesAccessor {
 				itemGprs.tx += ret.tx;
 				values.put("tx", itemGprs.tx);
 				netTrafficChange = db.update(T_NETTRAFFIC_BYTES, values, "dev=? and data_id=? and date=?", new String[] {itemGprs.dev+"", itemGprs.data_id+"", itemGprs.date+""})>0;
-		    }
-		    if ( netTrafficChange ) {
-		    	refreshNetTrafficBytesResult(netTrafficGprsResult, itemGprs.rx+itemGprs.tx);
 		    }
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -461,6 +462,12 @@ public class NetTrafficBytesAccessor {
 			NetTrafficInitTool.last_wifi_tx_Bytes = currentWifiTx;
 		}
 		
+		if (itemWifi.rx+itemWifi.tx<0.01){
+			return netTrafficChange;
+		}
+		
+	    refreshNetTrafficBytesResult(netTrafficWifiResult, itemWifi.rx+itemWifi.tx);
+		
 		ContentValues values = new ContentValues();		
 		//values.put("id", item.id); //系统自增
 		values.put("dev", itemWifi.dev);
@@ -479,7 +486,6 @@ public class NetTrafficBytesAccessor {
 	        if(c.moveToFirst()) {            
 	            ret = buildNetTrafficBytesItem(c);
 	        }
-	        
 		    if (ret==null){
 		    	netTrafficChange = db.insertOrThrow(T_NETTRAFFIC_BYTES, null, values)>0;	
 		    }else{
@@ -488,9 +494,6 @@ public class NetTrafficBytesAccessor {
 				itemWifi.tx += ret.tx;
 				values.put("tx", itemWifi.tx);
 				netTrafficChange = db.update(T_NETTRAFFIC_BYTES, values, "dev=? and data_id=? and date=?", new String[] {itemWifi.dev+"", itemWifi.data_id+"", itemWifi.date+""})>0;
-		    }
-		    if ( netTrafficChange ) {
-		    	refreshNetTrafficBytesResult(netTrafficWifiResult, itemWifi.rx+itemWifi.tx);
 		    }
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -507,8 +510,10 @@ public class NetTrafficBytesAccessor {
 	
 	private void refreshNetTrafficBytesResult(NetTrafficBytesResult netTrafficBytesResult, float addValue){
 		if (netTrafficBytesResult!=null){
+			Log.d(TAG, "Begin 实时流量 dateBytesAll="+netTrafficBytesResult.dateBytesAll+" addValue="+addValue);			
 			netTrafficBytesResult.dateBytesAll += addValue;
 			netTrafficBytesResult.monthBytesAll += addValue;
+			Log.d(TAG, "End   实时流量 dateBytesAll="+netTrafficBytesResult.dateBytesAll);	
 		}
 	}
 }
