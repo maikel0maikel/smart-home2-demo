@@ -63,11 +63,9 @@ public class NetTrafficBytesMain  extends Activity {
 		initView();
 		
 		//根据配置文件看是否启动悬浮窗口
-		if ( getFloatFlag(this) ){
-			Intent service = new Intent();
-    		service.setClass(NetTrafficBytesMain.this, NetTrafficBytesFloatService.class);		
-    		startService(service);
-		}
+		Intent service = new Intent();
+		service.setClass(NetTrafficBytesMain.this, NetTrafficBytesFloatService.class);		
+		startService(service);
 		
 		updateViewTimer = new Timer();
 		updateViewTimer.schedule(new TimerTask() {
@@ -78,17 +76,9 @@ public class NetTrafficBytesMain  extends Activity {
 				Message message = handler.obtainMessage(0, null);
 	            handler.sendMessage(message);
 			}
-		}, 0, 1000 * 3);
+		}, 0, 1000 * 5);
 		
 		refrashView();	
-		
-		//实际应用放到service中去.
-		ThreadUtil.executeNetTraffic(new Runnable() {
-			@Override
-			public void run() {
-				NetTrafficInitTool.getCacheAppMap(NetTrafficBytesMain.this);
-			}
-		});
 	}
 
 	@Override
