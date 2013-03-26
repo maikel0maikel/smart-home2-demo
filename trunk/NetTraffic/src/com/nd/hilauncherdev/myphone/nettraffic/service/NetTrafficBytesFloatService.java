@@ -5,6 +5,7 @@ import java.util.Calendar;
 
 import android.app.AlarmManager;
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
@@ -23,9 +24,11 @@ import android.widget.TextView;
 
 import com.felix.demo.R;
 import com.felix.demo.activity.NetTrafficBytesMain;
+import com.nd.hilauncherdev.kitset.util.ThreadUtil;
 import com.nd.hilauncherdev.myphone.nettraffic.db.NetTrafficBytesAccessor;
 import com.nd.hilauncherdev.myphone.nettraffic.receiver.NetTrafficConnectivityChangeBroadcast;
 import com.nd.hilauncherdev.myphone.nettraffic.util.CrashTool;
+import com.nd.hilauncherdev.myphone.nettraffic.util.NetTrafficInitTool;
 import com.nd.hilauncherdev.myphone.nettraffic.util.NetTrafficUnitTool;
 
 public class NetTrafficBytesFloatService extends Service {
@@ -50,10 +53,13 @@ public class NetTrafficBytesFloatService extends Service {
 	
 	int delaytime=5000;
 	
-	int ONGOING_NOTIFICATION = 9100;
+	int NOTIFICATION_ID = 9100;
 	
 	AlarmManager alarmManager;
 	PendingIntent pendingIntent;
+	
+	NotificationManager nManager;
+	
 	//private static final long DAY_MIN = 24 * 60 * 60 * 1000; // 一天时间
 	private static final long ONE_HOUR = 60 * 60 * 1000; // 一小时
 	
@@ -61,16 +67,15 @@ public class NetTrafficBytesFloatService extends Service {
 	public void onCreate() {
 		Log.d("NetTrafficBytesFloatService", "onCreate");
 		super.onCreate();
+		
+		nManager = (NotificationManager) getSystemService(Service.NOTIFICATION_SERVICE);
+		
 		view = LayoutInflater.from(this).inflate(R.layout.net_traffic_floating, null);
 		tvGprsUse = (TextView) view.findViewById(R.id.gprs_use);
 		tvWifiUser = (TextView) view.findViewById(R.id.wifi_use);
-
-		dataRefresh();
 		
 		iv = (ImageView) view.findViewById(R.id.img2);
 		iv.setVisibility(View.GONE);
-		
-		handler.postDelayed(task, delaytime);
 		
 		Intent intent = new Intent(this,NetTrafficConnectivityChangeBroadcast.class);  
 		intent.setAction("netTrafficAlarm");
@@ -78,12 +83,14 @@ public class NetTrafficBytesFloatService extends Service {
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);  
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, getAlarmStartTime(), ONE_HOUR, pendingIntent);    
      
-        /*TODO 修改为根据配置文件看是否在通知栏显示*/
-		Notification notification = new Notification(R.drawable.ic_launcher, "小黑流量监控", System.currentTimeMillis());
-		Intent notificationIntent = new Intent(this, NetTrafficBytesMain.class);
-		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
-		notification.setLatestEventInfo(this, "流量标题", "流量内容文本", pendingIntent);
-		startForeground(ONGOING_NOTIFICATION, notification);
+        startForeground(NOTIFICATION_ID, getNetTrafficNotification());
+		ThreadUtil.executeNetTraffic(new Runnable() {
+			@Override
+			public void run() {
+				NetTrafficInitTool.getCacheAppMap(NetTrafficBytesFloatService.this);
+				handler.postDelayed(task, delaytime);
+			}
+		});
 	}
 	
 	@Override
@@ -202,13 +209,28 @@ public class NetTrafficBytesFloatService extends Service {
 		public void run() {
 			try {
 				//TODO 判断无网络状态,如果无网络状态持续2分钟则停止刷新
-				dataRefresh();
-				if ( isRefreshView ) {
-					handler.postDelayed(this, delaytime);
-				}
-				if (isVisualFloatView) {
-					wm.updateViewLayout(view, wmParams);
-				}
+				ThreadUtil.executeNetTraffic(new Runnable() {
+					@Override
+					public void run() {
+						NetTrafficBytesAccessor.getInstance(getBaseContext()).insertNetTrafficBytesToDB(CrashTool.getStringDate());
+						
+						handler.post(new Runnable() {
+							
+							@Override
+							public void run() {
+								dataRefresh();
+								//间隔几秒更新比较好
+								nManager.notify(NOTIFICATION_ID, getNetTrafficNotification());
+								if (isVisualFloatView) {
+									wm.updateViewLayout(view, wmParams);
+								}
+								if ( isRefreshView ) {
+									handler.postDelayed(task, delaytime);
+								}
+							}
+						});
+					}
+				});
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -219,8 +241,6 @@ public class NetTrafficBytesFloatService extends Service {
 	 * 读取流量并设置显示
 	 */
 	public void dataRefresh() {
-		
-		NetTrafficBytesAccessor.getInstance(getBaseContext()).insertNetTrafficBytesToDB(CrashTool.getStringDate());
 		
 		// 数据显示到布局上
 		tvGprsUse.setText( NetTrafficUnitTool.netTrafficUnitHandler(NetTrafficBytesAccessor.netTrafficGprsResult.dateBytesAll)+" / "+
@@ -271,5 +291,17 @@ public class NetTrafficBytesFloatService extends Service {
 	public IBinder onBind(Intent intent) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	private Notification getNetTrafficNotification(){
+		Notification notification = new Notification(R.drawable.ic_launcher, "91流量监控已开启", System.currentTimeMillis());
+		Intent notificationIntent = new Intent(this, NetTrafficBytesMain.class);
+		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+		//判断是否需要重新获取今天及本月数据流量
+		notification.setLatestEventInfo(this, "91流量监控", 
+				"今日="+NetTrafficUnitTool.netTrafficUnitHandler(NetTrafficBytesAccessor.netTrafficGprsResult.dateBytesAll)
+				+";本月"+NetTrafficUnitTool.netTrafficUnitHandler(NetTrafficBytesAccessor.netTrafficGprsResult.monthBytesAll)
+				+";剩余", pendingIntent);
+		return notification;
 	}
 }
