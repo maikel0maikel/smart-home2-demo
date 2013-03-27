@@ -58,9 +58,29 @@
 	            android:layout_height="wrap_content"
 	            android:layout_gravity="center"
 	            android:gravity="center"
-	            android:text="自动校验"
+	            android:text="关闭流量监控"
 	            android:textSize="20dp"
-	            android:textStyle="bold" />	        
+	            android:textStyle="bold" />	  
+	            
+	        <Button
+	            android:id="@+id/btnstart_service"
+	            android:layout_width="160dip"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="center"
+	            android:gravity="center"
+	            android:text="开启服务"
+	            android:textSize="20dp"
+	            android:textStyle="bold" />	 	        
+	        
+	        <Button
+	            android:id="@+id/btnclose_service"
+	            android:layout_width="160dip"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="center"
+	            android:gravity="center"
+	            android:text="关闭服务"
+	            android:textSize="20dp"
+	            android:textStyle="bold" />	  	        
 </LinearLayout>	  
 	      
 </LinearLayout>
