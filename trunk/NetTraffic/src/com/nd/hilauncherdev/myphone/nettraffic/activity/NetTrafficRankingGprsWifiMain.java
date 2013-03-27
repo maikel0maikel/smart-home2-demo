@@ -21,7 +21,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.felix.demo.R;
-import com.nd.hilauncherdev.kitset.util.ThreadUtil;
+import com.nd.hilauncherdev.myphone.nettraffic.util.ThreadUtil;
 import com.nd.hilauncherdev.myphone.nettraffic.db.NetTrafficBytesItem;
 import com.nd.hilauncherdev.myphone.nettraffic.db.NetTrafficRankingGprsWifiAccessor;
 import com.nd.hilauncherdev.myphone.nettraffic.db.NetTrafficRankingItem;

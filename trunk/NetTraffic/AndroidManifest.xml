@@ -25,7 +25,7 @@
         android:label="@string/app_name" >
 
          <activity
-            android:name="com.felix.demo.activity.NetTrafficBytesMain"
+            android:name="com.nd.hilauncherdev.myphone.nettraffic.activity.NetTrafficBytesMain"
             android:label="流量监控" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

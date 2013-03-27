@@ -6,9 +6,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.nd.hilauncherdev.kitset.util.ThreadUtil;
 import com.nd.hilauncherdev.myphone.nettraffic.db.NetTrafficRankingGprsWifiAccessor;
-import com.nd.hilauncherdev.myphone.nettraffic.util.CrashTool;
+import com.nd.hilauncherdev.myphone.nettraffic.util.ThreadUtil;
 
 
 public class NetTrafficRankingPackageBroadcast extends BroadcastReceiver {
