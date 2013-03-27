@@ -17,7 +17,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.nd.hilauncherdev.kitset.util.ThreadUtil;
+import com.nd.hilauncherdev.myphone.nettraffic.util.ThreadUtil;
 import com.nd.hilauncherdev.myphone.nettraffic.db.NetTrafficBytesAccessor;
 import com.nd.hilauncherdev.myphone.nettraffic.db.NetTrafficBytesItem;
 import com.nd.hilauncherdev.myphone.nettraffic.db.NetTrafficRankingGprsWifiAccessor;
@@ -36,11 +36,13 @@ public class NetTrafficConnectivityChangeBroadcast extends BroadcastReceiver {
 
 	public static final String TAG = "NetTrafficConnectivityChangeBroadcast";
 
+	public static final String ALARM_ACTION = "com.nd.hilauncherdev.myphone.nettraffic.alarm_nettraffic_save";
+	
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		String action = intent.getAction();
 		
-		if (TextUtils.equals(action, "netTrafficAlarm")) {
+		if (TextUtils.equals(action, ALARM_ACTION)) {
 			logToFile(TAG, "每日12点定时记录=="+action);
 		}
 		
@@ -66,8 +68,7 @@ public class NetTrafficConnectivityChangeBroadcast extends BroadcastReceiver {
 					s = "正在关闭";
 					//保存信息
 					logToFile(TAG, "正在关闭  保存信息 登记Wifi流量"); 
-					NetTrafficBytesAccessor.getInstance(context).insertNetTrafficBytesToDB(CrashTool.getStringDate());
-					
+					//NetTrafficBytesAccessor.getInstance(context).insertNetTrafficBytesToDB(CrashTool.getStringDate());
 					break;
 				case WifiManager.WIFI_STATE_ENABLING:
 					s = "正在开启";

@@ -2,8 +2,67 @@ package com.nd.hilauncherdev.myphone.nettraffic.util;
 
 import java.text.DecimalFormat;
 
+import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.widget.TextView;
+
+import com.felix.demo.R;
+import com.nd.hilauncherdev.myphone.nettraffic.db.NetTrafficBytesItem;
+
+
 public class NetTrafficUnitTool {
 
+	/**Gprs图标*/
+	private static Drawable gprsDrawable;
+	/**Wifi图标*/
+	private static Drawable wifiDrawable;
+	
+	/**
+	 * 初始化91豆图标
+	 * @param ctx
+	 * @param resID 图标资源ID
+	 */
+	public synchronized static Drawable getNetTypeDrawable(Context ctx, int netType){
+		
+		if ( NetTrafficBytesItem.DEV_GPRS==netType ) {
+			if ( gprsDrawable==null ) {
+				try{
+					gprsDrawable= ctx.getResources().getDrawable(R.drawable.net_traffic_float_gprs);
+					gprsDrawable.setBounds(0, 0, gprsDrawable.getMinimumWidth(), gprsDrawable.getMinimumHeight());
+				}catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			return gprsDrawable;
+		}else{
+			if ( wifiDrawable==null ) {
+				try{
+					wifiDrawable= ctx.getResources().getDrawable(R.drawable.net_traffic_float_wifi);
+					wifiDrawable.setBounds(0, 0, wifiDrawable.getMinimumWidth(), wifiDrawable.getMinimumHeight());
+				}catch (Exception e) {
+					e.printStackTrace();
+				}
+			}		
+			return wifiDrawable;
+		}
+	}
+	
+	/**
+	 * 设置流量TextView的图标
+	 * @param priceTextView
+	 * @param isShow
+	 */
+	public static void setNetTypeTextViewDrawable(TextView priceTextView, boolean isShow, int netType){
+		
+		if (priceTextView!=null){
+			if (isShow){
+				priceTextView.setCompoundDrawables(NetTrafficUnitTool.getNetTypeDrawable(priceTextView.getContext(), netType),null,null,null);
+			}else{
+				priceTextView.setCompoundDrawables(null,null,null,null);
+			}
+		}
+	}
+	
 	/**
 	 * 流量显示格式转换 转为相应的单位
 	 * 
@@ -36,7 +95,6 @@ public class NetTrafficUnitTool {
 
 		return value;
 	}
-	
 	
 	public static String netTrafficSortUnitHandler(float floatnum) {
 		String value = null;
