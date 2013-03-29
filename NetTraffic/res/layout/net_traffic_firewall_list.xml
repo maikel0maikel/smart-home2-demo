@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	android:orientation="vertical"  android:background="@drawable/myphone_bg_color">
+    <LinearLayout 
+		android:orientation="horizontal"
+		android:id="@+id/app_running_fir_title" 
+		android:layout_alignParentTop="true" 
+		android:layout_width="fill_parent"
+		android:layout_height="@dimen/myphone_top_content1" 
+		android:background="@drawable/myphone_common_top_bg1"
+		android:gravity="center_vertical">
+		<ImageView 
+			android:id="@+id/safe_back_btn"
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content"
+			android:src="@drawable/myphone_back_btn_white_selector" />
+		<TextView 
+			android:id="@+id/container_title"
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content" 
+			android:textSize="@dimen/myphone_title_text_size"
+			android:textColor="@color/myphone_common_title_color" 
+			android:text="@string/safe_notify_firewall_title"
+			android:layout_marginLeft="@dimen/myphone_margin_left"
+			android:layout_weight="1" />
+	</LinearLayout>
+	<RelativeLayout
+	    android:id="@+id/list_head_ly"
+	    android:layout_below="@+id/app_running_fir_title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:background="@drawable/app_running_process_tab_bg">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="@color/myphone_common_title_color"
+            android:textSize="@dimen/myphone_item_text_size"
+        	android:layout_marginLeft="@dimen/myphone_margin_left"
+        	android:text="@string/safe_notify_firewall_list_title"
+        	android:layout_centerVertical="true"
+        	android:layout_alignParentLeft="true"/>
+        <ImageView
+            android:id="@+id/list_head_wifi_img"
+            android:layout_width="40dip"
+            android:layout_height="40dip"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/myphone_margin_left" 
+            android:src="@drawable/safe_firewall_item_wifi"/>
+       <ImageView
+            android:id="@+id/list_head_3g_img"
+            android:layout_width="40dip"
+            android:layout_height="40dip"
+            android:layout_toLeftOf="@+id/list_head_wifi_img"
+            android:layout_marginRight="@dimen/myphone_margin_left" 
+            android:src="@drawable/safe_firewall_item_3g"/>
+    </RelativeLayout>
+    <RelativeLayout
+         android:id="@+id/sliding_loading"
+         android:layout_width="fill_parent"
+         android:layout_height="fill_parent"
+         android:layout_gravity="center_vertical"
+         android:orientation="vertical"
+          android:layout_below="@+id/list_head_ly"
+         android:visibility="visible" >
+        
+     </RelativeLayout>
+	<ListView android:layout_width="fill_parent"
+		android:cacheColorHint="#00000000" android:layout_height="fill_parent"
+		android:listSelector="@color/transparent"
+		android:id="@+id/firewall_app_listview" android:layout_below="@+id/list_head_ly"
+		android:layout_alignParentBottom="true"
+		android:divider="@drawable/myphone_common_split"
+		android:dividerHeight="1dip" 
+		android:visibility="gone"/>
+</RelativeLayout>

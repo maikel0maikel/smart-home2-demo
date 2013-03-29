@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+ 	<string name="app_name">小黑测试</string>    
+    
+    <drawable name="bkcolor">#ff00ff</drawable>
+    <color name="white">#ffffffff</color>
+    <color name="grey">#ff959595</color>
+    <color name="list_divider">#ffd0d5d9</color>
+    
+    <string name="net_traffic_main_title">流量监控</string>
+    <string name="net_traffic_main_tab_ranking">流量排行</string>
+    <string name="net_traffic_main_tab_monitor">流量监控</string>
+    <string name="net_traffic_main_tab_firewall">网络防火墙</string>
+    
+    <string name="net_traffic_no_data">暂无流量排行数据，请稍后查看</string>
+    <string name="net_traffic_upload">上传</string>
+    <string name="net_traffic_download">下载</string>    
+    <string name="net_traffic_data_small">%sK</string>
+    <string name="net_traffic_data_big">%sM</string>
+    
+    <string name="net_traffic_loading">加载中...</string>
+    <string name="net_traffic_reading_apps">读取安装的程序</string>    
+    
+    <string name="net_traffic_bytes_gprs_desc">2G/3G流量</string>    
+    <string name="net_traffic_bytes_gprs_day">今日：%s  MB</string>
+    <string name="net_traffic_bytes_gprs_month">本月：%s  MB</string>
+    <string name="net_traffic_bytes_wifi_desc">wifi流量</string>    
+    <string name="net_traffic_bytes_wifi_day">今日：%s  MB</string>
+    <string name="net_traffic_bytes_wifi_month">本月：%s  MB</string>
+    
+    <string name="safe_notify_firewall_title">已禁止联网列表</string>
+   	<string name="safe_notify_firewall_list_title">应用列表   </string>
+    <string name="safe_notify_firewall_item_nettraffic_desc">总流量:%1$s</string>
+    <string name="safe_notify_firewall_forbid_nodata">无禁止联网应用</string>
+    
+    <string name="net_traffic_bottom_text">设置</string>
+</resources>
