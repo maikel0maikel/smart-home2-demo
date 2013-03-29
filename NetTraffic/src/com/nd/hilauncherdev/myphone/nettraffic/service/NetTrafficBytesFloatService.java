@@ -77,7 +77,7 @@ public class NetTrafficBytesFloatService extends Service {
 	/**是否定时刷新*/
 	private boolean isRefreshView = true;
 	/**定时刷新的频率*/
-	private int DELAY_TIME = 3 * 1000;
+	private int DELAY_TIME = 2500;
 	/**软件明细信息的记录频率*/
 	//private static final long DAY_MIN = 24 * 60 * 60 * 1000; // 一天时间
 	private static final long ONE_HOUR = 60 * 60 * 1000; // 一小时
@@ -137,6 +137,7 @@ public class NetTrafficBytesFloatService extends Service {
 				@Override
 				public void run() {
 					NetTrafficInitTool.getCacheAppMap(NetTrafficBytesFloatService.this);
+					handler.removeCallbacks(task);
 					handler.postDelayed(task, DELAY_TIME);
 				}
 			});
@@ -260,13 +261,10 @@ public class NetTrafficBytesFloatService extends Service {
 					public void run() {
 						NetTrafficBytesAccessor.getInstance(getBaseContext()).insertNetTrafficBytesToDB(CrashTool.getStringDate());
 						
-						//TODO 判断流量是否隔天了
-						
 						handler.post(new Runnable() {
 							
 							@Override
 							public void run() {
-								//判断网络类型再更新
 								if (isVisualFloatView) {
 									wm.updateViewLayout(floatView, wmParams);
 								}
@@ -298,14 +296,14 @@ public class NetTrafficBytesFloatService extends Service {
 			if ( CrashTool.isWifiNetwork(getBaseContext()) ){
 				if ( lastNetBytesWifi>0 && lastNetBytesWifi<NetTrafficBytesAccessor.netTrafficWifiResult.dateBytesAll){
 					float speed = NetTrafficBytesAccessor.netTrafficWifiResult.dateBytesAll-lastNetBytesWifi;
-					speedUse.setText( NetTrafficUnitTool.netTrafficUnitHandler(speed/3)+"/s" );
+					speedUse.setText( NetTrafficUnitTool.netTrafficUnitHandler(speed/2.5f)+"/s" );
 				}
 				NetTrafficUnitTool.setNetTypeTextViewDrawable(speedUse, true, NetTrafficBytesItem.DEV_WIFI);
 				lastNetBytesWifi = NetTrafficBytesAccessor.netTrafficWifiResult.dateBytesAll;
 			}else{
 				if ( lastNetBytesGprs>0 && lastNetBytesGprs<NetTrafficBytesAccessor.netTrafficGprsResult.dateBytesAll){
 					float speed = NetTrafficBytesAccessor.netTrafficGprsResult.dateBytesAll-lastNetBytesGprs;
-					speedUse.setText( NetTrafficUnitTool.netTrafficUnitHandler(speed/3)+"/s" );
+					speedUse.setText( NetTrafficUnitTool.netTrafficUnitHandler(speed/2.5f)+"/s" );
 				}
 				NetTrafficUnitTool.setNetTypeTextViewDrawable(speedUse, true, NetTrafficBytesItem.DEV_GPRS);
 				lastNetBytesGprs = NetTrafficBytesAccessor.netTrafficGprsResult.dateBytesAll;
@@ -372,7 +370,6 @@ public class NetTrafficBytesFloatService extends Service {
 		Intent notificationIntent = new Intent(this, NetTrafficBytesMain.class);
 		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 		
-		//TODO 判断是否需要重新获取今天及本月数据流量
 		boolean tmpTrafficOpen = NetTrafficSettingTool.getPrefsBoolean(getBaseContext(), NetTrafficSettingTool.TrafficOpen, true);
 		if ( tmpTrafficOpen ) {
 			notification.setLatestEventInfo(this, "91流量监控", 

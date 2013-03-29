@@ -229,6 +229,49 @@ public class NetTrafficRankingGprsWifiAccessor {
 	
 	/**
 	 * 获取所有的流量行记录
+	 * @return
+	 */
+	public HashMap<String,NetTrafficRankingItem> getAllNetTrafficRankingMap() {
+		HashMap<String,NetTrafficRankingItem> ret = new HashMap<String,NetTrafficRankingItem>();
+		
+		NetTrafficDB db = null;
+		Cursor c = null;
+		try{
+			//rx、tx在数据库中已 KB单位存放
+			String sql = ""
+					+ "SELECT pkg,names, "
+					+ "       Sum(rx)                      rx_tal, "
+					+ "       Sum(tx)                      tx_tal, "
+					+ "       ( Sum(rx) + Sum(tx) ) all_tal "
+					+ "FROM   "+T_NETTRAFFIC_RANKING_DETAIL+" "
+					+ "GROUP  BY pkg,names "
+					+ "HAVING all_tal > 0.01 "
+					+ "ORDER  BY all_tal DESC ";
+			db = new NetTrafficDB(ctx);
+			c = db.query(sql);
+			c.moveToFirst();
+	
+			while (!c.isAfterLast()) {
+				NetTrafficRankingItem item = buildNetTrafficRankingItemForSum(c);
+				ret.put(item.pkg,item);
+				c.moveToNext();
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+			return ret;
+		}finally {
+			if (c!=null) {
+				c.close();
+			}
+			if (db!=null) {
+				db.close();
+			}
+		}
+		return ret;
+	}
+	
+	/**
+	 * 获取所有的流量行记录
 	 * @param dev
 	 * @return
 	 */

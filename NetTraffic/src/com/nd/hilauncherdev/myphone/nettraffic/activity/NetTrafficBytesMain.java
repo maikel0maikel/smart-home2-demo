@@ -5,10 +5,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -170,9 +167,14 @@ public class NetTrafficBytesMain  extends Activity {
         btnclose_service.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
+            	
+            	Intent intent = new Intent(NetTrafficBytesMain.this, NetTrafficMain.class);
+            	NetTrafficBytesMain.this.startActivity(intent);		
+            	/*
             	Intent serviceStop = new Intent();
         		serviceStop.setClass(NetTrafficBytesMain.this, NetTrafficBytesFloatService.class);
         		stopService(serviceStop);
+        		*/
             }
         });
         
