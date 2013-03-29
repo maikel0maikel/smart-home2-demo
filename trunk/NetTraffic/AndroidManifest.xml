@@ -33,6 +33,14 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="com.nd.hilauncherdev.myphone.nettraffic.firewall.FireWallMainActivity"
+            android:label="91桌面网络防火墙" >
+        </activity> 
+        <activity
+            android:name="com.nd.hilauncherdev.myphone.nettraffic.activity.NetTrafficMain"
+            android:label="91桌面流量监控" >
+        </activity>
+        <activity
             android:name="com.nd.hilauncherdev.myphone.nettraffic.activity.NetTrafficRankingGprsWifiMain"
             android:label="流量排行" >
         </activity>

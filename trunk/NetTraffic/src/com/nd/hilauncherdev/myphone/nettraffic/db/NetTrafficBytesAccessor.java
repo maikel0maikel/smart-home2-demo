@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.net.TrafficStats;
 import android.util.Log;
 
+import com.nd.hilauncherdev.myphone.nettraffic.util.CrashTool;
 import com.nd.hilauncherdev.myphone.nettraffic.util.NetTrafficInitTool;
 import com.nd.hilauncherdev.myphone.nettraffic.util.NetTrafficSettingTool;
 
@@ -511,8 +512,15 @@ public class NetTrafficBytesAccessor {
 	private void refreshNetTrafficBytesResult(NetTrafficBytesResult netTrafficBytesResult, float addValue){
 		if (netTrafficBytesResult!=null){
 			Log.d(TAG, "Begin 实时流量 dateBytesAll="+netTrafficBytesResult.dateBytesAll+" addValue="+addValue);			
-			netTrafficBytesResult.dateBytesAll += addValue;
-			netTrafficBytesResult.monthBytesAll += addValue;
+			if ( !CrashTool.getStringDate().equals(netTrafficBytesResult.date) ) {
+				netTrafficGprsResult = NetTrafficBytesAccessor.getInstance(ctx)
+						.getDayAndMonth(NetTrafficBytesItem.DEV_GPRS, CrashTool.getStringDate(), CrashTool.getStringMonth());
+				netTrafficWifiResult = NetTrafficBytesAccessor.getInstance(ctx)
+						.getDayAndMonth(NetTrafficBytesItem.DEV_WIFI, CrashTool.getStringDate(), CrashTool.getStringMonth());
+			}else{
+				netTrafficBytesResult.dateBytesAll += addValue;
+				netTrafficBytesResult.monthBytesAll += addValue;
+			}
 			Log.d(TAG, "End   实时流量 dateBytesAll="+netTrafficBytesResult.dateBytesAll);	
 		}
 	}
