@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:orientation="vertical">
+		<com.nd.hilauncherdev.myphone.nettraffic.view.base.NetTrafficTabLoadingView android:id="@+id/wait_layout" android:layout_width="fill_parent"  android:layout_height="fill_parent"/>     		
+		<LinearLayout android:id="@+id/main" android:orientation="vertical" android:layout_height="fill_parent"  android:layout_width="fill_parent">
+			<ListView android:id="@+id/list_ranking" android:layout_weight="1.0"			    
+			    android:layout_width="fill_parent" 
+				android:layout_height="fill_parent"
+				android:gravity="center"	
+				android:divider="@drawable/myphone_common_split"
+				android:dividerHeight="1dip" 
+				android:transcriptMode="disabled" 
+				android:cacheColorHint="#00000000"				
+				android:fadingEdge="none" 
+				></ListView>						
+		</LinearLayout>
+</LinearLayout>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" >
+
+    <RelativeLayout
+        android:id="@+id/safe_up_view"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:gravity="center_vertical"
+        android:paddingBottom="@dimen/myphone_item_padding"
+        android:paddingTop="@dimen/myphone_item_padding" >
+
+        <ImageView
+            android:id="@+id/app_item_img"
+            android:layout_width="@dimen/myphone_item_icon"
+            android:layout_height="50dip"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="@dimen/myphone_margin_left" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/myphone_margin_left"
+            android:layout_toRightOf="@+id/app_item_img"
+            android:layout_toLeftOf="@+id/app_item_3g_img"
+            android:paddingRight="5dip"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/app_item_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:textColor="@color/myphone_common_text_color"
+                android:textSize="@dimen/myphone_item_text_size" />
+
+            <TextView
+                android:id="@+id/app_item_nettraffic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/app_item_name"
+                android:textColor="@color/myphone_common_little_text_color"
+                android:textSize="@dimen/myphone_item_little_text_size" />
+        </RelativeLayout>
+        
+        <ImageView
+            android:id="@+id/app_item_wifi_img"
+            android:layout_width="40dip"
+            android:layout_height="40dip"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/myphone_margin_left" 
+            android:src="@drawable/safe_firewall_item"
+            android:layout_centerVertical="true"/>
+       <ImageView
+            android:id="@+id/app_item_3g_img"
+            android:layout_width="40dip"
+            android:layout_height="40dip"
+            android:layout_toLeftOf="@+id/app_item_wifi_img"
+            android:layout_marginRight="@dimen/myphone_margin_left" 
+            android:src="@drawable/safe_firewall_item"
+            android:layout_centerVertical="true"/>
+    </RelativeLayout>
+
+</RelativeLayout>
