@@ -1,0 +1,50 @@
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+	
+    	<!-- 首页推荐 -->
+	<string name="recommend_pandaspace">91助手</string>
+	<string name="recommend_gfan">机锋市场</string>
+	<string name="app_market_app_no_gfan_tip">是否立即下载机锋市场？</string>
+	<string name="app_market_app_gfan">机锋市场</string>
+	<string name="recommend_install_tip_title">安装</string>
+	<string name="recommend_install_tip_summary">是否立即安装%1$s？</string>
+	
+	<!-- 一键装机  -->
+	<string name="app_market_one_key">热门软件</string>
+	<string name="app_market_app_journal">应用杂志</string>
+	<string name="app_market_editor_recommend">编辑推荐</string>
+	<string name="app_market_app_recommend">精品推荐</string>
+	<string name="app_market_later_subject">往期专题</string>
+	<string name="app_market_download_all_tip">总共%1$d个软件，点此全部下载</string>
+	<string name="app_market_download_all_confirm">总共%1$d个软件，您确认要全部下载?</string>
+	<string name="app_market_one_key_play">热门游戏</string>
+	<string name="app_market_one_key_install">一键安装</string>
+	<string name="app_market_load_data_failed">数据加载失败！</string>
+
+	<string name="app_market_install_tip">请先选中要下载的软件</string>
+	<string name="app_market_app_downloaded">已下载</string>
+	<string name="app_market_app_installed">已安装</string>
+	<string name="app_market_app_installed_run_tip">您已经安装了该软件,是否立刻打开?</string>
+	<string name="app_market_app_download_pause">暂停</string>
+	<string name="app_market_app_download_wait">等待中</string>
+	<string name="app_market_app_no_assit_tip">91助手提供海量的游戏、应用、铃声、壁纸、主题等资源下载，全方位覆盖用户下载、管理、分享、社交娱乐等多样化需求，协助用户更好地管理手机。\n是否立即下载91助手？</string>
+	<string name="app_market_app_assit">91助手</string>
+	<string name="app_market_detail_version">版本：%1$s｜%2$s｜%3$s</string>
+	<string name="app_market_detail_download_count_unit">%1$s次下载</string>
+	<string name="app_market_clear_select">清空</string>
+	<string name="app_market_non_safe_content_tip">该应用可能存在\"%1$s\"等不安全因素，您是否确认下载？</string>
+	<string name="app_market_scan_ok">通过</string>
+	<string name="app_market_non_check">未检测</string>
+	<string name="app_market_silent_install_point">自动安装</string>
+	
+	<string name="theme_shop_theme_downloading">Download</string>
+	<string name="theme_shop_v2_theme_detail_downprocessing_txt">正在下载......</string>  
+	<string name="myphone_hint_loading">数据加载中...</string>
+	<string name="theme_shop_theme_download_now">正在下载</string>
+	<string name="file_manager_file_not_exist_tips">文件不存在</string>
+	
+	<string name="appinfo_load_more">显示更多</string>
+	
+	<string name="launcher_edit_show_more">显示更多</string>
+</resources>
+
+	

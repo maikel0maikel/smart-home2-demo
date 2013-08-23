@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.nd.android.pandahome2"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk android:minSdkVersion="8" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+
+    <application android:name="com.debug.MyPhoneApplication"
+        android:icon="@drawable/ic_launcher"  android:label="appDown" >
+       
+        <!-- 应用下载，下载管理 -->
+		<activity 
+			android:name="com.nd.hilauncherdev.webconnect.downloadmanage.activity.DownloadManageActivity"
+			android:theme="@android:style/Theme.NoTitleBar"
+			android:screenOrientation="portrait" 
+			android:launchMode="singleInstance"
+			android:exported="false"
+			android:process=":hilauncherex_myphone"
+			/>
+		
+		<service 
+		    android:name="com.nd.hilauncherdev.webconnect.downloadmanage.model.DownloadServerService" 
+		    android:exported="false"
+			android:process=":hilauncherex_myphone"/>
+		<!-- 应用下载，下载管理   End -->
+		
+		<!-- 应用/游戏 专题 -->
+		<activity android:name="com.nd.hilauncherdev.appmarket.AppMarketSubjectActivity"
+			android:launchMode="singleTask"
+			android:screenOrientation="portrait"
+			android:theme="@android:style/Theme.NoTitleBar"
+            android:configChanges="keyboardHidden|orientation" 
+            android:process=":hilauncherex_myphone">
+			<intent-filter>
+			    <category android:name="android.intent.category.DEFAULT" />
+			    <action android:name="android.intent.action.MAIN" />
+			    <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+            
+        <!-- 专题 详情 -->
+        <activity android:name="com.nd.hilauncherdev.appmarket.AppMarketSubjectDetailActivity"
+        		android:theme="@android:style/Theme.NoTitleBar"
+        		android:screenOrientation="portrait"
+        		android:process=":hilauncherex_myphone" />
+  		<!-- 往期专题  -->
+        <activity android:name="com.nd.hilauncherdev.appmarket.AppMarketSubjectLaterActivity"
+        		android:theme="@android:style/Theme.NoTitleBar"
+        		android:screenOrientation="portrait"
+        		android:process=":hilauncherex_myphone" />
+        		
+        <!-- 一键装机和热门游戏 详情-->
+		<activity android:name="com.nd.hilauncherdev.appmarket.AppMarketAppDetailActivity"
+			android:launchMode="singleTask"
+			android:theme="@android:style/Theme.NoTitleBar"
+			android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation" 
+            android:process=":hilauncherex_myphone" />
+            
+        <!-- 一键装机和热门游戏 详情 大预览图界面-->
+		<activity android:name="com.nd.hilauncherdev.appmarket.AppMarketLargeImagePreviewActivity"
+			android:launchMode="singleTask"
+			android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation" 
+            android:process=":hilauncherex_myphone" />
+		
+    </application>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+</manifest>

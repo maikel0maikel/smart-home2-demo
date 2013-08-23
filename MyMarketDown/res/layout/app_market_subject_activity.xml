@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_main"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical" >
+
+    <!-- 头部条 -->
+
+    <LinearLayout
+        android:id="@+id/wp_main_top_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/myphone_top_content1"
+        android:background="@drawable/myphone_common_top_bg1"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:id="@+id/app_running_back_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/myphone_back_btn_white_selector" />
+
+        <TextView
+            android:id="@+id/container_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/myphone_margin_left"
+            android:layout_weight="1"
+            android:maxLines="1"
+            android:text="loading..."
+            android:textColor="@color/myphone_common_title_color"
+            android:textSize="@dimen/myphone_title_text_size" />
+
+        <!-- 进入下载管理的按钮 -->
+
+        <com.nd.hilauncherdev.appmarket.AppMarketNumIcon
+            android:id="@+id/im_into_download"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dip"
+            android:paddingRight="15dip"
+            android:paddingTop="5dip"
+            android:src="@drawable/app_market_download_icon_selector" />
+    </LinearLayout>
+
+    <!-- 数据显示示区 -->
+
+    <RelativeLayout
+        android:id="@+id/rl_data_main"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/wp_main_top_layout" >
+
+        <!-- 内容ListView -->
+
+        <ListView
+            android:id="@+id/lv_main_list"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:cacheColorHint="#00000000"
+            android:divider="@drawable/myphone_common_split"
+            android:dividerHeight="1dip"
+            android:headerDividersEnabled="false"
+            android:listSelector="@android:color/transparent"
+            android:visibility="gone" />
+
+        <!-- 下载进度条，在单应用专题的详情页中用到 -->
+
+        <com.nd.hilauncherdev.appmarket.AppMarketDownloadBar
+            android:id="@+id/ll_download_bar"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="#B0000000"
+            android:clickable="true"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="10dip"
+            android:visibility="gone" >
+
+            <RelativeLayout
+                android:id="@+id/rl_download_progress_area"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dip"
+                android:layout_marginRight="10dip"
+                android:layout_weight="1" >
+
+                <TextView
+                    android:id="@+id/tv_download_tip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:text="@string/theme_shop_v2_theme_detail_downprocessing_txt"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_process"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp" />
+
+                <ProgressBar
+                    android:id="@+id/pb_proccess"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="20dip"
+                    android:layout_below="@id/tv_process"
+                    android:max="100"
+                    android:progress="0"
+                    android:progressDrawable="@drawable/app_market_download_process_layer" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_download_btn_area"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <ImageView
+                    android:id="@+id/im_pause"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_marginLeft="5dip"
+                    android:clickable="true"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/app_market_download_icon_pause_selector" />
+
+                <ImageView
+                    android:id="@+id/im_cancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_marginLeft="5dip"
+                    android:clickable="true"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/app_market_download_icon_cancel_selector" />
+            </LinearLayout>
+        </com.nd.hilauncherdev.appmarket.AppMarketDownloadBar>
+    </RelativeLayout>
+
+    <!-- 静默安装热点提示 -->
+
+    <TextView
+        android:id="@+id/btn_hit_me"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="65dip"
+        android:background="@drawable/navigation_view_tips_btn_selector"
+        android:gravity="center"
+        android:text="@string/app_market_silent_install_point"
+        android:textColor="@android:color/black"
+        android:visibility="gone" />
+
+    <!-- 数据加载框 -->
+
+    <LinearLayout
+        android:id="@+id/wait_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:background="@android:drawable/toast_frame"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:visibility="gone" >
+
+        <ProgressBar
+            android:id="@+id/progress_small_title"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="3dip"
+            android:text="@string/myphone_hint_loading"
+            android:textColor="@android:color/white" >
+        </TextView>
+    </LinearLayout>
+
+</RelativeLayout>

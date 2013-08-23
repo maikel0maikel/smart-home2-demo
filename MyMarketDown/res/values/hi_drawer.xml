@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    
+    <item type="id" name="common_view_holder"></item>
+    <item type="id" name="launcher_edit_widget_down_item"></item>
+    <item type="id" name="drager_controller_on_drag_exit_in_action_move"></item>
+    
+    <string name="drawer_all_apps">应用程序</string>
+    <string name="drawer_widgets">小部件</string>
+    <string name="drawer_my_phone">我的手机</string>
+    
+    <string name="drawer_common_download">下载</string>
+    <string name="drawer_common_confirm">确定</string>
+    <string name="drawer_common_cancel">取消</string>
+    
+    <string name="drawer_move_to_launcher">移动至桌面</string>
+    <string name="drawer_show_app_details">详情</string>
+    <string name="drawer_backup_app">备份</string>
+    <string name="drawer_not_found_app_tips">无法找到该应用</string>
+    <string name="drawer_backup_app_not_support">暂不支持非应用备份</string>
+    <string name="drawer_show_app_details_not_support">暂不支持查看非应用信息</string>
+    <string name="drawer_delete_folder_tips_title">删除文件夹提示</string>
+    <string name="drawer_delete_folder_tips">确定删除文件夹并把图标放回应用列表?</string>
+    <string name="drawer_delete_encript_folder_tips">确定删除文件夹并把图标放回应用列表?\n该文件夹已被加密</string>
+    <string name="drawer_delete_dialog_message">正在删除，请稍候...</string>
+    <string name="drawer_delete_not_found_app_tips_title">删除提示</string>
+    <string name="drawer_delete_not_found_app_tips">无法找到该应用，即将从应用列表中移除该图标，确定删除？</string>
+    <string name="drawer_tools_btn_click_tips">请长按图标拖入该区域</string>
+    <string name="drawer_apps_not_init_tips">程序尚未完成初始化，请稍后重试...</string>
+    <string name="drawer_widget_click_tips">可长按该小部件移动至桌面</string>
+    <string name="drawer_new_folder_failed_tips">新建文件夹失败</string>
+    <string name="drawer_add_system_widget_tips">请选择屏幕后点击下方高亮系统小部件添加</string>
+    <string name="drawer_not_found_widget_tips">无法找到该小部件，请确定是否已安装</string>
+    <string name="drawer_multi_choose_reached_limit_tips">多选项个数已达到最大限制</string>
+    <string name="drawer_multi_choose_folder_unavailable_tips">多选模式下，文件夹不可用</string>
+    
+    <string name="drawer_menu_icon_sort">图标排序</string>
+    <string name="drawer_menu_new_folder">新建文件夹</string>
+    <string name="drawer_menu_hide_app">隐藏程序</string>
+    <string name="drawer_menu_settings">应用列表设置</string>
+    <string name="drawer_menu_sort_mode">图标排序方式</string>
+    <string name="drawer_menu_app_market">应用商店</string>
+    
+    <!-- 匣子小部件中更多类型 -->
+    <string name="drawer_widget_system_widget">系统小部件</string>
+    <string name="drawer_widget_download_more">下载更多</string>
+    
+    <string name="drawer_shortcut_contact">快捷联系人</string>
+    <string name="drawer_shortcut_bookmark">书签</string>
+    <string name="drawer_shortcut_settings">设置</string>
+    
+    <string name="drawer_download_widget_tip">是否立即下载%1$s？</string>
+    <string name="drawer_update_widget_tip">是否立即升级%1$s？</string>
+    <string name="drawer_before_download_widget_tip">%1$s软件开始下载，可在状态栏中查看下载进度</string>
+    <string name="drawer_confirm_install_widget_tip">确认安装%1$s?</string>    
+    
+    <string name="drawer_not_found_focused_item_tips">抱歉，未找到匹配项，请重新搜索</string>
+    <string name="drawer_download_widget_no_sdcard">抱歉，未找到SD卡，无法下载</string>
+    
+</resources>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 软件安全信息显示界面  -->
+<com.nd.hilauncherdev.appmarket.AppMarketDetailSecurityView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    >
+    <!-- 分隔线 -->
+	<TextView 
+		android:layout_width="fill_parent" 
+		android:layout_height="1px"
+		android:background="#B4BEC9"/>
+    <!-- 安全信息条 -->
+    <LinearLayout 
+    	android:id="@+id/ll_security_bar"
+	    android:orientation="horizontal"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:clickable="true"
+	    android:padding="5dip"
+	    android:gravity="center_vertical"
+	    android:background="#E4E4E4">
+	    <LinearLayout 
+	    	android:id="@+id/ll_security_bar_tip"
+		    android:orientation="horizontal"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_weight="1"
+		    android:gravity="center_vertical">
+	    
+	    </LinearLayout>
+	    <ImageView 
+	    	android:id="@+id/im_security_bar_expand"
+    		android:layout_width="25dip"
+		    android:layout_height="25dip"
+		    android:scaleType="fitXY"
+		    android:src="@drawable/app_market_detail_security_expand"/>
+    </LinearLayout>
+    <!-- 分隔线 -->
+	<TextView 
+		android:layout_width="fill_parent" 
+		android:layout_height="1px"
+		android:background="#B4BEC9"/>
+    
+    <!-- 扫描结果显示区 -->
+    <LinearLayout 
+    	android:id="@+id/ll_security_desc_container"
+	    android:orientation="vertical"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:padding="5dip"
+	    android:background="#F2F2F2"
+	    android:visibility="gone">
+    </LinearLayout>
+</com.nd.hilauncherdev.appmarket.AppMarketDetailSecurityView>

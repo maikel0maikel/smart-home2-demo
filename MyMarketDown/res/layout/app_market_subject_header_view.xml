@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 应用杂志的HeaderView -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <WebView
+        android:id="@+id/web_view"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+    <!-- 精品推荐分隔区 -->
+	<LinearLayout 
+	    android:orientation="horizontal"
+	    android:id="@+id/rl_split"
+	    android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+        
+	    <!-- 编辑推荐 -->
+	    <LinearLayout 
+	        android:orientation="vertical"
+	    	android:layout_width="fill_parent"
+        	android:layout_height="fill_parent"
+        	android:layout_weight="1">
+        	
+	        <CheckedTextView 
+	            android:id="@+id/tv_editor_recmd"
+	            android:layout_width="fill_parent"
+        		android:layout_height="fill_parent"
+        		android:layout_weight="1"
+        		android:gravity="center"
+        		android:textSize="@dimen/frame_viewpager_tab_textsize"
+        		android:textColor="@color/app_market_tab_text_color_selector"
+        		android:text="@string/app_market_editor_recommend"
+        		android:clickable="true"
+        		android:checked="true"
+        		android:background="@drawable/app_market_tab_line_background"/>
+	        
+	    </LinearLayout>
+	    
+	    <!-- 精品推荐 -->
+	    <RelativeLayout 
+	    	android:layout_width="fill_parent"
+        	android:layout_height="fill_parent"
+        	android:layout_weight="1">
+        	
+	        <CheckedTextView 
+	            android:id="@+id/tv_prime_recmd"
+	            android:layout_width="fill_parent"
+        		android:layout_height="fill_parent"
+        		android:layout_weight="1"
+        		android:gravity="center"
+        		android:textSize="@dimen/frame_viewpager_tab_textsize"
+        		android:textColor="@color/app_market_tab_text_color_selector"
+        		android:text="@string/app_market_app_recommend"
+        		android:clickable="true"
+        		android:checked="false"
+        		android:background="@drawable/app_market_tab_line_background"/>
+	        <ImageView 
+	            android:id="@+id/im_prime_recmd_hot"
+	            android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"
+        		android:layout_centerVertical="true"
+        		android:layout_alignParentRight="true"
+        		android:src="@drawable/hot_label"
+        		android:visibility="gone"/>
+	    </RelativeLayout>
+	    
+	</LinearLayout>
+ 
+    <!-- 全部下载分隔区，在专题详情页中用到 -->
+
+    <LinearLayout
+        android:id="@+id/ll_split"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dip"
+        android:gravity="right"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <TextView
+            android:id="@+id/tv_app_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dip"
+            android:background="@drawable/app_market_download_btn_selector"
+            android:clickable="true"
+            android:gravity="center"
+            android:maxLines="1"
+            android:paddingLeft="10dip"
+            android:paddingRight="10dip"
+            android:shadowColor="@android:color/black"
+            android:shadowDx="3"
+            android:shadowDy="3"
+            android:shadowRadius="2"
+            android:textColor="@android:color/white"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+        <!-- 分隔线 -->
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:background="@android:color/black" />
+    </LinearLayout>
+
+</LinearLayout>

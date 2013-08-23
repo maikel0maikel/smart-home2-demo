@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" 
+	android:layout_height="fill_parent"
+	android:background="@android:color/white">
+	<LinearLayout 
+		android:orientation="horizontal"
+		android:id="@+id/wp_main_top_layout" 
+		android:layout_width="fill_parent"
+		android:layout_height="@dimen/myphone_top_content1" 
+		android:background="@drawable/myphone_common_top_bg1"
+		android:gravity="center_vertical">
+		<ImageView 
+			android:id="@+id/app_running_back_btn"
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content"
+			android:src="@drawable/myphone_back_btn_white_selector" />
+		<TextView 
+			android:id="@+id/container_title"
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content" 
+			android:textSize="@dimen/myphone_title_text_size"
+			android:textColor="@color/myphone_common_title_color" 
+			android:text="@string/app_market_one_key"
+			android:layout_marginLeft="@dimen/myphone_margin_left"
+			android:layout_weight="1" />
+		<!-- 进入下载管理的按钮 -->
+		<com.nd.hilauncherdev.appmarket.AppMarketNumIcon 
+			android:id="@+id/im_into_download"
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content"
+			android:paddingTop="5dip"
+			android:paddingRight="10dip"
+			android:layout_marginRight="5dip"
+			android:src="@drawable/app_market_download_icon_selector"/>
+	</LinearLayout>
+
+	<!-- 底部条 -->
+	<LinearLayout 
+			android:orientation="vertical"
+			android:id="@+id/ll_bottom_layout"
+			android:layout_width="fill_parent"
+			android:layout_height="@dimen/myphone_bottom_content"
+			android:layout_alignParentBottom="true"
+			android:gravity="center">
+	
+		<!-- 批量选择 -->
+		<TextView 
+			android:id="@+id/tv_open_batch_select" 
+			android:layout_width="fill_parent"
+			android:layout_height="@dimen/myphone_bottom_content"
+			android:clickable="true"
+			android:background="@drawable/myphone_common_edit_bottom_bg_selector"
+			android:textColor="@color/myphone_bottom_blue_bg_text_color"
+			android:textSize="@dimen/myphone_title_bottom_text_size1"
+			android:gravity="center" 
+			android:text="@string/app_market_one_key_install" />
+			
+		<!-- 操作条 -->
+		<LinearLayout 
+			android:orientation="horizontal"
+			android:id="@+id/ll_oper_bar"
+			android:layout_width="fill_parent"
+			android:layout_height="@dimen/myphone_bottom_content"
+			android:gravity="center"
+			android:visibility="gone">
+			<!-- 返回，即关闭批量选择态 -->
+			<LinearLayout 
+				android:orientation="vertical"
+				android:id="@+id/ll_close_batch_select"
+				android:layout_width="wrap_content"
+				android:layout_height="fill_parent"
+				android:layout_weight="1"
+				android:gravity="center"
+				android:clickable="true"
+				android:background="@drawable/myphone_common_edit_bottom_bg_selector">
+				
+				<TextView 
+					android:layout_width="wrap_content"
+					android:layout_height="fill_parent"
+					android:gravity="center"
+					android:drawableRight="@drawable/appinfo_appinfo_cancel_btn_icon"
+					android:drawablePadding="5dip"
+					android:textColor="@color/myphone_bottom_blue_bg_text_color"
+					android:textSize="@dimen/myphone_title_bottom_text_size1"
+					android:text="@string/common_button_return" />
+			</LinearLayout>
+			<!-- 清空选择 -->
+			<LinearLayout 
+				android:orientation="vertical"
+				android:id="@+id/ll_clear_select" 
+				android:layout_width="wrap_content"
+				android:layout_height="fill_parent"
+				android:layout_weight="1"
+				android:gravity="center"
+				android:clickable="true"
+				android:background="@drawable/myphone_common_edit_bottom_bg_selector">
+				<TextView 
+					android:layout_width="wrap_content"
+					android:layout_height="fill_parent"
+					android:gravity="center"
+					android:drawableRight="@drawable/appinfo_selected_btn_icon"
+					android:drawablePadding="5dip"
+					android:textColor="@color/myphone_bottom_blue_bg_text_color"
+					android:textSize="@dimen/myphone_title_bottom_text_size1"
+					android:text="@string/app_market_clear_select" />
+			</LinearLayout>
+			<!-- 一键下载 -->
+			<LinearLayout 
+				android:orientation="vertical"
+				android:id="@+id/ll_start_download"
+				android:layout_width="wrap_content"
+				android:layout_height="fill_parent"
+				android:layout_weight="1"
+				android:gravity="center"
+				android:clickable="true"
+				android:background="@drawable/myphone_common_edit_bottom_bg_selector">
+				<TextView 
+					android:id="@+id/tv_start_download"
+					android:layout_width="wrap_content"
+					android:layout_height="fill_parent"
+					android:gravity="center" 
+					android:textColor="@color/myphone_bottom_blue_bg_text_color"
+					android:textSize="@dimen/myphone_title_bottom_text_size1"
+					android:text="@string/theme_shop_theme_downloading" />
+			</LinearLayout>
+			
+			
+		</LinearLayout>
+		
+	</LinearLayout>
+	
+	<!-- 展示体 -->
+	<LinearLayout 
+		android:orientation="vertical" 
+		android:id="@+id/wp_main_layout"
+		android:layout_width="fill_parent" 
+		android:layout_height="fill_parent"
+		android:layout_weight="1" 
+		android:layout_below="@id/wp_main_top_layout"
+		android:layout_above="@id/ll_bottom_layout"
+		android:gravity="center">
+		
+		<!-- 滑动体 -->
+		<com.nd.hilauncherdev.appmarket.AppMarketSlidingView
+			android:id="@+id/sliding_view" 
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent" 
+			android:layout_weight="1"/>
+		<!-- 指示灯 -->
+		<com.nd.hilauncherdev.framework.view.commonsliding.CommonLightbar
+			android:id="@+id/lightbar"
+			android:layout_width="fill_parent" 
+			android:layout_height="8dip"
+			android:gravity="center" />
+	</LinearLayout>	
+</RelativeLayout>
+
+

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 往期专题 -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:id="@+id/ll_main"
+	android:layout_width="fill_parent" 
+	android:layout_height="fill_parent"
+	android:background="@android:color/white">
+	<!-- 头部条 -->
+	<LinearLayout 
+		android:orientation="horizontal"
+		android:id="@+id/wp_main_top_layout" 
+		android:layout_width="fill_parent"
+		android:layout_height="@dimen/myphone_top_content1" 
+		android:background="@drawable/myphone_common_top_bg1"
+		android:gravity="center_vertical">
+		<ImageView 
+			android:id="@+id/app_running_back_btn"
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content"
+			android:src="@drawable/myphone_back_btn_white_selector" />
+		<TextView 
+			android:id="@+id/container_title"
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content" 
+			android:textSize="@dimen/myphone_title_text_size"
+			android:textColor="@color/myphone_common_title_color" 
+			android:layout_marginLeft="@dimen/myphone_margin_left"
+			android:text="@string/app_market_later_subject"/>
+	</LinearLayout>
+	<LinearLayout 
+		android:orientation="vertical"
+		android:id="@+id/ll_data_main"
+		android:layout_width="fill_parent" 
+		android:layout_height="fill_parent">
+		<WebView 
+			android:id="@+id/web_view" 
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:visibility="gone"/>
+	</LinearLayout>
+</LinearLayout>
+
+

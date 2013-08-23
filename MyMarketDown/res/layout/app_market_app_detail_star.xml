@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>  
+<!-- 一键装机软件详情中的星级布局 -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"  
+    android:layout_height="wrap_content" 
+    android:layout_width="wrap_content" 
+    android:orientation="horizontal"
+    android:layout_below="@id/tv_app_title"
+	android:layout_toRightOf="@id/im_icon"
+	android:layout_marginLeft="13dp"
+	android:layout_marginBottom="3dip">  
+	<ImageView 
+		android:id="@+id/im_star1"
+		android:layout_height="wrap_content" 
+	    android:layout_width="wrap_content"
+	    android:src="@drawable/theme_shop_v2_theme_detail_comment_rating_2"/>
+    <ImageView 
+		android:id="@+id/im_star2"
+		android:layout_height="wrap_content" 
+	    android:layout_width="wrap_content"
+	    android:src="@drawable/theme_shop_v2_theme_detail_comment_rating_2"/>
+    <ImageView 
+		android:id="@+id/im_star3"
+		android:layout_height="wrap_content" 
+	    android:layout_width="wrap_content"
+	    android:src="@drawable/theme_shop_v2_theme_detail_comment_rating_2"/>
+    <ImageView 
+		android:id="@+id/im_star4"
+		android:layout_height="wrap_content" 
+	    android:layout_width="wrap_content"
+	    android:src="@drawable/theme_shop_v2_theme_detail_comment_rating_2"/>
+    <ImageView 
+		android:id="@+id/im_star5"
+		android:layout_height="wrap_content" 
+	    android:layout_width="wrap_content"
+	    android:src="@drawable/theme_shop_v2_theme_detail_comment_rating_2"/>
+</LinearLayout>  

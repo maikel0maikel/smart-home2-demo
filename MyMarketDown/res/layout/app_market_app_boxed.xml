@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.nd.hilauncherdev.appmarket.AppMarketItemView xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+	
+	<LinearLayout 
+		android:id="@+id/app_layout"
+		android:orientation="vertical"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_centerInParent="true"
+		android:gravity="center"
+		android:padding="5dip">
+
+		<com.nd.hilauncherdev.appmarket.AppMarketItemIconView
+			android:id="@+id/im_icon" 
+			android:layout_width="48dip"
+			android:layout_height="48dip"
+			android:scaleType="fitCenter"
+			android:src="@drawable/app_market_default_icon"/>
+		<TextView 
+			android:id="@+id/tv_title" 
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="3dip"
+			android:gravity="center"
+			android:textColor="#333333"
+			android:singleLine="true"/>	
+		<!-- 下载次数 -->
+		
+		<TextView 
+			android:id="@+id/tv_download_number" 
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:gravity="center"
+			android:textSize="10sp"
+			android:textColor="#9a9a9a"
+			android:singleLine="true"/>
+			
+		<!-- 大小 -->
+		<TextView 
+			android:id="@+id/tv_size" 
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:gravity="center"
+			android:textSize="12sp"
+			android:textColor="#9a9a9a"
+			android:singleLine="true"
+			android:visibility="visible"/>
+			
+	</LinearLayout>
+	<!-- 选中的打勾图标 -->
+	<ImageView 
+		android:id="@+id/im_selected"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignParentTop="true"
+		android:layout_alignParentRight="true"
+		android:scaleType="fitCenter"
+		android:src="@drawable/common_checkbox_checked"
+		android:visibility="invisible"/>
+	<!-- 未选中的打勾图标 -->
+	<ImageView 
+		android:id="@+id/im_unselected"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignParentTop="true"
+		android:layout_alignParentRight="true"
+		android:scaleType="fitCenter"
+		android:src="@drawable/common_checkbox_uncheck"
+		android:visibility="invisible"/>
+</com.nd.hilauncherdev.appmarket.AppMarketItemView>

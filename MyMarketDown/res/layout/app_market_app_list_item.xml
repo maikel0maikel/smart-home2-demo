@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="5dip"
+    android:gravity="center_vertical"
+    android:background="@drawable/myphone_click_item_blue"
+    >
+    <RelativeLayout 
+    	android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+    	android:layout_weight="1">
+	    <!-- 软件图标 -->
+		<com.nd.hilauncherdev.appmarket.AppMarketImageView 
+			android:id="@+id/im_icon"
+			android:layout_width="52dip" 
+			android:layout_height="52dip"
+	       	android:padding="1dip"
+	       	android:layout_marginRight="10dip"
+			android:scaleType="fitXY"
+			android:src="@drawable/app_market_default_icon"/>
+		<!-- 软件名称 -->
+		<TextView 
+			android:id="@+id/tv_app_title"
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content" 
+			android:layout_alignParentTop="true"
+			android:layout_toRightOf="@id/im_icon"
+			android:textSize="16dip"
+			android:textColor="@android:color/black"
+			android:layout_marginBottom="3dip"
+			android:ellipsize="end"
+			android:maxLines="2" />
+		<!-- 星级布局 -->	
+		<include 
+			android:id="@+id/ll_star"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/tv_app_title"
+			android:layout_toRightOf="@id/im_icon"
+		 	layout="@layout/app_market_app_detail_star"/> 
+		 	
+		<!-- 下载次数 -->
+		<TextView 
+			android:id="@+id/tv_download_count"
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content" 
+			android:layout_below="@id/tv_app_title"
+			android:layout_toRightOf="@id/ll_star"
+			android:layout_marginLeft="5dip"
+			android:layout_marginTop="3dip"
+			android:layout_marginBottom="3dip"
+			android:singleLine="true"
+			android:textSize="12dip"
+			android:textColor="@android:color/black"/>
+			
+		<!-- 版本名称、大小、语言 -->
+		<TextView 
+			android:id="@+id/tv_version_name"
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content" 
+			android:layout_below="@id/tv_download_count"
+			android:layout_toRightOf="@id/im_icon"
+			android:layout_marginBottom="3dip"
+			android:singleLine="true"
+			android:textSize="12dip"
+			android:textColor="@android:color/black"/>
+    </RelativeLayout>
+    
+    <!-- 分隔线 -->
+    <ImageView 
+   		android:layout_width="wrap_content"
+		android:layout_height="fill_parent" 
+		android:layout_marginLeft="2dip"
+		android:layout_marginRight="2dip"
+		android:background="@drawable/myphone_ver_split_line" />
+		
+    <!-- 下载按钮 -->
+    <com.nd.hilauncherdev.appmarket.AppMarketDownloadingButton 
+    	android:id="@+id/ll_download"
+		android:layout_width="50dip" 
+		android:layout_height="fill_parent"
+		android:gravity="center"
+		android:clickable="true"
+		android:background="@drawable/myphone_click_item_blue">
+	    <ImageView 
+			android:id="@+id/im_download"
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content"
+			android:scaleType="fitCenter"
+			android:src="@drawable/myphone_common_download"/>
+		<!-- 下载状态 -->
+		<TextView 
+			android:id="@+id/tv_download_state"
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content"
+			android:textSize="12dip"
+			android:textColor="@android:color/black"
+			android:visibility="gone"/>
+    </com.nd.hilauncherdev.appmarket.AppMarketDownloadingButton>
+	
+</LinearLayout>
