@@ -17,13 +17,13 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.nd.android.pandahome2.R;
-import com.nd.hilauncherdev.framework.view.commonsliding.CommonLightbar;
-import com.nd.hilauncherdev.framework.view.commonsliding.CommonSlidingView;
 import com.nd.hilauncherdev.framework.view.commonsliding.datamodel.CommonSlidingViewData;
 import com.nd.hilauncherdev.framework.view.commonsliding.datamodel.ICommonData;
 import com.nd.hilauncherdev.framework.view.commonsliding.datamodel.ICommonDataItem;
 import com.nd.hilauncherdev.kitset.util.ScreenUtil;
 import com.nd.hilauncherdev.myphone.util.TabContainerUtil;
+import com.nd.hilauncherdev.myphone.util.commonsliding.CommonLightbar;
+import com.nd.hilauncherdev.myphone.util.commonsliding.CommonSlidingView;
 
 public class AppMarketLargeImagePreviewActivity extends Activity {
 
@@ -160,8 +160,8 @@ public class AppMarketLargeImagePreviewActivity extends Activity {
 			preItem.setImageUrl(mDetailItem.getPreviewImageUrlList().get(i));
 			mPreviewImageItems.add(preItem);
 		}
-		mSlidingView.setCurrentScreen(mPosition);
-		mSlidingView.reLayout();
+		//mSlidingView.setCurrentScreen(mPosition);
+		//mSlidingView.reLayout();
 		//mSlidingView.snapToScreen(mPosition);
 	}
 
@@ -201,13 +201,13 @@ public class AppMarketLargeImagePreviewActivity extends Activity {
 			
 		}
 		
-		
+		/*
 
 		@Override
 		public void setCurrentScreen(int mCurrentScreen) {
 			super.setCurrentScreen(mCurrentScreen);
 		}
-
+*/
 		@Override
 		public View onGetItemView(ICommonData data, int position) {
 			AppMarketDetailPreviewImageItem item=(AppMarketDetailPreviewImageItem) data.getDataList().get(position);

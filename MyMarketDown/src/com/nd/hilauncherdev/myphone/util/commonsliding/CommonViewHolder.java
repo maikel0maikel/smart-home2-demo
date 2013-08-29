@@ -1,4 +1,4 @@
-package com.nd.hilauncherdev.framework.view.commonsliding;
+package com.nd.hilauncherdev.myphone.util.commonsliding;
 
 import com.nd.hilauncherdev.framework.view.commonsliding.datamodel.ICommonDataItem;
 

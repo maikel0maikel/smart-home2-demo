@@ -1,7 +1,6 @@
-package com.nd.hilauncherdev.framework.view.commonsliding;
+package com.nd.hilauncherdev.myphone.util.commonsliding;
 
 import android.content.Context;
-import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +11,6 @@ import android.view.ViewGroup;
  */
 public class CommonLayout extends ViewGroup {
 
-	private int layoutNum;
-	
 	public CommonLayout(Context context) {
 		super(context);
 	}
@@ -24,11 +21,6 @@ public class CommonLayout extends ViewGroup {
 
 	public CommonLayout(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-	}
-
-	public CommonLayout(Context context, CommonSlidingView workspace) {
-		super(context);
-		this.layoutNum = workspace.pageViews.size();
 	}
 
 	@Override
@@ -45,6 +37,9 @@ public class CommonLayout extends ViewGroup {
 			final View view = getChildAt(i);
 			view.setDrawingCacheEnabled(enabled);
 			view.buildDrawingCache(enabled);
+			if (enabled) {
+				view.setDrawingCacheQuality(DRAWING_CACHE_QUALITY_LOW);
+			}
 		}
 		super.setChildrenDrawingCacheEnabled(enabled);
 	}
@@ -59,13 +54,5 @@ public class CommonLayout extends ViewGroup {
 			int bottom) {
 
 	}
-	
-	public int getLayoutNum(){
-		return layoutNum;
-	}
-	
-	public void callDispatchDraw(Canvas canvas){		
-		super.dispatchDraw(canvas);
-	}
-	
+
 }

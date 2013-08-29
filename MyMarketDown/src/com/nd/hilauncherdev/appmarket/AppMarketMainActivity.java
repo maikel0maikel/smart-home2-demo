@@ -8,8 +8,8 @@ import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -25,8 +25,8 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -35,8 +35,6 @@ import com.nd.android.pandahome2.R;
 import com.nd.hilauncherdev.basecontent.HiActivity;
 import com.nd.hilauncherdev.datamodel.Global;
 import com.nd.hilauncherdev.framework.ViewFactory;
-import com.nd.hilauncherdev.framework.view.commonsliding.CommonLightbar;
-import com.nd.hilauncherdev.framework.view.commonsliding.CommonSlidingView;
 import com.nd.hilauncherdev.framework.view.commonsliding.datamodel.CommonSlidingViewData;
 import com.nd.hilauncherdev.framework.view.commonsliding.datamodel.ICommonData;
 import com.nd.hilauncherdev.framework.view.commonsliding.datamodel.ICommonDataItem;
@@ -52,10 +50,12 @@ import com.nd.hilauncherdev.kitset.util.SystemUtil;
 import com.nd.hilauncherdev.kitset.util.TelephoneUtil;
 import com.nd.hilauncherdev.kitset.util.ThreadUtil;
 import com.nd.hilauncherdev.myphone.util.TabContainerUtil;
+import com.nd.hilauncherdev.myphone.util.commonsliding.CommonLightbar;
 import com.nd.hilauncherdev.plugin.RecommendApps;
 import com.nd.hilauncherdev.webconnect.downloadmanage.OneKeyPhoneHelper;
 import com.nd.hilauncherdev.webconnect.downloadmanage.activity.DownloadManageActivity;
 import com.nd.hilauncherdev.webconnect.downloadmanage.model.ApkDownloadInfo;
+import com.nd.hilauncherdev.myphone.util.commonsliding.CommonSlidingView;
 
 public class AppMarketMainActivity extends HiActivity {
 
@@ -693,7 +693,7 @@ public class AppMarketMainActivity extends HiActivity {
 					mItems.addAll(tempList);
 					mItems.add(mMoreItem);//在最后面添加一个"进入91助手"的数据项
 					mSlidingView.setVisibility(View.VISIBLE);
-					mSlidingView.reLayout();
+					//mSlidingView.reLayout();
 				}else
 					mNoDataView.setVisibility(View.VISIBLE);
 				

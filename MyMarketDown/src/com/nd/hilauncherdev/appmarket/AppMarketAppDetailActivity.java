@@ -30,7 +30,6 @@ import android.widget.TextView;
 import com.nd.android.pandahome2.R;
 import com.nd.hilauncherdev.datamodel.Global;
 import com.nd.hilauncherdev.framework.ViewFactory;
-import com.nd.hilauncherdev.framework.view.commonsliding.CommonSlidingView;
 import com.nd.hilauncherdev.framework.view.commonsliding.datamodel.CommonSlidingViewData;
 import com.nd.hilauncherdev.framework.view.commonsliding.datamodel.ICommonData;
 import com.nd.hilauncherdev.framework.view.commonsliding.datamodel.ICommonDataItem;
@@ -43,6 +42,7 @@ import com.nd.hilauncherdev.kitset.util.ScreenUtil;
 import com.nd.hilauncherdev.kitset.util.StringUtil;
 import com.nd.hilauncherdev.kitset.util.TelephoneUtil;
 import com.nd.hilauncherdev.myphone.util.TabContainerUtil;
+import com.nd.hilauncherdev.myphone.util.commonsliding.CommonSlidingView;
 import com.nd.hilauncherdev.webconnect.downloadmanage.OneKeyPhoneHelper;
 import com.nd.hilauncherdev.webconnect.downloadmanage.activity.DownloadManageActivity;
 import com.nd.hilauncherdev.webconnect.downloadmanage.model.CommonCallBack;
@@ -409,7 +409,7 @@ public class AppMarketAppDetailActivity extends Activity {
 
 			}
 			im_icon.setAppMarketItem(mAppItem);
-			mSlidingView.reLayout();
+			//mSlidingView.reLayout();
 			mSlidingView.invalidate();
 		}
 	}

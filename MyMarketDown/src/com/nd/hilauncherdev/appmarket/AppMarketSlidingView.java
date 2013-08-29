@@ -15,9 +15,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nd.android.pandahome2.R;
-import com.nd.hilauncherdev.framework.view.commonsliding.CommonLayout;
-import com.nd.hilauncherdev.framework.view.commonsliding.CommonSlidingView;
 import com.nd.hilauncherdev.framework.view.commonsliding.datamodel.ICommonData;
+import com.nd.hilauncherdev.myphone.util.commonsliding.CommonLayout;
+import com.nd.hilauncherdev.myphone.util.commonsliding.CommonSlidingView;
 import com.nd.hilauncherdev.webconnect.downloadmanage.model.ApkDownloadInfo;
 import com.nd.hilauncherdev.webconnect.downloadmanage.model.DownloadDBManager;
 

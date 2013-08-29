@@ -7,9 +7,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.nd.android.pandahome2.R;
-import com.nd.hilauncherdev.framework.view.commonsliding.CommonSlidingView;
 import com.nd.hilauncherdev.framework.view.commonsliding.datamodel.ICommonData;
 import com.nd.hilauncherdev.kitset.util.ScreenUtil;
+import com.nd.hilauncherdev.myphone.util.commonsliding.CommonSlidingView;
 
 public class AppMarketDetailPreviewSlidingView extends CommonSlidingView {
 
